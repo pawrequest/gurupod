@@ -1,9 +1,18 @@
-# get number of pages from 'last' tagged href css selector page-link
 import json
+import os
+
+import praw
 import requests
 from bs4 import BeautifulSoup
 
-EPISODE_DICT = {}
+MAIN_URL = "https://decoding-the-gurus.captivate.fm"
+REDDIT_USER = os.environ['REDDIT_USER']
+REDDIT_PASS = os.environ['REDDIT_PASS']
+CLIENT_ID = os.environ['CLIENT_ID']
+CLIENT_SEC = os.environ['CLIENT_SEC']
+USER_AGENT = "Guru_Pod Wiki updater by prosodyspeaks"
+REDIRECT = "http://localhost:8080"
+REF_TOK = os.environ['REF_TOK']
 
 
 def get_num_pages(main_url: str) -> int:
@@ -22,24 +31,37 @@ def get_num_pages(main_url: str) -> int:
     return num_pages
 
 
-def get_details(show_url: str) -> (list, list):
+def details_from_episode(show_url: str) -> (list, list):
     """
-    gets show_notes and show_links from episode_url
+    gets full_show_notes and show_links from episode_url
     :param show_url:
     :return:
     """
     response = requests.get(show_url)
     soup = BeautifulSoup(response.text, "html.parser")
+
     paragraphs = soup.select(".show-notes p")
-    show_notes = ([p.text for p in paragraphs if p.text != "Links"])
-    show_links_html = soup.select(".show-notes li")
-    show_links = [li.a['href'] for li in show_links_html]
-    return show_notes, show_links
+    full_show_notes = [p.text for p in paragraphs]
+    show_notes = []
+
+    for note in full_show_notes:
+        if note == "Links":
+            break
+        else:
+            show_notes.append(note)
+
+    show_links_html = soup.select(".show-notes a")
+    show_links_dict = {}
+    for aref in show_links_html:
+        show_links_dict[aref.text] = aref['href']
+    return show_notes, show_links_dict
 
 
-def get_episodes(page_url: str) -> dict:
+def new_episodes_from_page(page_url: str) -> tuple:
     """
+    checks for new episodes
     gets data for mutliple episodes from a given page
+    json file as psuedo db
     retrieves title, date, url
     calls get_details to scrape show_notes and show_links from the page at show_url
     returns a dictionary of episodes - titles as keys
@@ -48,61 +70,197 @@ def get_episodes(page_url: str) -> dict:
     """
     response = requests.get(page_url)
     soup = BeautifulSoup(response.text, "html.parser")
+    new_ep_found = False
+    reached_end = False
+    try:
+        with open("data/episodes.json", 'r') as input_json:
+            show_dict = json.load(input_json)
+    except:
+        show_dict = {}
+    new_dict = {}
 
     episode_soup = soup.select(".episode")
-    show_dict = {}
     for episode in episode_soup:
-        show_title = episode.select_one(".episode-title a").text
+        show_name = episode.select_one(".episode-title a").text
         show_date = episode.select_one(".publish-date").text
         show_url = episode.select_one(".episode-title a")['href']
-        show_notes, show_links = get_details(show_url)
+        show_notes, show_links = details_from_episode(show_url)
 
-        show_dict[show_title] = {"URL": show_url,
-                                 "Date": show_date,
-                                 "Show Notes": show_notes,
-                                 "Show Links": show_links
-                                 }
+        if show_name in show_dict:
+            print(f"Already in json: {show_name}")
+            reached_end = True
+            break
 
-    return show_dict
+        else:
+            print(f"New episode found: {show_name}")
+            new_ep_found = True
+            new_dict[show_name] = {"show_url": show_url,
+                                   "show_date": show_date,
+                                   "show_notes": show_notes,
+                                   "show_links": show_links
+                                   }
+
+    return (new_dict, new_ep_found, reached_end)
 
 
-def create_markup_text(episode_dict):
+def create_markup(episode_dict, format='reddit'):
+    '''
+    takes a dict of episodes and format - html or reddit - and returns markup/markdown
+    :param episode_dict:
+    :param format: "reddit" or "html"
+    :return:
+    '''
     markup_text = ""
+
     for episode_name, details in episode_dict.items():
-        date_pub = details.get('Date')
-        show_url = details.get('URL')
-        show_notes = details.get('Show Notes')
-        show_links = details.get('Show Links')
+        date_pub = details.get('show_date')
+        show_url = details.get('show_url')
+        show_notes = details.get('show_notes')
+        show_links = details.get('show_links')
 
-        markup_text += f"<h1>{episode_name}</h1>\n"
-        markup_text += f"<p>Date Published: {date_pub}</p>\n"
-        markup_text += f"<a href='{show_url}'>Play on Captivate.fm</a>"
+        if format == 'html':
+            markup_text += f"<h1>{episode_name}</h1>\n"
+            markup_text += f"<p>Date Published: {date_pub}</p>\n"
+            markup_text += f"<a href='{show_url}'>Play on Captivate.fm</a>"
 
-        if show_notes:
-            markup_text += "<h3>Show Notes:</h3>\n"
-            for note in show_notes:
-                markup_text += f"<p>{note}</p>\n"
+            if show_notes:
+                markup_text += "<h3>Show Notes:</h3>\n"
+                for note in show_notes:
+                    markup_text += f"<p>{note}</p>\n"
 
-        if show_links:
-            markup_text += "<h3>Show Links:</h3>\n"
-            for link in show_links:
-                markup_text += f"<a href='{link}'>{link}</a><br>"
+            if show_links:
+                markup_text += "<h3>Show Links:</h3>\n"
+                for text, link in show_links.items():
+                    markup_text += f"<a href='{link}'>{text}</a><br>"
 
-        markup_text += "<br> <br>"
+            markup_text += "<br> <br>"
+
+        elif format == 'reddit':
+            markup_text += f"## [{episode_name}]({show_url})\n \n"
+            markup_text += f"***Date Published:*** {date_pub}\n \n"
+            # markup_text += f"[Play on Captivate.fm]({show_url})"
+
+            if show_notes:
+                markup_text += "***Show Notes:***\n \n"
+                for note in show_notes:
+                    markup_text += f"{note}\n \n"
+
+            if show_links:
+                markup_text += "***Show Links:***\n \n"
+                for text, link in show_links.items():
+                    markup_text += f"[{text}]({link}) \n \n"
+
+            markup_text += "\n \n --- \n"
     return markup_text
 
 
-def runscript(main_url):
-    for page in range(get_num_pages(main_url)):
-        # for page in range(2):
-        page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"
-        episode_dict = get_episodes(page_url)
-        EPISODE_DICT.update(episode_dict)
+def dict_to_markup_file(episodes_dict: dict, format: str):
+    '''
+    :param format: 'html' or 'reddit'(as .txt)
+    :return: writes to file
+    '''
+    if format.lower() == "reddit":
+        with open('data/episodes.txt', "w", encoding="utf-8") as output_txt:
+            markdown_text = create_markup(episodes_dict, format)
+            output_txt.write(markdown_text)
+            print(".txt for reddit")
+    else:
+        with open('data/episodes.html', "w", encoding="utf-8") as output_html:
+            markup_text = create_markup(episodes_dict, format)
+            output_html.write(markup_text)
+            print("html")
 
-    markup_text = create_markup_text(EPISODE_DICT)
 
-    with open('episodes.html', "w", encoding="utf-8") as file:
-        file.write(markup_text)
+def json_to_markup(format: str):
+    '''
+    :param format: 'html' or 'reddit'(as .txt)
+    :return: writes to file
+    '''
+    with open("data/episodes.json", 'r') as input_json:
+        episodes_dict = json.load(input_json)
+        if format.lower() == "reddit":
+            with open('data/episodes.txt', "w", encoding="utf-8") as output_txt:
+                markdown_text = create_markup(episodes_dict, format)
+                output_txt.write(markdown_text)
+                print(".txt for reddit")
+        else:
+            with open('data/episodes.html', "w", encoding="utf-8") as output_html:
+                markup_text = create_markup(episodes_dict, format)
+                output_html.write(markup_text)
+                print("html")
 
-    with open("episodes.json", "w") as outfile:
-        json.dump(EPISODE_DICT, outfile)
+
+def get_new_episodes(main_url):
+    try:
+        with open("data/episodes.json", "r") as infile:
+            dict_in_json = json.load(infile)
+            for page in range(get_num_pages(main_url)):
+                page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"
+                (episode_dict, new_ep_found, reached_end) = new_episodes_from_page(page_url)
+                if not new_ep_found:
+                    print("no new episodes")
+                    break
+                else:
+                    print("merging new episodes")
+                    episode_dict.update(dict_in_json)
+
+                if reached_end:
+                    # no point trying more pages
+                    print("Search complete")
+                    break
+                else:
+                    # carry on more pages
+                    continue
+            if new_ep_found:
+                with open("data/episodes.json", "w") as outfile:
+                    json.dump(episode_dict, outfile)
+                return episode_dict
+            else:
+                return "no new"
+
+                # dict_to_markup_file(episode_dict, format='reddit')
+                # markdown = create_markup(episode_dict, format='reddit')
+
+    except:
+        print(
+            "Error, probably episodes.json doesn't exist or is empty so i'm making a new one from all data on captivate.fm")
+        master_dict = {}
+        with open("data/episodes.json", "w") as outfile:
+
+            for page in range(get_num_pages(main_url)):
+                page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"
+                (episode_dict, new_ep_found, reached_end) = new_episodes_from_page(page_url)
+                master_dict.update(episode_dict)
+            json.dump(master_dict, outfile)
+            return master_dict
+
+
+def update_wiki():
+    subr = 'DecodingTheGurus'
+    reddit = praw.Reddit(client_id=CLIENT_ID,
+                         client_secret=CLIENT_SEC,
+                         user_agent=USER_AGENT,
+                         redirect_uri=REDIRECT,
+                         refresh_token=REF_TOK
+                         )
+
+    subreddit = reddit.subreddit(subr)
+
+    episode_dict = get_new_episodes(MAIN_URL)
+    if episode_dict == "no new":
+        print ("nothing new to add")
+        exit()
+    else:
+        markdown = create_markup(episode_dict, format='reddit')
+        wikiname = "episodes"
+        wiki = subreddit.wiki[wikiname]
+        if input(f"overwrite {wikiname}?").lower()[0] == "y":
+            wiki.edit(content=markdown)
+            print ("edited the wiki")
+
+
+# json_to_markup("reddit")
+
+# get_new_episodes(MAIN_URL)
+
+update_wiki()
