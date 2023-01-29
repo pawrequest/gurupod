@@ -1,7 +1,9 @@
 import json
 import os
-
+from datetime import datetime
 import praw
+# from django.utils import dateformat
+from dateutil.parser import parse
 import requests
 from bs4 import BeautifulSoup
 
@@ -33,7 +35,7 @@ def get_num_pages(main_url: str) -> int:
     return num_pages
 
 
-def details_from_episode(show_url: str) -> (list, list):
+def get_show_notes_and_links(show_url: str) -> (list, dict):
     """
     gets full_show_notes and show_links from episode_url
     :param show_url:
@@ -59,14 +61,12 @@ def details_from_episode(show_url: str) -> (list, list):
     return show_notes, show_links_dict
 
 
-def new_episodes_from_page(page_url: str) -> tuple:
+def episode_objects_from_page(page_url: str) -> tuple:
     """
-    checks for new episodes
+    loads episode dict from json, or creates empty
     gets data for mutliple episodes from a given page
-    json file as psuedo db
-    retrieves title, date, url
-    calls get_details to scrape show_notes and show_links from the page at show_url
-    returns a dictionary of episodes - titles as keys
+    retrieves title, date, url directly, show_notes and show_links via function call
+    returns a list of Episode objects, and booleans for new episodes found / reached end of search
     :param page_url:
     :return:
     """
@@ -74,38 +74,39 @@ def new_episodes_from_page(page_url: str) -> tuple:
     soup = BeautifulSoup(response.text, "html.parser")
     new_ep_found = False
     reached_end = False
+    episode_os = []
     try:
         with open("data/episodes.json", 'r') as input_json:
             show_dict = json.load(input_json)
     except:
         show_dict = {}
-    new_dict = {}
 
     episode_soup = soup.select(".episode")
     for episode in episode_soup:
         show_name = episode.select_one(".episode-title a").text
-        show_date = episode.select_one(".publish-date").text
+        show_date_str = episode.select_one(".publish-date").text
+        show_date = parse(show_date_str)
         show_url = episode.select_one(".episode-title a")['href']
-        show_notes, show_links = details_from_episode(show_url)
+        show_notes, show_links = get_show_notes_and_links(show_url)
 
         if show_name in show_dict:
-            print(f"Already in json: {show_name}")
+            print(f"Already in json: {show_name} \n ending search")
             reached_end = True
             break
 
         else:
             print(f"New episode found: {show_name}")
             new_ep_found = True
-            new_dict[show_name] = {"show_url": show_url,
-                                   "show_date": show_date,
-                                   "show_notes": show_notes,
-                                   "show_links": show_links
-                                   }
 
-    return (new_dict, new_ep_found, reached_end)
+            episode_o = Episode(show_name=show_name, show_url=show_url, show_links=show_links, show_date=show_date,
+                                show_notes=show_notes)
+            episode_os.append(episode_o)
+
+    # return (new_dict, new_ep_found, reached_end)
+    return (episode_os, new_ep_found, reached_end)
 
 
-def create_markup(episode_dict, format='reddit'):
+def create_markup(episode_dict: dict, format: str = 'reddit') -> str:
     '''
     takes a dict of episodes and format - html or reddit - and returns markup/markdown
     :param episode_dict:
@@ -198,7 +199,7 @@ def get_new_episodes(main_url):
             dict_in_json = json.load(infile)
             for page in range(get_num_pages(main_url)):
                 page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"
-                (episode_dict, new_ep_found, reached_end) = new_episodes_from_page(page_url)
+                (episode_dict, new_ep_found, reached_end) = episode_objects_from_page(page_url)
                 if not new_ep_found:
                     print("no new episodes")
                     break
@@ -229,7 +230,7 @@ def get_new_episodes(main_url):
 
             for page in range(get_num_pages(main_url)):
                 page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"
-                (episode_dict, new_ep_found, reached_end) = new_episodes_from_page(page_url)
+                (episode_dict, new_ep_found, reached_end) = episode_objects_from_page(page_url)
                 fresh_episode_dict.update(episode_dict)
             json.dump(fresh_episode_dict, outfile)
             return fresh_episode_dict
@@ -259,3 +260,19 @@ def update_wiki():
             print("edited the wiki")
 
 
+def dict_to_excel(episode_dict):
+    for name, details in episode_dict.items():
+        print(name)
+        for k, v in details.items():
+            print(k, v, "\n")
+        print(parse(details['show_date']))
+        break
+
+
+# json_to_markup("reddit")
+
+# get_new_episodes(MAIN_URL)
+
+with open("data/episodes.json", "r") as infile:
+    dict_in_json = json.load(infile)
+    dict_to_excel(dict_in_json)
