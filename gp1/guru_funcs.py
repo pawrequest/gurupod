@@ -75,7 +75,7 @@ def new_episodes_from_page(page_url: str) -> tuple:
     new_ep_found = False
     reached_end = False
     try:
-        with open("data/episodes.json", 'r') as input_json:
+        with open("../data/episodes.json", 'r') as input_json:
             show_dict = json.load(input_json)
     except:
         show_dict = {}
@@ -178,7 +178,7 @@ def json_to_markup(format: str):
     :param format: 'html' or 'reddit'(as .txt)
     :return: writes to file
     '''
-    with open("data/episodes.json", 'r') as input_json:
+    with open("../data/episodes.json", 'r') as input_json:
         episodes_dict = json.load(input_json)
         if format.lower() == "reddit":
             with open('data/episodes.txt', "w", encoding="utf-8") as output_txt:
@@ -194,7 +194,7 @@ def json_to_markup(format: str):
 
 def get_new_episodes(main_url):
     try:
-        with open("data/episodes.json", "r") as infile:
+        with open("../data/episodes.json", "r") as infile:
             dict_in_json = json.load(infile)
             for page in range(get_num_pages(main_url)):
                 page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"
@@ -214,7 +214,7 @@ def get_new_episodes(main_url):
                     # carry on more pages
                     continue
             if new_ep_found:
-                with open("data/episodes.json", "w") as outfile:
+                with open("../data/episodes.json", "w") as outfile:
                     json.dump(episode_dict, outfile)
                 return episode_dict
             else:
@@ -225,7 +225,7 @@ def get_new_episodes(main_url):
         print(
             "Error, probably episodes.json doesn't exist or is empty so i'm making a new one from all data on captivate.fm")
         fresh_episode_dict = {}
-        with open("data/episodes.json", "w") as outfile:
+        with open("../data/episodes.json", "w") as outfile:
 
             for page in range(get_num_pages(main_url)):
                 page_url = main_url + f"/episodes/{page + 1}/#showEpisodes"

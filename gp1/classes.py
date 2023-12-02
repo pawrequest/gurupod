@@ -25,7 +25,7 @@ class Pod:
 
     def __post_init__(self):
         try:
-            with open("data/episodes.json", 'r') as input_json:
+            with open("../data/episodes.json", 'r') as input_json:
                 pod_dict = json.load(input_json)
                 print(f"Json Loaded with {len(pod_dict)} entries")
         except:
@@ -89,7 +89,7 @@ class Pod:
             print(f"Update Package:{update_package}")
             update_package.update(self.json_dict)
             self.json_dict = update_package
-            with open("data/episodes.json", "w") as outfile:
+            with open("../data/episodes.json", "w") as outfile:
                 json.dump(update_package, outfile)
 
 
