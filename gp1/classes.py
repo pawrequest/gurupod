@@ -7,7 +7,6 @@ import requests
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from dateutil.parser import parse
-import pandas as pd
 
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
 REDDIT_USER = os.environ['REDDIT_USER']
@@ -177,10 +176,6 @@ class Pod:
             wiki.edit(content=self.markup)
             print("edited the wiki")
 
-    def dict_to_excel(self):
-        df = pd.DataFrame.from_dict(self.json_dict, orient='index')  # convert dict to dataframe
-
-        df.to_csv('data/episodes.csv')
 
 
 
@@ -243,6 +238,5 @@ if GuruPod.new_episodes:
     GuruPod.update_wiki(subr='DecodingTheGurus', wiki_page='episodes')
 else:
     print("No New Episodes")
-GuruPod.dict_to_excel()
 
 ...
