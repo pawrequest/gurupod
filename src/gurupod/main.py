@@ -14,8 +14,8 @@ def main():
 
 
     writer = HtmlWriter(episodes)
-    markdown = writer.all_eps_to_md()
-    writer.save_markdown(outfile=Path(EPISODES_HTML), markup=markdown)
+    markup = writer.episode_markup_many()
+    writer.save_markdown(outfile=Path(EPISODES_HTML), markdown=markup)
 
     # edit_reddit_wiki(markdown)
 

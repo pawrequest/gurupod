@@ -8,15 +8,16 @@ from gurupod.episodes import Episode
 
 class EpisodeWriter(ABC):
     def __init__(self, episodes: [Episode]):
-        self.eps = episodes
-        self.text = ''
+        self.episodes = episodes
 
-    def all_eps_to_md(self):
-        for ep in self.eps:
-            self.text += self.ep_to_md(ep)
-        return self.text
+    def episode_markup_many(self, eps=None):
+        eps = eps or self.episodes
+        text = ''
+        for ep in eps:
+            text += self.episode_markup_one(ep)
+        return text
 
-    def ep_to_md(self, episode: Episode) -> str:
+    def episode_markup_one(self, episode: Episode) -> str:
         text = self.title_text(episode)
         text += self.date_text(episode.show_date)
 
@@ -30,8 +31,7 @@ class EpisodeWriter(ABC):
 
         return text
 
-    def save_markdown(self, outfile: Path, markup: str or None = None):
-        markup = markup or self.text
+    def save_markup(self, outfile: Path, markup: str):
         if not markup:
             print("no text to write")
             return
@@ -72,19 +72,22 @@ HEAD_ = """
 """
 TAIL = "</body>\n</html>"
 
+
 class HtmlWriter(EpisodeWriter):
-    def all_eps_to_md(self):
+    def episode_markup_many(self, eps=None):
         """ override to add html boilerplate"""
+        eps = eps or self.episodes
         self.text = HEAD_
         self.text += self.build_table_of_contents()
-        for ep in self.eps:
-            self.text += self.ep_to_md(ep)
+        for ep in eps:
+            self.text += self.episode_markup_one(ep)
         self.text += TAIL
         return self.text
 
-    def build_table_of_contents(self):
+    def build_table_of_contents(self, eps=None):
+        eps = eps or self.episodes
         toc = "<h2>Table of Contents</h2>\n"
-        for i, ep in enumerate(self.eps):
+        for i, ep in enumerate(eps):
             toc += f"<a href='#ep-{i}'>{ep.show_name}</a><br>\n"
         return toc
 
@@ -93,18 +96,16 @@ class HtmlWriter(EpisodeWriter):
 
         # return f"<h1>{episode_name}</h1>\n<a href='{show_url}'>Play on Captivate.fm</a>\n"
 
-
-
-# class HtmlWriter(EpisodeWriter):
-#     def all_eps_to_md(self):
-#         """ override to add html boilerplate"""
-#         self.text = HEAD_
-#         for ep in self.eps:
-#             self.text += self.ep_to_md(ep)
-#         self.text += TAIL
-#         return self.text
-#
-#     def title_text(self, episode_name, show_url) -> str:
+    # class HtmlWriter(EpisodeWriter):
+    #     def all_eps_to_md(self):
+    #         """ override to add html boilerplate"""
+    #         self.text = HEAD_
+    #         for ep in self.eps:
+    #             self.text += self.ep_to_md(ep)
+    #         self.text += TAIL
+    #         return self.text
+    #
+    #     def title_text(self, episode_name, show_url) -> str:
 
     def date_text(self, date_pub) -> str:
         return f"<p>Date Published: {date_pub}</p>\n"
@@ -125,7 +126,7 @@ class HtmlWriter(EpisodeWriter):
 
 
 class RedditWriter(EpisodeWriter):
-    def title_text(self, episode:Episode):
+    def title_text(self, episode: Episode):
         return f"## [{episode.show_name}]({episode.show_url})\n \n"
 
     def date_text(self, date_pub):
