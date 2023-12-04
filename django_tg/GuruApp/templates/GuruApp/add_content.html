@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<ul>
-  {% for item in content %}
-    <li><a href="{{ item.url }}">{{ item.title }}</a></li>
-  {% endfor %}
-</ul>
-{% endblock %}

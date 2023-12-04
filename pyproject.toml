@@ -1,9 +1,9 @@
 [project]
 name = "gurupod"
 version = "0.1.0"
-description = "Add your description here"
+description = "Decoding The Guru Podcast wiki generator"
 authors = [
-    { name = "prosodyspeaks", email = "prosodyspeaks@gmail.com" }
+    { name = "pawrequest", email = "paw@pawrequest.com" }
 ]
 dependencies = [
     "praw",

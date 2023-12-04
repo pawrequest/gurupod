@@ -2,11 +2,11 @@ from pathlib import Path
 
 import praw
 
-from gurupod.consts import MAIN_URL, OUTPUT_FILE, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
+from data.consts import MAIN_URL, OUTPUT_FILE, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
     REDDIT_REF_TOK, REDIRECT, SUBRED, USER_AGENT, WIKINAME
-from gurupod.dld import EXISTING_EPS
+from data.dld import EXISTING_EPS
 from gurupod.episode import get_all_episodes
-from gurupod.markdown import RedditWriter
+from gurupod.writer import RedditWriter
 
 
 def main():
