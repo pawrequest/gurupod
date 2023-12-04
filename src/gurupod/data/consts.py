@@ -14,5 +14,4 @@ WIKINAME = "episodes"
 thisfile = Path(__file__).parent
 EPISODES_MD = thisfile / "episodes.md"
 EPISODES_JSON = thisfile / "episodes.json"
-EPISODES_MD.touch(exist_ok=True)
-EPISODES_JSON.touch(exist_ok=True)
+EPISODES_HTML = thisfile / 'episodes.html'

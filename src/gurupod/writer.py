@@ -26,7 +26,7 @@ class EpisodeWriter(ABC):
         if episode.show_links:
             text += self.links_text(episode.show_links)
 
-        text += self.break_text()
+        text += self.final_text()
 
         return text
 
@@ -45,45 +45,64 @@ class EpisodeWriter(ABC):
             output.write(markup)
 
     @abstractmethod
-    def title_text(self, episode_name, show_url):
+    def title_text(self, episode_name, show_url) -> str:
         raise NotImplementedError
 
     @abstractmethod
-    def date_text(self, date_pub):
+    def date_text(self, date_pub) -> str:
         raise NotImplementedError
 
     @abstractmethod
-    def notes_text(self, show_notes):
+    def notes_text(self, show_notes) -> str:
         raise NotImplementedError
 
     @abstractmethod
-    def links_text(self, show_links):
+    def links_text(self, show_links) -> str:
         raise NotImplementedError
 
     @abstractmethod
-    def break_text(self):
+    def final_text(self) -> str:
         raise NotImplementedError
+
+boilerplate = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Title</title>
+</head>
+<body>
+"""
 
 
 class HtmlWriter(EpisodeWriter):
-    def title_text(self, episode_name, show_url):
+    def all_eps_to_md(self):
+        self.text = boilerplate
+        for ep in self.eps:
+            self.text += self.ep_to_md(ep)
+        self.text += "</body>\n</html>"
+        return self.text
+
+    def title_text(self, episode_name, show_url) -> str:
+
         return f"<h1>{episode_name}</h1>\n<a href='{show_url}'>Play on Captivate.fm</a>\n"
 
-    def date_text(self, date_pub):
+    def date_text(self, date_pub) -> str:
         return f"<p>Date Published: {date_pub}</p>\n"
 
-    def notes_text(self, show_notes):
+    def notes_text(self, show_notes) -> str:
         notes = "<h3>Show Notes:</h3>\n" + "\n".join(
             [f"<p>{note}</p>" for note in show_notes]) + "\n" if show_notes else ""
         return notes
 
-    def links_text(self, show_links):
+    def links_text(self, show_links) -> str:
         links = "<h3>Show Links:</h3>\n" + "\n".join(
             [f"<a href='{link}'>{text}</a><br>" for text, link in
              show_links.items()]) + "\n" if show_links else ""
         return links
 
-    def break_text(self):
+    def final_text(self) -> str:
         return "<br> <br>"
 
 
@@ -103,5 +122,5 @@ class RedditWriter(EpisodeWriter):
             [f"[{text}]({link})" for text, link in show_links.items()]) + "\n \n"
         return links
 
-    def break_text(self):
+    def final_text(self):
         return "\n \n --- \n"
