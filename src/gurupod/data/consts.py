@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
 REDDIT_USER = os.environ['REDDIT_USER']
@@ -10,4 +11,8 @@ REDIRECT = "http://localhost:8080"
 REDDIT_REF_TOK = os.environ['REDDIT_REF_TOK']
 SUBRED = 'DecodingTheGurus'
 WIKINAME = "episodes"
-OUTPUT_FILE = "episodes.md"
+thisfile = Path(__file__).parent
+EPISODES_MD = thisfile / "episodes.md"
+EPISODES_JSON = thisfile / "episodes.json"
+EPISODES_MD.touch(exist_ok=True)
+EPISODES_JSON.touch(exist_ok=True)

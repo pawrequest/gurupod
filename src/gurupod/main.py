@@ -1,19 +1,35 @@
+import asyncio
+import time
 from pathlib import Path
 
 import praw
 
-from data.consts import MAIN_URL, OUTPUT_FILE, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
+from data.consts import EPISODES_MD, MAIN_URL, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
     REDDIT_REF_TOK, REDIRECT, SUBRED, USER_AGENT, WIKINAME
 from data.dld import EXISTING_EPS
-from gurupod.episode import get_all_episodes
+from gurupod.episodes import get_new_eps_as, get_eps
+from gurupod.episode_sync import get_all_episodes
 from gurupod.writer import RedditWriter
 
 
-def main():
+def time_diff():
+    st1 = time.perf_counter_ns()
+    eps2 = asyncio.run(get_new_eps_as(MAIN_URL, existing_eps=EXISTING_EPS))
+    st2 = time.perf_counter_ns()
     eps = get_all_episodes(MAIN_URL, existing_eps=EXISTING_EPS)
-    writer = RedditWriter(eps)
+    st3 = time.perf_counter_ns()
+    time_as = st2 - st1
+    time_norm = st3 - st2
+    print(f" \n {time_norm=}, {time_as=} ratio = {time_norm / time_as}")
+
+
+def main():
+    # time_diff()
+    episodes = get_eps()
+
+    writer = RedditWriter(episodes)
     markdown = writer.all_eps_to_md()
-    writer.save_markdown(outfile=Path(OUTPUT_FILE), markup=markdown)
+    writer.save_markdown(outfile=Path(EPISODES_MD), markup=markdown)
 
     reddit = get_reddit()
     subreddit = reddit.subreddit(SUBRED)

@@ -1,7 +1,6 @@
 from __future__ import annotations, annotations
 
 import time
-from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
@@ -9,24 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser
 
-
-@dataclass
-class Episode:
-    show_name: str
-    show_links: dict
-    show_notes: list
-    show_date: datetime.date
-    show_url: str
-
-    @classmethod
-    def from_tup_n_soup(cls, ep_tup, ep_soup) -> Episode:
-        return cls(
-            show_name=ep_tup[0],
-            show_url=ep_tup[1],
-            show_date=ep_soup_date(ep_soup),
-            show_notes=ep_soup_notes(ep_soup),
-            show_links=ep_soup_links(ep_soup),
-        )
+from gurupod.episodes import Episode
 
 
 def get_all_episodes(main_url: str, existing_eps: dict or None = None) -> List[Episode]:
@@ -70,23 +52,20 @@ def _get_response(url: str):
 
 
 def _get_num_pages(main_url: str) -> int:
-    """
-    gets number of pages from the 'last' button on captivate.fm
-    :param main_url:
-    :return num_pages:
-    """
     response = _get_response(main_url)
     soup = BeautifulSoup(response.text, "html.parser")
     page_links = soup.select(".page-link")
     lastpage = page_links[-1]['href']
-    num_pages = lastpage.replace("https://decoding-the-gurus.captivate.fm/episodes/", "")
-    num_pages = int(num_pages.replace("#showEpisodes", ""))  #
+    num_pages = lastpage.split("/")[-1].split("#")[0]
+    # num_pages = lastpage.replace("https://decoding-the-gurus.captivate.fm/episodes/", "")
+    # num_pages = int(num_pages.replace("#showEpisodes", ""))  #
 
-    return num_pages
+    return int(num_pages)
 
 
 def get_listing_pages(main_url: str) -> List[str]:
-    return [_url_from_pagenum(main_url, page_num) for page_num in range(_get_num_pages(main_url))]
+    return [_url_from_pagenum(main_url, page_num)
+            for page_num in range(_get_num_pages(main_url))]
 
 
 def _url_from_pagenum(main_url: str, page_num: int) -> str:

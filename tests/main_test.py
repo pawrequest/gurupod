@@ -3,8 +3,8 @@ import datetime
 import pytest
 from bs4 import BeautifulSoup
 
-from data.consts import MAIN_URL
-from src.gurupod.episode import _url_from_pagenum, ep_soup_from_link, ep_soup_date, ep_soup_notes, \
+from gurupod.data.consts import MAIN_URL
+from src.gurupod.episode_sync import _url_from_pagenum, ep_soup_from_link, ep_soup_date, ep_soup_notes, \
     ep_soup_links
 
 
