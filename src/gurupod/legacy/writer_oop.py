@@ -6,6 +6,15 @@ from pathlib import Path
 from gurupod.episodes import Episode
 
 
+def save_markup(outfile: Path, markup: str):
+    if not markup:
+        print("no text to write")
+        return
+
+    with open(outfile, "w", encoding='utf-8') as output:
+        output.write(markup)
+
+
 class EpisodeWriter(ABC):
     def __init__(self, episodes: [Episode]):
         self.episodes = episodes
@@ -30,14 +39,6 @@ class EpisodeWriter(ABC):
         text += self.final_text()
 
         return text
-
-    def save_markup(self, outfile: Path, markup: str):
-        if not markup:
-            print("no text to write")
-            return
-
-        with open(outfile, "w", encoding='utf-8') as output:
-            output.write(markup)
 
     @abstractmethod
     def title_text(self, episode) -> str:
