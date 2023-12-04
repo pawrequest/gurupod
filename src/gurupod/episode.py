@@ -42,7 +42,7 @@ def get_all_episodes(main_url: str, existing_eps: dict or None = None) -> List[E
 def episodes_from_listing_page(page_url: str, existing_eps: dict or None = None) -> List[Episode]:
     existing_eps = existing_eps or {}
     new_eps = []
-    ep_tups = list_page_names_links(page_url)
+    ep_tups = names_n_links(page_url)
     for tup in ep_tups:
         if tup[0] in existing_eps:
             print(f"Already Exists: {tup[0]}")
@@ -51,23 +51,6 @@ def episodes_from_listing_page(page_url: str, existing_eps: dict or None = None)
         print(f"New episode found: {tup[0]}")
         ep_soup = ep_soup_from_link(tup[1])
         new_eps.append(Episode.from_tup_n_soup(tup, ep_soup))
-
-    #
-    # for title, link in ep_tups:
-    #     if title in existing_eps:
-    #         print(f"Already Exists: {title}")
-    #         return new_eps
-    #
-    #     print(f"New episode found: {title}")
-    #     ep_soup = ep_soup_from_link(link)
-    #     new
-    #     new_eps.append(Episode(
-    #         show_name=title,
-    #         show_url=link,
-    #         show_date=ep_soup_date(ep_soup),
-    #         show_notes=ep_soup_notes(ep_soup),
-    #         show_links=ep_soup_links(ep_soup),
-    #     ))
 
     return new_eps
 
@@ -114,7 +97,7 @@ def _url_from_pagenum(main_url: str, page_num: int) -> str:
 # Soupy functions:
 
 
-def list_page_names_links(page_url: str) -> tuple[tuple[str, str]]:
+def names_n_links(page_url: str) -> tuple[tuple[str, str]]:
     response = requests.get(page_url)
     soup = BeautifulSoup(response.text, "html.parser")
     episode_soup = soup.select(".episode")
