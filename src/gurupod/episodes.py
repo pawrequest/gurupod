@@ -17,11 +17,15 @@ from gurupod.data.consts import EPISODES_JSON, MAIN_URL
 @dataclass
 class Episode:
     show_name: str
-    show_links: dict
-    show_notes: list
-    show_date: datetime.date
     show_url: str
+    show_notes: list
+    show_links: dict
+    show_date: datetime.date or str
     num: int = None
+
+    def __post_init__(self):
+        if isinstance(self.show_date, str):
+            self.show_date = datetime.strptime(self.show_date, "%Y-%m-%d").date()
 
     @property
     def details(self):
@@ -54,30 +58,25 @@ class EpTup(NamedTuple):
 
 
 class EpDetails(NamedTuple):
-    date: datetime.date
     notes: list
     links: dict
+    date: datetime.date
 
     @classmethod
     def from_soup(cls, ep_soup):
         """ ep_soup is a complete episode-specific page"""
-        return cls(ep_soup_date(ep_soup), ep_soup_notes(ep_soup), ep_soup_links(ep_soup))
+        return cls(
+            notes=ep_soup_notes(ep_soup),
+            links=ep_soup_links(ep_soup),
+            date=ep_soup_date(ep_soup),
+        )
 
 
-# def ep_soup_details(ep_soup) -> EpDetails:
-#     return EpDetails(ep_soup_date(ep_soup), ep_soup_notes(ep_soup), ep_soup_links(ep_soup))
-
-
-def ep_tup_from_soup(ep_soup) -> EpTup:
-    return EpTup(ep_soup.select_one(".episode-title a").text,
-                 str(ep_soup.select_one(".episode-title a")['href']))
-
-
-def new_episodes_():
+def all_episodes_():
     existing_dict, existing_eps = existing_episodes_()
     new_eps = asyncio.run(get_new_eps(MAIN_URL, existing_d=existing_dict))
     all_eps = existing_eps + new_eps
-    all_eps.sort(key=lambda ep: ep.show_date, reverse=True)
+    all_eps.sort(key=lambda epi: epi.show_date, reverse=True)
     for number, ep in enumerate(all_eps):
         ep.num = number
 
@@ -125,10 +124,20 @@ async def episodes_from_page(
             print(f"Already Exists: {tup[0]}")
             return new_eps
 
-        print(f"New episode found: {tup[0]}")
+        print(f"New episode found: {tup}")
         ep_soup = await ep_soup_from_link(tup.url, session)
-        ep_details_ = ep_soup_details(ep_soup)
-        new_eps.append(Episode.from_tuppies(tup, ep_details_))
+        # ep_details_ = ep_soup_details(ep_soup)
+        ep_details_ = EpDetails.from_soup(ep_soup)
+        # new_eps.append(Episode.from_tuppies(tup, ep_details_))
+        new_e = Episode(*tup, *ep_details_)
+        new_eps.append(Episode(*tup, *ep_details_))
+        # new_eps.append(Episode(
+        #     show_name=tup.name,
+        #     show_url=tup.url,
+        #     show_date=ep_soup_date(ep_soup),
+        #     show_notes=ep_soup_notes(ep_soup),
+        #     show_links=ep_soup_links(ep_soup),
+        # ))
 
     return new_eps
 
@@ -170,7 +179,8 @@ async def names_n_links(page_url: str, session):
     soup = BeautifulSoup(text, "html.parser")
     episodes_soup = soup.select(".episode")
     for ep_soup in episodes_soup:
-        yield ep_tup_from_soup(ep_soup)
+        yield EpTup.from_soup(ep_soup)
+        # yield ep_tup_from_soup(ep_soup)
 
         # yield (ep_soup.select_one(".episode-title a").text,
         #        str(ep_soup.select_one(".episode-title a")['href']))
