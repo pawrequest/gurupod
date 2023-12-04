@@ -64,7 +64,8 @@ class EpisodeWriter(ABC):
     def final_text(self) -> str:
         raise NotImplementedError
 
-boilerplate = """
+
+HEAD_ = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,18 +75,18 @@ boilerplate = """
 </head>
 <body>
 """
+TAIL = "</body>\n</html>"
 
 
 class HtmlWriter(EpisodeWriter):
     def all_eps_to_md(self):
-        self.text = boilerplate
+        self.text = HEAD_
         for ep in self.eps:
             self.text += self.ep_to_md(ep)
-        self.text += "</body>\n</html>"
+        self.text += TAIL
         return self.text
 
     def title_text(self, episode_name, show_url) -> str:
-
         return f"<h1>{episode_name}</h1>\n<a href='{show_url}'>Play on Captivate.fm</a>\n"
 
     def date_text(self, date_pub) -> str:
