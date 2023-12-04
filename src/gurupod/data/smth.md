@@ -1,6 +1,5 @@
-## 105: [Interview with Daniël Lakens and Smriti Mehta on the state of Psychology](https://decoding-the-gurus.captivate.fm/episode/interview-with-daniel-lakens-and-smriti-mehta-on-the-state-of-psychology)
+## [Interview with Daniël Lakens and Smriti Mehta on the state of Psychology](https://decoding-the-gurus.captivate.fm/episode/interview-with-daniel-lakens-and-smriti-mehta-on-the-state-of-psychology)
  
-
 ***Date Published:*** 2023-11-18
  
 ***Show Notes:***
@@ -30,9 +29,8 @@ Back soon with a Decoding episode!
 
  
  --- 
-## 104: [Andrew Huberman and Peter Attia: Self-enhancement, supplements & doughnuts?](https://decoding-the-gurus.captivate.fm/episode/andrew-huberman-and-peter-attia-optimising-your-pizza-binges)
+## [Andrew Huberman and Peter Attia: Self-enhancement, supplements & doughnuts?](https://decoding-the-gurus.captivate.fm/episode/andrew-huberman-and-peter-attia-optimising-your-pizza-binges)
  
-
 ***Date Published:*** 2023-11-09
  
 ***Show Notes:***
@@ -68,9 +66,8 @@ Also featuring, an introduction that covers Irish history, the most humble guru 
 
  
  --- 
-## 103: [Interview with Julia Ebner: Extremist Networks & Radicalisation](https://decoding-the-gurus.captivate.fm/episode/interview-with-julia-ebner-extremist-networks-radicalisation)
+## [Interview with Julia Ebner: Extremist Networks & Radicalisation](https://decoding-the-gurus.captivate.fm/episode/interview-with-julia-ebner-extremist-networks-radicalisation)
  
-
 ***Date Published:*** 2023-10-16
  
 ***Show Notes:***
@@ -108,9 +105,8 @@ For a palette cleanser enjoy an extended review-of-reviews and some marathon sho
 
  
  --- 
-## 102: [Triggernometry's Big Moment: Entering the Guru Galaxy](https://decoding-the-gurus.captivate.fm/episode/triggernometry-enter-the-big-leagues)
+## [Triggernometry's Big Moment: Entering the Guru Galaxy](https://decoding-the-gurus.captivate.fm/episode/triggernometry-enter-the-big-leagues)
  
-
 ***Date Published:*** 2023-10-03
  
 ***Show Notes:***
@@ -150,9 +146,8 @@ Also on this episode: some updates on previous gurus (Russell Brand & Ibram X. K
 
  
  --- 
-## 101: [Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy](https://decoding-the-gurus.captivate.fm/episode/interview-with-the-conspirituality-trio)
+## [Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy](https://decoding-the-gurus.captivate.fm/episode/interview-with-the-conspirituality-trio)
  
-
 ***Date Published:*** 2023-09-19
  
 ***Show Notes:***
@@ -194,9 +189,8 @@ Other Links
 
  
  --- 
-## 100: [Andrew Huberman: Forest Bathing in Negative Ions](https://decoding-the-gurus.captivate.fm/episode/andrew-huberman-forest-bathing-in-negative-ions)
+## [Andrew Huberman: Forest Bathing in Negative Ions](https://decoding-the-gurus.captivate.fm/episode/andrew-huberman-forest-bathing-in-negative-ions)
  
-
 ***Date Published:*** 2023-09-06
  
 ***Show Notes:***
@@ -238,9 +232,8 @@ Also featuring: some good content recommendations (for a change!) and a review o
 
  
  --- 
-## 99: [Noam Chomsky: Lover of linguistics, the USA... not so much](https://decoding-the-gurus.captivate.fm/episode/noam-chomsky)
+## [Noam Chomsky: Lover of linguistics, the USA... not so much](https://decoding-the-gurus.captivate.fm/episode/noam-chomsky)
  
-
 ***Date Published:*** 2023-08-18
  
 ***Show Notes:***
@@ -276,9 +269,8 @@ Enjoy!
 
  
  --- 
-## 98: [The Science and the Art of Gurometry](https://decoding-the-gurus.captivate.fm/episode/the-science-and-the-art-of-gurometry)
+## [The Science and the Art of Gurometry](https://decoding-the-gurus.captivate.fm/episode/the-science-and-the-art-of-gurometry)
  
-
 ***Date Published:*** 2023-07-22
  
 ***Show Notes:***
@@ -306,9 +298,8 @@ You're welcome.
 
  
  --- 
-## 97: [Mick West & Eric Weinstein: UFO Tango](https://decoding-the-gurus.captivate.fm/episode/mick-west-eric-weinstein-ufo-tango)
+## [Mick West & Eric Weinstein: UFO Tango](https://decoding-the-gurus.captivate.fm/episode/mick-west-eric-weinstein-ufo-tango)
  
-
 ***Date Published:*** 2023-07-14
  
 ***Show Notes:***
@@ -348,9 +339,8 @@ So join us, won't you, as we boldly venture through the outermost reaches of the
 
  
  --- 
-## 96: [Interview with Jonathan Howard on Covid Contrarians](https://decoding-the-gurus.captivate.fm/episode/interview-with-jonathan-howard-on-covid-contrarians)
+## [Interview with Jonathan Howard on Covid Contrarians](https://decoding-the-gurus.captivate.fm/episode/interview-with-jonathan-howard-on-covid-contrarians)
  
-
 ***Date Published:*** 2023-06-23
  
 ***Show Notes:***
@@ -392,9 +382,8 @@ In any case, we learnt a lot and enjoyed the discussion with Jonathan and hope y
 
  
  --- 
-## 95: ["Mini" Decoding of Michael Shermer's Advice on Conspiracy Theories](https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-michael-shermers-advice-on-conspiracy-theories)
+## ["Mini" Decoding of Michael Shermer's Advice on Conspiracy Theories](https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-michael-shermers-advice-on-conspiracy-theories)
  
-
 ***Date Published:*** 2023-06-21
  
 ***Show Notes:***
@@ -430,9 +419,8 @@ Back soon enough with a full waffle episode!
 
  
  --- 
-## 94: [Interview with Mick West: UFOs, Aliens, and Conspiracy Psychology](https://decoding-the-gurus.captivate.fm/episode/interview-with-mick-west-ufos-aliens-and-c)
+## [Interview with Mick West: UFOs, Aliens, and Conspiracy Psychology](https://decoding-the-gurus.captivate.fm/episode/interview-with-mick-west-ufos-aliens-and-c)
  
-
 ***Date Published:*** 2023-06-17
  
 ***Show Notes:***
@@ -464,9 +452,8 @@ Other Links
 
  
  --- 
-## 93: [Eliezer Yudkowksy: AI is going to kill us all](https://decoding-the-gurus.captivate.fm/episode/74-eliezer-yudkowksy-ai-is-going-to-kill-us-all)
+## [Eliezer Yudkowksy: AI is going to kill us all](https://decoding-the-gurus.captivate.fm/episode/74-eliezer-yudkowksy-ai-is-going-to-kill-us-all)
  
-
 ***Date Published:*** 2023-06-10
  
 ***Show Notes:***
@@ -500,9 +487,8 @@ We can't promise to have all the answers. But we can promise to talk about it. A
 
  
  --- 
-## 92: [Interview with Renée DiResta: Online Ecosystems, Disinformation, & Censorship Debates](https://decoding-the-gurus.captivate.fm/episode/interview-with-renee-diresta-online-ecosystems-disinformation-censorship-debates)
+## [Interview with Renée DiResta: Online Ecosystems, Disinformation, & Censorship Debates](https://decoding-the-gurus.captivate.fm/episode/interview-with-renee-diresta-online-ecosystems-disinformation-censorship-debates)
  
-
 ***Date Published:*** 2023-05-20
  
 ***Show Notes:***
@@ -538,9 +524,8 @@ Also covered in this episode: Eric Weinstein's suggestions for Twitter CEO, evid
 
  
  --- 
-## 91: [Christopher Hitchens: Rhetoric, Religion, and Ramadan](https://decoding-the-gurus.captivate.fm/episode/christopher-hitchens-)
+## [Christopher Hitchens: Rhetoric, Religion, and Ramadan](https://decoding-the-gurus.captivate.fm/episode/christopher-hitchens-)
  
-
 ***Date Published:*** 2023-05-15
  
 ***Show Notes:***
@@ -570,9 +555,8 @@ Also covered in the episode Andrew Huberman and whether sad women's tears have u
 
  
  --- 
-## 90: [Interview with Matt Johnson on Christopher Hitchens](https://decoding-the-gurus.captivate.fm/episode/interview-with-matt-johnson-on-christopher-hitchens)
+## [Interview with Matt Johnson on Christopher Hitchens](https://decoding-the-gurus.captivate.fm/episode/interview-with-matt-johnson-on-christopher-hitchens)
  
-
 ***Date Published:*** 2023-05-09
  
 ***Show Notes:***
@@ -602,9 +586,8 @@ So join us one and all! And don't forget to subscribe to Sam Harris' meditation 
 
  
  --- 
-## 89: [Oprah Winfrey: Self Actualising Your Destiny](https://decoding-the-gurus.captivate.fm/episode/oprah-winfrey-self-actualising-your-destiny)
+## [Oprah Winfrey: Self Actualising Your Destiny](https://decoding-the-gurus.captivate.fm/episode/oprah-winfrey-self-actualising-your-destiny)
  
-
 ***Date Published:*** 2023-04-16
  
 ***Show Notes:***
@@ -630,9 +613,8 @@ Also on this week's episode discover whether Oprah earns a place on Guru island,
 
  
  --- 
-## 88: ["Mini" Decoding of Matthew Goodwin & Interview with Paul Bloom](https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-matthew-goodwin-interview-with-paul-bloom)
+## ["Mini" Decoding of Matthew Goodwin & Interview with Paul Bloom](https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-matthew-goodwin-interview-with-paul-bloom)
  
-
 ***Date Published:*** 2023-04-08
  
 ***Show Notes:***
@@ -664,9 +646,8 @@ Next up Oprah! Coming soon...
 
  
  --- 
-## 87: [Interview with Travis View: QANon & Modern Conspiracies](https://decoding-the-gurus.captivate.fm/episode/interview-with-travis-view-qanon-modern-conspiracies)
+## [Interview with Travis View: QANon & Modern Conspiracies](https://decoding-the-gurus.captivate.fm/episode/interview-with-travis-view-qanon-modern-conspiracies)
  
-
 ***Date Published:*** 2023-03-25
  
 ***Show Notes:***
@@ -696,9 +677,8 @@ Wisdom Signalling & the Wisdom of Criticism w/ John Veraveke, Chris M, Chris Kav
 
  
  --- 
-## 86: [Interview with Worobey, Andersen & Holmes: The Lab Leak](https://decoding-the-gurus.captivate.fm/episode/interview-with-worobey-andersen-holmes-the-lab-leak)
+## [Interview with Worobey, Andersen & Holmes: The Lab Leak](https://decoding-the-gurus.captivate.fm/episode/interview-with-worobey-andersen-holmes-the-lab-leak)
  
-
 ***Date Published:*** 2023-03-11
  
 ***Show Notes:***
@@ -748,9 +728,8 @@ Relevant Research Papers & Letters
 
  
  --- 
-## 85: [Dave Rubin: A Pointless Partisan Pundit](https://decoding-the-gurus.captivate.fm/episode/dave-rubin-a-pointless-partisan-pundit)
+## [Dave Rubin: A Pointless Partisan Pundit](https://decoding-the-gurus.captivate.fm/episode/dave-rubin-a-pointless-partisan-pundit)
  
-
 ***Date Published:*** 2023-03-08
  
 ***Show Notes:***
@@ -784,9 +763,8 @@ P.S. We also talk (probably for too long) about "discourse surfing" in relation 
 
  
  --- 
-## 84: [Bill Maher: A boozy, stoned, liberal take on classic anti-vax tropes](https://decoding-the-gurus.captivate.fm/episode/bill-maher-a-boozy-stoned-liberal-take-on-classic-anti-vax-tropes)
+## [Bill Maher: A boozy, stoned, liberal take on classic anti-vax tropes](https://decoding-the-gurus.captivate.fm/episode/bill-maher-a-boozy-stoned-liberal-take-on-classic-anti-vax-tropes)
  
-
 ***Date Published:*** 2023-02-25
  
 ***Show Notes:***
@@ -820,9 +798,8 @@ Also features discussions of Chris' run-ins with the rationalists, a new 'Whinge
 
  
  --- 
-## 83: [Daniel Dennett: It's Evolution Baby](https://decoding-the-gurus.captivate.fm/episode/daniel-dennett-its-evolution-baby)
+## [Daniel Dennett: It's Evolution Baby](https://decoding-the-gurus.captivate.fm/episode/daniel-dennett-its-evolution-baby)
  
-
 ***Date Published:*** 2023-02-02
  
 ***Show Notes:***
@@ -846,9 +823,8 @@ An extended introduction section will also reveal our first DTG conspiracy hypot
 
  
  --- 
-## 82: ["Mini" Decoding of Konstantin Kisin's Oxford Union speech](https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-konstantin-kisins-oxford-union-speech)
+## ["Mini" Decoding of Konstantin Kisin's Oxford Union speech](https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-konstantin-kisins-oxford-union-speech)
  
-
 ***Date Published:*** 2023-01-21
  
 ***Show Notes:***
@@ -886,9 +862,8 @@ Global Concern about Climate Change, Broad Support for Limiting Emissions
 
  
  --- 
-## 81: [Interview with Coffeezilla on Cryptocurrencies, NFTs, and modern scammers](https://decoding-the-gurus.captivate.fm/episode/interview-with-coffeezilla)
+## [Interview with Coffeezilla on Cryptocurrencies, NFTs, and modern scammers](https://decoding-the-gurus.captivate.fm/episode/interview-with-coffeezilla)
  
-
 ***Date Published:*** 2023-01-14
  
 ***Show Notes:***
@@ -902,22 +877,6 @@ Coffeezilla's hard work on financial scammer has made him extremely knowledgeabl
 Oh, and Chris and Matt talk about Lex Fridman and that damn booklist in the introduction, and introduce a new segment the 'Weekly Wisdom of Mikhaila' at the end.
  
 Enjoy!
- 
-Coffeezilla feed on YouTube
- 
-Coffeezilla's Investigating Logan Paul's CryptoZoo series
- 
-Logan Paul's attempts to address and redress
- 
-CoffeeZilla on The Lex Fridman Podcast
- 
-MIchaela's Q&A to end 2022
- 
-Lex being sad about people dunking on his reading list
- 
-Nassim Taleb on Lex
- 
-Nathan J Robinson: The Guy Who Just Loves Everyone
  
 ***Show Links:***
  
@@ -940,9 +899,8 @@ Nathan J Robinson: The Guy Who Just Loves Everyone
 
  
  --- 
-## 80: [Elon Musk: The Techno Shaman](https://decoding-the-gurus.captivate.fm/episode/elon-musk-the-techno-shaman)
+## [Elon Musk: The Techno Shaman](https://decoding-the-gurus.captivate.fm/episode/elon-musk-the-techno-shaman)
  
-
 ***Date Published:*** 2022-12-29
  
 ***Show Notes:***
@@ -978,9 +936,8 @@ Oh and also Happy New Year! Remember to keep an eye out for those pesky Distribu
 
  
  --- 
-## 79: [Gurus Christmas Special with Helen Lewis](https://decoding-the-gurus.captivate.fm/episode/gurus-christmas-special-with-helen-lewis)
+## [Gurus Christmas Special with Helen Lewis](https://decoding-the-gurus.captivate.fm/episode/gurus-christmas-special-with-helen-lewis)
  
-
 ***Date Published:*** 2022-12-27
  
 ***Show Notes:***
@@ -1012,9 +969,8 @@ P.S. The Elon Decoding episode is on its way very soon!
 
  
  --- 
-## 78: [Guru Right to Reply with Jamie Wheal](https://decoding-the-gurus.captivate.fm/episode/guru-right-to-reply-with-jamie-wheal)
+## [Guru Right to Reply with Jamie Wheal](https://decoding-the-gurus.captivate.fm/episode/guru-right-to-reply-with-jamie-wheal)
  
-
 ***Date Published:*** 2022-12-10
  
 ***Show Notes:***
@@ -1052,9 +1008,8 @@ Enjoy!
 
  
  --- 
-## 77: [Interview with Manvir Singh on Gurus & Shamans](https://decoding-the-gurus.captivate.fm/episode/interview-with-manvir-singh-on-gurus-shamans)
+## [Interview with Manvir Singh on Gurus & Shamans](https://decoding-the-gurus.captivate.fm/episode/interview-with-manvir-singh-on-gurus-shamans)
  
-
 ***Date Published:*** 2022-11-17
  
 ***Show Notes:***
@@ -1090,9 +1045,8 @@ In short, there is something for everyone. So open your third eye and join us on
 
  
  --- 
-## 76: [Robin DiAngelo: Matt and Chris struggle with their fragility](https://decoding-the-gurus.captivate.fm/episode/robin-diangelo-matt-and-chris-struggle-with-their-fragility)
+## [Robin DiAngelo: Matt and Chris struggle with their fragility](https://decoding-the-gurus.captivate.fm/episode/robin-diangelo-matt-and-chris-struggle-with-their-fragility)
  
-
 ***Date Published:*** 2022-11-02
  
 ***Show Notes:***
@@ -1118,9 +1072,8 @@ So join the intrepid duo as they embark on this neverending journey to interroga
 
  
  --- 
-## 75: [Interview with Konstantin Kisin from Triggernometry on Heterodoxy, Biases, and the Media](https://decoding-the-gurus.captivate.fm/episode/interview-with-konstantin-kisin-from-tiggernometry-on-heterodoxy-biases-and-debates)
+## [Interview with Konstantin Kisin from Triggernometry on Heterodoxy, Biases, and the Media](https://decoding-the-gurus.captivate.fm/episode/interview-with-konstantin-kisin-from-tiggernometry-on-heterodoxy-biases-and-debates)
  
-
 ***Date Published:*** 2022-10-16
  
 ***Show Notes:***
@@ -1156,9 +1109,8 @@ So join us in this voyage into institutional and heterodox biases and slowly com
 
  
  --- 
-## 74: [Peterson, Murray & Pageau: Transcendent Tableware](https://decoding-the-gurus.captivate.fm/episode/peterson-murray-pageau-transcendent-tableware)
+## [Peterson, Murray & Pageau: Transcendent Tableware](https://decoding-the-gurus.captivate.fm/episode/peterson-murray-pageau-transcendent-tableware)
  
-
 ***Date Published:*** 2022-10-01
  
 ***Show Notes:***
@@ -1180,9 +1132,8 @@ Along the way Matt and Chris will also teach us valuable lessons like how to dea
 
  
  --- 
-## 73: [Interview with Neil Levy on Intellectual Virtue Signalling](https://decoding-the-gurus.captivate.fm/episode/interview-with-neil-levy-on-intellectual-virtue-signalling)
+## [Interview with Neil Levy on Intellectual Virtue Signalling](https://decoding-the-gurus.captivate.fm/episode/interview-with-neil-levy-on-intellectual-virtue-signalling)
  
-
 ***Date Published:*** 2022-09-27
  
 ***Show Notes:***
@@ -1206,9 +1157,8 @@ We heartily recommend this interview, and might even go so far as to say Neil ha
 
  
  --- 
-## 72: [Daniel Schmachtenberger, Jamie Wheal & Jordan Hall: Making Sense about Making Sense of Sensemaking](https://decoding-the-gurus.captivate.fm/episode/daniel-schmachtenberger-jamie-wheal-jordan-hall-making-sense-about-making-sense-of-sensemaking)
+## [Daniel Schmachtenberger, Jamie Wheal & Jordan Hall: Making Sense about Making Sense of Sensemaking](https://decoding-the-gurus.captivate.fm/episode/daniel-schmachtenberger-jamie-wheal-jordan-hall-making-sense-about-making-sense-of-sensemaking)
  
-
 ***Date Published:*** 2022-09-14
  
 ***Show Notes:***
@@ -1234,9 +1184,8 @@ So join us as we operate in 75 simultaneous paradigms, make not just sense but a
 
  
  --- 
-## 71: [Interview with Helen Lewis on culture wars and religion, that Jordan Peterson interview, and gurus generally](https://decoding-the-gurus.captivate.fm/episode/interview-with-helen-lewis-on-that-article-jpb-and-gurus-generally)
+## [Interview with Helen Lewis on culture wars and religion, that Jordan Peterson interview, and gurus generally](https://decoding-the-gurus.captivate.fm/episode/interview-with-helen-lewis-on-that-article-jpb-and-gurus-generally)
  
-
 ***Date Published:*** 2022-09-03
  
 ***Show Notes:***
@@ -1268,9 +1217,8 @@ Also featured on this episode: our most defensive response to a review to date, 
 
  
  --- 
-## 70: [Interview with Dan Friesen from Knowledge Fight on Alex Jones, the Sandy Hook Trial, and conspiracy ecosystems](https://decoding-the-gurus.captivate.fm/episode/interview-with-dan-friesen-from-knowledge-fight-on-alex-jones-the-sandhook-trial-and-conspiracy-ecosystems)
+## [Interview with Dan Friesen from Knowledge Fight on Alex Jones, the Sandy Hook Trial, and conspiracy ecosystems](https://decoding-the-gurus.captivate.fm/episode/interview-with-dan-friesen-from-knowledge-fight-on-alex-jones-the-sandhook-trial-and-conspiracy-ecosystems)
  
-
 ***Date Published:*** 2022-08-27
  
 ***Show Notes:***
@@ -1304,9 +1252,8 @@ Also, in this episode, we discuss Sam Harris' recent online travails, Jordan Pet
 
  
  --- 
-## 69: [John Vervaeke & Jonathan Pageau: Decoding the Demons](https://decoding-the-gurus.captivate.fm/episode/decoding-the-demons-john-vervaeke-jonathan-pageau)
+## [John Vervaeke & Jonathan Pageau: Decoding the Demons](https://decoding-the-gurus.captivate.fm/episode/decoding-the-demons-john-vervaeke-jonathan-pageau)
  
-
 ***Date Published:*** 2022-08-21
  
 ***Show Notes:***
@@ -1326,9 +1273,8 @@ Join us for this special mini decoding and find out!
 
  
  --- 
-## 68: [Interview with Elgen Strait on the Unification Church and the assassination of Shinzo Abe](https://decoding-the-gurus.captivate.fm/episode/interview-with-elgen-strait-on-the-unification-church-and-the-assassination-of-shinzo-abe)
+## [Interview with Elgen Strait on the Unification Church and the assassination of Shinzo Abe](https://decoding-the-gurus.captivate.fm/episode/interview-with-elgen-strait-on-the-unification-church-and-the-assassination-of-shinzo-abe)
  
-
 ***Date Published:*** 2022-08-20
  
 ***Show Notes:***
@@ -1364,9 +1310,8 @@ The next decoding episode we are back with the sensemakers and it's one you won'
 
  
  --- 
-## 67: [Special: Guru Right to Reply with Robert Wright](https://decoding-the-gurus.captivate.fm/episode/special-guru-right-to-reply-with-robert-wright)
+## [Special: Guru Right to Reply with Robert Wright](https://decoding-the-gurus.captivate.fm/episode/special-guru-right-to-reply-with-robert-wright)
  
-
 ***Date Published:*** 2022-07-31
  
 ***Show Notes:***
@@ -1384,12 +1329,6 @@ In the original episode, we made only passing reference to our disagreements wit
 It's no secret we earnestly disagree with Bob on geopolitics. But it's most definitely one of those topics where decent people can disagree. Since he's a frood who Really Knows Where His Towel is, we always appreciate the chance to talk to him. And who knows, one day Matt and Chris might even be wrong about something!? If so, I'm sure the subreddit will let us know.
  
 Enjoy!
- 
-﻿Your Gurometer Ratings!
- 
-If you want to play along you can add your own scores for Jordan or any of our previous gurus here:
- 
-And if you want to check the collected results:
  
 ***Show Links:***
  
@@ -1412,9 +1351,8 @@ And if you want to check the collected results:
 
  
  --- 
-## 66: [Recoding Jordan Peterson: Think again, Sunshine!](https://decoding-the-gurus.captivate.fm/episode/recoding-jordan-peterson-think-again-sunshine)
+## [Recoding Jordan Peterson: Think again, Sunshine!](https://decoding-the-gurus.captivate.fm/episode/recoding-jordan-peterson-think-again-sunshine)
  
-
 ***Date Published:*** 2022-07-24
  
 ***Show Notes:***
@@ -1426,12 +1364,6 @@ Nevertheless, this is still a 'recoding' episode of a previously decoded guru. F
 This time we find Jordan in a foul mood delivering some stern advice to the Christian Churches on how to attract and recruit young men. He's been on a bit of a roll recently (since joining the Daily Wire) and thus far has delivered unsolicited 'messages' to Christians, Muslims, and CEOs. The mind boggles at how much advice he will have provided and to how many groups before the year is out!
  
 So join the decoders for a (theoretically) condensed decoding of a paradigmatic modern guru on the rampage. Think we are kidding? Think again sunshine. Listen... NOW! Do it, before it is too late.
- 
-Your Gurometer Ratings!
- 
-If you want to play along you can add your own scores for Jordan or any of our previous gurus here:
- 
-And if you want to check the collected results:
  
 ***Show Links:***
  
@@ -1458,9 +1390,8 @@ And if you want to check the collected results:
 
  
  --- 
-## 65: [*Patreon Preview* Lex and Haidt: Gurometer Ratings](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-gurometer)
+## [*Patreon Preview* Lex and Haidt: Gurometer Ratings](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-gurometer)
  
-
 ***Date Published:*** 2022-07-10
  
 ***Show Notes:***
@@ -1486,9 +1417,8 @@ And if you want to check the collected results:
 
  
  --- 
-## 64: [Lex Fridman & Jonathan Haidt: The Techno Monk & The Social Scientist](https://decoding-the-gurus.captivate.fm/episode/lex-fridman-jonathan-haidt-the-techno-monk-the-social-scientist)
+## [Lex Fridman & Jonathan Haidt: The Techno Monk & The Social Scientist](https://decoding-the-gurus.captivate.fm/episode/lex-fridman-jonathan-haidt-the-techno-monk-the-social-scientist)
  
-
 ***Date Published:*** 2022-07-08
  
 ***Show Notes:***
@@ -1526,9 +1456,8 @@ Join us and find out!
 
  
  --- 
-## 63: [Interview with Nathan Allebach on Online Brands, Weird Twitter & that Steak Umms Account](https://decoding-the-gurus.captivate.fm/episode/interview-with-nathan-allebach-on-online-brands-weird-twitter-that-steak-umms-account)
+## [Interview with Nathan Allebach on Online Brands, Weird Twitter & that Steak Umms Account](https://decoding-the-gurus.captivate.fm/episode/interview-with-nathan-allebach-on-online-brands-weird-twitter-that-steak-umms-account)
  
-
 ***Date Published:*** 2022-06-11
  
 ***Show Notes:***
@@ -1536,10 +1465,6 @@ Join us and find out!
 In a way, we're all managing our personal brand in the infosphere aren't we? But Nathan Allebach, in a far more tangible way, really does manage brands - not just his own, but also for companies. And in managing the Steak-Umm brand on twitter, he drew attention by being one of the first to adopt a personal, authentic, and informative style - covering topics far beyond the world of frozen processed steak. Far from providing the typical zero-calorie bland corporate platitudes, Nathan quickly drew attention by delivering substantial threads on weighty topics like conspiracism and online disinformation. He played a delicate game of being edgy without being snarky or combative, providing informative and positive intellectual fare, nourishing both the hearts and minds of twitter users everywhere. As a hardened and savvy longtime twitter user, he's got a good understanding of the weirdness of Being Online, and the various ways to do so.
  
 So, we were glad to have a chance to meat Nathan (virtually of course, not in the flesh), to get his insights on navigating the online world, on what it means to See and Be Seen there, and his personal approach to Doing It Right. He didn't share any Convenient Meat Recipes For Busy Professionals though, weirdly enough... Maybe we'll have to get him back for that.
- 
-Gurometer
- 
-Want to help us rate the Gurus? You can enter your own scores for any Guru here! 
  
 ***Show Links:***
  
@@ -1560,9 +1485,8 @@ Want to help us rate the Gurus? You can enter your own scores for any Guru here!
 
  
  --- 
-## 62: [Jaron Lanier: Fear of an Algorithmic Planet](https://decoding-the-gurus.captivate.fm/episode/jaron-lanier-smash-the-algorithmic-duck)
+## [Jaron Lanier: Fear of an Algorithmic Planet](https://decoding-the-gurus.captivate.fm/episode/jaron-lanier-smash-the-algorithmic-duck)
  
-
 ***Date Published:*** 2022-05-30
  
 ***Show Notes:***
@@ -1588,9 +1512,8 @@ Smash the Duck!
 
  
  --- 
-## 61: [*Patreon Preview* Decoding Academia 8: Monkey see, Monkey do?](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-decoding-academia-8-monkey-see-monkey-do)
+## [*Patreon Preview* Decoding Academia 8: Monkey see, Monkey do?](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-decoding-academia-8-monkey-see-monkey-do)
  
-
 ***Date Published:*** 2022-05-24
  
 ***Show Notes:***
@@ -1610,9 +1533,8 @@ We will be back later in the week with our normal decoding episode.
 
  
  --- 
-## 60: [Interview with Michael Inzlicht on the Replication Crisis, Mindfulness, and Responsible Heterodoy](https://decoding-the-gurus.captivate.fm/episode/interview-with-michael-inzlicht-on-the-replication-crisis-mindfulness-and-responsible-heterodoy)
+## [Interview with Michael Inzlicht on the Replication Crisis, Mindfulness, and Responsible Heterodoy](https://decoding-the-gurus.captivate.fm/episode/interview-with-michael-inzlicht-on-the-replication-crisis-mindfulness-and-responsible-heterodoy)
  
-
 ***Date Published:*** 2022-05-20
  
 ***Show Notes:***
@@ -1644,9 +1566,8 @@ Back next week with Jaron Lanier!
 
  
  --- 
-## 59: [Very Bad Gurus with David Pizarro & Tamler Sommers](https://decoding-the-gurus.captivate.fm/episode/very-bad-gurus)
+## [Very Bad Gurus with David Pizarro & Tamler Sommers](https://decoding-the-gurus.captivate.fm/episode/very-bad-gurus)
  
-
 ***Date Published:*** 2022-04-29
  
 ***Show Notes:***
@@ -1674,9 +1595,8 @@ Join us and help us as we attempt to decode with the wizards.
 
  
  --- 
-## 58: [Interview with Timbah Toast on his Tim Pool Documentary & Scooby Doo Partisans](https://decoding-the-gurus.captivate.fm/episode/interview-with-timbah-toast-on-his-tim-pool-documentary-scooby-doo-partisans)
+## [Interview with Timbah Toast on his Tim Pool Documentary & Scooby Doo Partisans](https://decoding-the-gurus.captivate.fm/episode/interview-with-timbah-toast-on-his-tim-pool-documentary-scooby-doo-partisans)
  
-
 ***Date Published:*** 2022-04-23
  
 ***Show Notes:***
@@ -1708,9 +1628,8 @@ Also featuring... a Weinstein World update, the standard banter quotient, and an
 
  
  --- 
-## 57: [Reverend Sun Myung Moon: Absolute Decoding](https://decoding-the-gurus.captivate.fm/episode/reverend-sun-myung-moon-absolute-decoding)
+## [Reverend Sun Myung Moon: Absolute Decoding](https://decoding-the-gurus.captivate.fm/episode/reverend-sun-myung-moon-absolute-decoding)
  
-
 ***Date Published:*** 2022-04-09
  
 ***Show Notes:***
@@ -1740,9 +1659,8 @@ So join us as we return to an imagined glory era of America in the 1950s (or was
 
  
  --- 
-## 56: [Interview with Elgen Strait on growing up in the Moonies & cultish manipulation](https://decoding-the-gurus.captivate.fm/episode/interview-with-elgen-strait-on-growing-up-in-the-moonies-cultish-manipulation)
+## [Interview with Elgen Strait on growing up in the Moonies & cultish manipulation](https://decoding-the-gurus.captivate.fm/episode/interview-with-elgen-strait-on-growing-up-in-the-moonies-cultish-manipulation)
  
-
 ***Date Published:*** 2022-03-31
  
 ***Show Notes:***
@@ -1758,8 +1676,6 @@ However, Elgen is a man after our own hearts and his dark sense of humour means 
 Our next episode will be guest co-hosted by Elgen as we take an excursion from the contemporary secular gurus and attempt to decode some historical recordings from a bonafide religious cult leader.
  
 This episode hopefully provides the foundations to better understand that decoding and we hope you 'enjoy' the discussion with Elgen as much as we did, despite the subject matter!
- 
-Podcast Recommendations
  
 ***Show Links:***
  
@@ -1784,9 +1700,8 @@ Podcast Recommendations
 
  
  --- 
-## 55: [Interview with Julian Walker on Conspirituality, Conspiracies and (Global) Culture Wars](https://decoding-the-gurus.captivate.fm/episode/special-interview-with-julian-walker-on-conspirituality-conspiracies-and-the-global-culture-war)
+## [Interview with Julian Walker on Conspirituality, Conspiracies and (Global) Culture Wars](https://decoding-the-gurus.captivate.fm/episode/special-interview-with-julian-walker-on-conspirituality-conspiracies-and-the-global-culture-war)
  
-
 ***Date Published:*** 2022-03-26
  
 ***Show Notes:***
@@ -1810,9 +1725,8 @@ Due to the backlog caused by lazy elves in the DTG editing bay, some of the refe
 
  
  --- 
-## 54: [Interview with Josh Szeps, The Rumble from Downunder](https://decoding-the-gurus.captivate.fm/episode/special-interview-with-josh-szeps-the-rumble-from-downunder)
+## [Interview with Josh Szeps, The Rumble from Downunder](https://decoding-the-gurus.captivate.fm/episode/special-interview-with-josh-szeps-the-rumble-from-downunder)
  
-
 ***Date Published:*** 2022-03-17
  
 ***Show Notes:***
@@ -1837,8 +1751,6 @@ We don't see eye to eye on everything, but Josh is a super cool guy so enjoy som
  
 Check it out!
  
-This Week's Sponsor
- 
 ***Show Links:***
  
 [Uncomfortable Conversations](https://podcasts.apple.com/au/podcast/uncomfortable-conversations-with-josh-szeps/id1002920114)
@@ -1862,9 +1774,8 @@ This Week's Sponsor
 
  
  --- 
-## 53: [James Lindsay & Michael O'Fallon: Eating bugs for Feminist Glaciology](https://decoding-the-gurus.captivate.fm/episode/james-lindsay-michael-ofallon-eating-bugs-for-feminist-glaciology)
+## [James Lindsay & Michael O'Fallon: Eating bugs for Feminist Glaciology](https://decoding-the-gurus.captivate.fm/episode/james-lindsay-michael-ofallon-eating-bugs-for-feminist-glaciology)
  
-
 ***Date Published:*** 2022-03-06
  
 ***Show Notes:***
@@ -1900,9 +1811,8 @@ For this excursion, Chris and Matt are joined for the second time by Aaron Rabin
 
  
  --- 
-## 52: [Interview with Liam Bright on Scientific Orthodoxy, Reform Efforts & DTG's Philosophy](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-liam-bright-on-scientific-orthodoxy-reform-efforts-dtgs-philosophy-)
+## [Interview with Liam Bright on Scientific Orthodoxy, Reform Efforts & DTG's Philosophy](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-liam-bright-on-scientific-orthodoxy-reform-efforts-dtgs-philosophy-)
  
-
 ***Date Published:*** 2022-03-03
  
 ***Show Notes:***
@@ -1912,8 +1822,6 @@ Today we have a little mid-week treat, ahead of our next decoding episode, a dis
 Liam is an Assistant Professor at the Department of Philosophy, Logic, and Scientific Method at a little known degree-mill called the London School of Economics. On this episode we have a wide ranging discussion revolving around the state of the Orthodoxy in modern scientific research, the viability of proposed reforms, and finally Liam decodes whether we are mindless defenders of the status quo or the true heirs of the Logical Positivists tradition. 
  
 Along the way we also learn the three rules to master Twitter, what Open Science is all about, whether philosophers of science are good or bad, and what exactly 26+6 equals.
- 
-This Week's Sponsor
  
 ***Show Links:***
  
@@ -1934,9 +1842,8 @@ This Week's Sponsor
 
  
  --- 
-## 51: [Interview with Virginia Heffernan on Edge, the dangers of Scientism, & Culture Wars](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-virginia-heffernan-on-edge-the-dangers-of-scientism-culture-wars)
+## [Interview with Virginia Heffernan on Edge, the dangers of Scientism, & Culture Wars](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-virginia-heffernan-on-edge-the-dangers-of-scientism-culture-wars)
  
-
 ***Date Published:*** 2022-02-26
  
 ***Show Notes:***
@@ -1946,8 +1853,6 @@ On this week's show we have a broad ranging discussion with the well known journ
 One short service note is that Matt is incognito for part of the conversation as he had a prior appointment so you will have to endure Chris functioning on his own but do not fear our intrepid psychologist re-emerges to offer some words of wisdom at the end. Also, the conversation with Virginia was recorded in advance of the events in Ukraine so no recent events are discussed (which is probably for the best).
  
 For those who want to do a bit more digging on the topics discussed, below are a bunch of related articles and you can also follow Virginia on Twitter (@page88) and check out her new podcast 'This is Critical' which encourages people to look critically at a wide array of topics, which is quite on brand for us!
- 
-This Week's Sponsor
  
 ***Show Links:***
  
@@ -1976,9 +1881,8 @@ This Week's Sponsor
 
  
  --- 
-## 50: [Robert Wright: A Cosmic Journey Across the Bob-o-verse](https://decoding-the-gurus.captivate.fm/episode/robert-wright-blackhole-gods-collective-brains)
+## [Robert Wright: A Cosmic Journey Across the Bob-o-verse](https://decoding-the-gurus.captivate.fm/episode/robert-wright-blackhole-gods-collective-brains)
  
-
 ***Date Published:*** 2022-02-19
  
 ***Show Notes:***
@@ -2022,9 +1926,8 @@ Thanks to Mark Ledwich (@mark_ledwich) and Elsa Jansen (@ElsaJansen) for the cov
 
  
  --- 
-## 49: [Interview: Debunking (Antivaxx) Funk with Dr Dan Wilson](https://decoding-the-gurus.captivate.fm/episode/dubunking-antivax-funk-with-dr-dan-wilson)
+## [Interview: Debunking (Antivaxx) Funk with Dr Dan Wilson](https://decoding-the-gurus.captivate.fm/episode/dubunking-antivax-funk-with-dr-dan-wilson)
  
-
 ***Date Published:*** 2022-02-11
  
 ***Show Notes:***
@@ -2046,9 +1949,8 @@ It was an absolute pleasure to talk to Dan. We love what he does, and we hope he
 
  
  --- 
-## 48: [Special: Joe Rogan 'Sorry, not Sorry'](https://decoding-the-gurus.captivate.fm/episode/special-episode-joe-rogan-sorry-not-sorry)
+## [Special: Joe Rogan 'Sorry, not Sorry'](https://decoding-the-gurus.captivate.fm/episode/special-episode-joe-rogan-sorry-not-sorry)
  
-
 ***Date Published:*** 2022-02-04
  
 ***Show Notes:***
@@ -2080,9 +1982,8 @@ Whether you are a fan of Rogan or a critic, we hope you can find something usefu
 
  
  --- 
-## 47: [*Patreon Preview* Malone & McCullough: Gurometer Ratings](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-malone-mccullough-gurometer)
+## [*Patreon Preview* Malone & McCullough: Gurometer Ratings](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-malone-mccullough-gurometer)
  
-
 ***Date Published:*** 2022-01-28
  
 ***Show Notes:***
@@ -2102,9 +2003,8 @@ Next week, we will be back with a full length guru episode!
 
  
  --- 
-## 46: [Robert Malone & Peter McCullough: A litany of untruths](https://decoding-the-gurus.captivate.fm/episode/robert-malone-peter-mccullough-a-litany-of-untruths)
+## [Robert Malone & Peter McCullough: A litany of untruths](https://decoding-the-gurus.captivate.fm/episode/robert-malone-peter-mccullough-a-litany-of-untruths)
  
-
 ***Date Published:*** 2022-01-13
  
 ***Show Notes:***
@@ -2116,8 +2016,6 @@ In this case, we have Dr. Robert Malone, the *self-proclaimed* inventor of mRNA 
 Matt and Chris are no medical experts nor do they play them on podcasts (if you are looking for a point by point technical/medical debunking, we would recommend following the links at the bottom of these show notes). But what they are very familiar with are modern gurus and conspiracy theorists. So in this episode, after twenty plus episodes of calibrating the Gurometer(TM) with known gurus, they take it for a new test with these two maverick doctors. Applying the well-developed science of Gurometry(TM) to a novel dataset. How do they fare? Guess...
  
 Honestly, this is probably the darkest and most depressing episode we've done. It was not fun and we would really prefer to be talking about something else but here we are. Hopefully we will not be back soon... 
- 
-Technical Rebuttal Resources
  
 ***Show Links:***
  
@@ -2152,9 +2050,8 @@ Technical Rebuttal Resources
 
  
  --- 
-## 45: [*Patreon Preview* Decoding Academia #2: False Positive Psychology](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-decoding-academia-2-false-positive-psychology)
+## [*Patreon Preview* Decoding Academia #2: False Positive Psychology](https://decoding-the-gurus.captivate.fm/episode/patreon-preview-decoding-academia-2-false-positive-psychology)
  
-
 ***Date Published:*** 2021-12-30
  
 ***Show Notes:***
@@ -2180,9 +2077,8 @@ Finally... just a quick note to say Happy New Year from Chris & Matt! We will be
 
  
  --- 
-## 44: [Joe Rogan: Just an average Joe?](https://decoding-the-gurus.captivate.fm/episode/joe-rogan-just-an-average-joe)
+## [Joe Rogan: Just an average Joe?](https://decoding-the-gurus.captivate.fm/episode/joe-rogan-just-an-average-joe)
  
-
 ***Date Published:*** 2021-12-18
  
 ***Show Notes:***
@@ -2226,9 +2122,8 @@ P.S. Did Matt mention that he had to listen to 6hrs this week?!?
 
  
  --- 
-## 43: [Special: Guru Right to Reply with Chris Williamson](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-chris-williamson)
+## [Special: Guru Right to Reply with Chris Williamson](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-chris-williamson)
  
-
 ***Date Published:*** 2021-12-10
  
 ***Show Notes:***
@@ -2254,9 +2149,8 @@ P.S. Sincere apologies for the audio quality, especially on Matt's end. We recor
 
  
  --- 
-## 42: [Decoding Academia: Matt on his ENTIRE research career *Patreon Sample*](https://decoding-the-gurus.captivate.fm/episode/decoding-academia-matt-on-his-entire-research-career-patreon-sample)
+## [Decoding Academia: Matt on his ENTIRE research career *Patreon Sample*](https://decoding-the-gurus.captivate.fm/episode/decoding-academia-matt-on-his-entire-research-career-patreon-sample)
  
-
 ***Date Published:*** 2021-12-03
  
 ***Show Notes:***
@@ -2282,9 +2176,8 @@ Here it is: the backstory of Matt.
 
  
  --- 
-## 41: [Brené Brown:  Matt and Chris courageously embrace their vulnerability](https://decoding-the-gurus.captivate.fm/episode/brene-brown-matt-and-chris-courageously-embrace-their-vulnerability)
+## [Brené Brown:  Matt and Chris courageously embrace their vulnerability](https://decoding-the-gurus.captivate.fm/episode/brene-brown-matt-and-chris-courageously-embrace-their-vulnerability)
  
-
 ***Date Published:*** 2021-11-26
  
 ***Show Notes:***
@@ -2322,9 +2215,8 @@ Well, what do they say? What is there take? You'll have to tune in to find out!
 
  
  --- 
-## 40: [Decoding Academia: Chris on Religion & Ritual *Patreon Sample*](https://decoding-the-gurus.captivate.fm/episode/patreon-sample-decoding-academia-chris-on-religion-ritual)
+## [Decoding Academia: Chris on Religion & Ritual *Patreon Sample*](https://decoding-the-gurus.captivate.fm/episode/patreon-sample-decoding-academia-chris-on-religion-ritual)
  
-
 ***Date Published:*** 2021-11-23
  
 ***Show Notes:***
@@ -2354,9 +2246,8 @@ We will be back on Friday this week with a full guru episode on Brene Brown!
 
  
  --- 
-## 39: [Interview with Annie Kelly on Vaccines, Conspiracies, & Misinformation](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-annie-kelly-on-vaccines-conspiracies-misinformation)
+## [Interview with Annie Kelly on Vaccines, Conspiracies, & Misinformation](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-annie-kelly-on-vaccines-conspiracies-misinformation)
  
-
 ***Date Published:*** 2021-11-07
  
 ***Show Notes:***
@@ -2388,9 +2279,8 @@ One of our most enjoyable and informative interviews - do check it out!
 
  
  --- 
-## 38: [Special: Interview with Sam Harris on Gurus, Tribalism & the Culture War](https://decoding-the-gurus.captivate.fm/episode/sam-harris)
+## [Special: Interview with Sam Harris on Gurus, Tribalism & the Culture War](https://decoding-the-gurus.captivate.fm/episode/sam-harris)
  
-
 ***Date Published:*** 2021-10-30
  
 ***Show Notes:***
@@ -2408,8 +2298,6 @@ In the second section, we turn to some of the more controversial topics that hav
 Although the format is an interview, it does get quite ‘debate-y’ at times. And it’s probably true that we don’t come to a grand reconciliation of views at the end. However, nobody storms off, so what you get is a frank and friendly but robust exchange of views.
  
 We hope you enjoy it.
- 
-This Week's Sponsor
  
 ***Show Links:***
  
@@ -2442,9 +2330,8 @@ This Week's Sponsor
 
  
  --- 
-## 37: [Mikhaila Peterson: The Marvelous World of Meat](https://decoding-the-gurus.captivate.fm/episode/mikhaila-peterson-the-marvelous-world-of-meat)
+## [Mikhaila Peterson: The Marvelous World of Meat](https://decoding-the-gurus.captivate.fm/episode/mikhaila-peterson-the-marvelous-world-of-meat)
  
-
 ***Date Published:*** 2021-10-26
  
 ***Show Notes:***
@@ -2460,8 +2347,6 @@ In this episode you'll learn about the surprising diversity of customised, bespo
 More substantively, Mikhaila provides an interesting entry point to dig a little deeper into the psychological, psychosomatic, and physical problems that lead people into adopting this kind of restrictive practice. Just as Jordan Peterson discussed the truly horrific and destructive powers unleashed by sipping apple cider, there seems to be a common theme of attributing HUGE and dramatic powers to dietary choices. All of which is connected to existential concerns about what we put into our body, magical thinking about health and wellness, heuristics about purity, and anxieties about personal control. Get ready for lots of anecdotal reasoning and emotional testimonies of those with meat based lived experience.
  
 Could an all meat diet be for you? Tune in, and find out!
- 
-This Week's Sponsor
  
 ***Show Links:***
  
@@ -2484,9 +2369,8 @@ This Week's Sponsor
 
  
  --- 
-## 36: [Interview with Stuart Neil on SARS CoV-2](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-stuart-neil-on-sars-cov-2)
+## [Interview with Stuart Neil on SARS CoV-2](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-stuart-neil-on-sars-cov-2)
  
-
 ***Date Published:*** 2021-10-09
  
 ***Show Notes:***
@@ -2503,8 +2387,6 @@ In this episode, Stuart gives a nuanced and crystal clear summary of where the e
  
 If you have friends or colleagues who are uncertain about what positions the evidence supports on COVID, then THIS is the guy and THIS is the episode you want them to listen to.
  
-This Week's Sponsor
- 
 ***Show Links:***
  
 [Stuart's article on Fake Science and Judy Mikovits](https://www.liebertpub.com/doi/10.1089/AID.2020.0095)
@@ -2518,9 +2400,8 @@ This Week's Sponsor
 
  
  --- 
-## 35: [Special Episode: Interview with Stuart Ritchie on Hunter Gatherers in the 21st Century, covid skeptics, and bad science](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-stuart-ritchie-on-hunter-gatherers-in-the-21st-century-covid-skeptics-and-bad-science)
+## [Special Episode: Interview with Stuart Ritchie on Hunter Gatherers in the 21st Century, covid skeptics, and bad science](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-stuart-ritchie-on-hunter-gatherers-in-the-21st-century-covid-skeptics-and-bad-science)
  
-
 ***Date Published:*** 2021-09-24
  
 ***Show Notes:***
@@ -2530,8 +2411,6 @@ This week we have an engaging interview with the scientist, author, and public s
 In this episode we start of by discussing Stuart's recently published review of Bret Weinstein and Heather Heying's new book 'A Hunter Gatherer's Guide to the 21st Century'. Was Stuart a fan and is now an acolyte of Weinsteinian lineage theory? Tune in to find out.
  
 Also, for those who enjoy 'challenging conversations', robust discourse, and regularly shop in the marketplace of ideas, there is an extended discussion on whether we have been a little bit too kind on the government and public health institutions. Stuart uses facts and logic and attempts to DESTROY us, so come and get your well earned vicarious catharsis but be prepared for plenty of postmodern deflection. We've learned from the best.
- 
-This Week's Sponsor
  
 ***Show Links:***
  
@@ -2554,9 +2433,8 @@ This Week's Sponsor
 
  
  --- 
-## 34: [Jordan Hall: Sensemaking, or the superficial pitter-patter on the neocortex?](https://decoding-the-gurus.captivate.fm/episode/jordan-hall-sensemaking)
+## [Jordan Hall: Sensemaking, or the superficial pitter-patter on the neocortex?](https://decoding-the-gurus.captivate.fm/episode/jordan-hall-sensemaking)
  
-
 ***Date Published:*** 2021-09-11
  
 ***Show Notes:***
@@ -2586,9 +2464,8 @@ Anyway if that sounds good to you then tune in, check it out, and if you manage 
 
  
  --- 
-## 33: [Special Episode: Welcome to Weinstein World with special guest David Pizarro](https://decoding-the-gurus.captivate.fm/episode/special-episode-welcome-to-weinstein-world-with-special-guest-david-pizarro)
+## [Special Episode: Welcome to Weinstein World with special guest David Pizarro](https://decoding-the-gurus.captivate.fm/episode/special-episode-welcome-to-weinstein-world-with-special-guest-david-pizarro)
  
-
 ***Date Published:*** 2021-08-27
  
 ***Show Notes:***
@@ -2622,9 +2499,8 @@ So we hope you will join us on this exploration and remember our core message: *
 
  
  --- 
-## 32: [Gad Saad: Oh my Gad, it's the Saadfather!](https://decoding-the-gurus.captivate.fm/episode/18-gad-saad-oh-my-gad-its-the-saadfather)
+## [Gad Saad: Oh my Gad, it's the Saadfather!](https://decoding-the-gurus.captivate.fm/episode/18-gad-saad-oh-my-gad-its-the-saadfather)
  
-
 ***Date Published:*** 2021-08-20
  
 ***Show Notes:***
@@ -2648,9 +2524,8 @@ But it isn't all partisan politics, we also get to see Gad draws on his knowledg
 
  
  --- 
-## 31: [Special Episode: Interview with Robert Wright on crackpots, gurus, and modern media ecosystems](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-robert-wright-on-crackpots-gurus-and-modern-media-ecosystems)
+## [Special Episode: Interview with Robert Wright on crackpots, gurus, and modern media ecosystems](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-robert-wright-on-crackpots-gurus-and-modern-media-ecosystems)
  
-
 ***Date Published:*** 2021-08-13
  
 ***Show Notes:***
@@ -2678,9 +2553,8 @@ P.S. We promise the Gad Saad episode is coming soon!
 
  
  --- 
-## 30: [Special Episode: Interview with Evan Thompson on Buddhist Exceptionalism](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-evan-thompson-on-buddhist-exceptionalism)
+## [Special Episode: Interview with Evan Thompson on Buddhist Exceptionalism](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-evan-thompson-on-buddhist-exceptionalism)
  
-
 ***Date Published:*** 2021-07-30
  
 ***Show Notes:***
@@ -2706,9 +2580,8 @@ So join us to distill the real teachings of the Buddha and hear how our rambling
 
  
  --- 
-## 29: [Carl Sagan: My God, it's full of stars](https://decoding-the-gurus.captivate.fm/episode/carl-sagan-my-god-its-full-of-stars)
+## [Carl Sagan: My God, it's full of stars](https://decoding-the-gurus.captivate.fm/episode/carl-sagan-my-god-its-full-of-stars)
  
-
 ***Date Published:*** 2021-07-23
  
 ***Show Notes:***
@@ -2732,9 +2605,8 @@ Also featured in this week's episode: Weinstein Watch, Viewer Feedback, the Next
 
  
  --- 
-## 28: [Special Episode: Interview with Daniel Harper on the Far Right & IDW Criticism](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-daniel-harper-on-the-far-right-idw-criticism)
+## [Special Episode: Interview with Daniel Harper on the Far Right & IDW Criticism](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-daniel-harper-on-the-far-right-idw-criticism)
  
-
 ***Date Published:*** 2021-07-15
  
 ***Show Notes:***
@@ -2754,9 +2626,8 @@ Join us for a fun discussion while accepting our apologies for the self-indulgen
 
  
  --- 
-## 27: [Special Episode: Interview with Amanda Montell on Cultish Linguistics](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-amanda-montell)
+## [Special Episode: Interview with Amanda Montell on Cultish Linguistics](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-amanda-montell)
  
-
 ***Date Published:*** 2021-07-02
  
 ***Show Notes:***
@@ -2778,9 +2649,8 @@ We learnt a lot from Amanda and hope you will too!
 
  
  --- 
-## 26: [Anthony DeMello: The Bob Ross of Spiritual Gurus?](https://decoding-the-gurus.captivate.fm/episode/anthony-demello)
+## [Anthony DeMello: The Bob Ross of Spiritual Gurus?](https://decoding-the-gurus.captivate.fm/episode/anthony-demello)
  
-
 ***Date Published:*** 2021-06-26
  
 ***Show Notes:***
@@ -2804,9 +2674,8 @@ He's got the good vibes of Bob Ross, but does that conceal something darker? Was
 
  
  --- 
-## 25: [Special Episode: Interview with Jesse Singal on Quick Fix Psychology](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-jesse-singal-on-quick-fix-psychology)
+## [Special Episode: Interview with Jesse Singal on Quick Fix Psychology](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-jesse-singal-on-quick-fix-psychology)
  
-
 ***Date Published:*** 2021-06-18
  
 ***Show Notes:***
@@ -2830,9 +2699,8 @@ Jesse provides keen insight and is a good sport when it comes to critical topics
 
  
  --- 
-## 24: [Special Episode: Interview with Tim Nguyen on Geometric Unity](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-tim-nguyen-on-geometric-unity)
+## [Special Episode: Interview with Tim Nguyen on Geometric Unity](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-tim-nguyen-on-geometric-unity)
  
-
 ***Date Published:*** 2021-06-12
  
 ***Show Notes:***
@@ -2866,9 +2734,8 @@ Notes provided by Tim
 
  
  --- 
-## 23: [Bret Weinstein & Jordan Peterson: Two gargantuan intellects stare into the abyss](https://decoding-the-gurus.captivate.fm/episode/two-gargantuan-intellects-stare-into-the-abyss)
+## [Bret Weinstein & Jordan Peterson: Two gargantuan intellects stare into the abyss](https://decoding-the-gurus.captivate.fm/episode/two-gargantuan-intellects-stare-into-the-abyss)
  
-
 ***Date Published:*** 2021-06-04
  
 ***Show Notes:***
@@ -2882,8 +2749,6 @@ So yes... Chris and Matt couldn't resist returning to this epic crossover of two
 You will come away with your brain a smouldering ruin after dealing with so many high level ideas... you have been warned!
  
 P.S. If you make it all the way to the end you'll get to hear Matt DESTROY a so-called philosopher's Low Quality Criticism with REASON and SCIENCE.
- 
-P.P.S. The Alternative Title: 'Lineage selection hierarchy heroes 2: Choose your guru!' suppressed by the Distributed Australian Dilettante or DAD.
  
 ***Show Links:***
  
@@ -2904,9 +2769,8 @@ P.P.S. The Alternative Title: 'Lineage selection hierarchy heroes 2: Choose your
 
  
  --- 
-## 22: [Brett Weinstein & Heather Heying: Why are 'they' suppressing Ivermectin, the miracle cure?](https://decoding-the-gurus.captivate.fm/episode/brett-heather-weinstein-why-are-they-suppressing-ivermectin-the-miracle-cure)
+## [Brett Weinstein & Heather Heying: Why are 'they' suppressing Ivermectin, the miracle cure?](https://decoding-the-gurus.captivate.fm/episode/brett-heather-weinstein-why-are-they-suppressing-ivermectin-the-miracle-cure)
  
-
 ***Date Published:*** 2021-05-22
  
 ***Show Notes:***
@@ -2940,9 +2804,8 @@ Also, stay tuned after the music ends for one of Matt's rare rants. Live mic sit
 
  
  --- 
-## 21: [Michael O"Fallon: The Jacobins are Back..... To Reset..... Everything.... Dun Dun Daah!](https://decoding-the-gurus.captivate.fm/episode/michael-ofallon-the-jacobins-are-back-to-reset-everything-dun-dun-daah)
+## [Michael O"Fallon: The Jacobins are Back..... To Reset..... Everything.... Dun Dun Daah!](https://decoding-the-gurus.captivate.fm/episode/michael-ofallon-the-jacobins-are-back-to-reset-everything-dun-dun-daah)
  
-
 ***Date Published:*** 2021-05-06
  
 ***Show Notes:***
@@ -2972,9 +2835,8 @@ Dun Dun Daaaaah!
 
  
  --- 
-## 20: [Gwyneth Paltrow: Crawling with parasites and in need of a cleanse](https://decoding-the-gurus.captivate.fm/episode/gwyneth-paltrow-crawling-with-parasites-and-in-need-of-a-cleanse)
+## [Gwyneth Paltrow: Crawling with parasites and in need of a cleanse](https://decoding-the-gurus.captivate.fm/episode/gwyneth-paltrow-crawling-with-parasites-and-in-need-of-a-cleanse)
  
-
 ***Date Published:*** 2021-04-13
  
 ***Show Notes:***
@@ -2998,9 +2860,8 @@ Check it out! And get yourself checked for bespoke parasites while you're at it.
 
  
  --- 
-## 19: [Special Episode: Sam Harris & Meditation is all you need](https://decoding-the-gurus.captivate.fm/episode/special-episode-sam-harris-meditation-is-all-you-need)
+## [Special Episode: Sam Harris & Meditation is all you need](https://decoding-the-gurus.captivate.fm/episode/special-episode-sam-harris-meditation-is-all-you-need)
  
-
 ***Date Published:*** 2021-04-02
  
 ***Show Notes:***
@@ -3018,9 +2879,8 @@ This is an interesting one. And whether you love or hate Sam, we hope you find s
 
  
  --- 
-## 18: [Special Episode: Interview with Phrost on Bullshido](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-phrost-on-bullshido)
+## [Special Episode: Interview with Phrost on Bullshido](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-phrost-on-bullshido)
  
-
 ***Date Published:*** 2021-03-19
  
 ***Show Notes:***
@@ -3044,9 +2904,8 @@ Tune in as Matt and Chris compares notes with Phrost on how and why people delud
 
  
  --- 
-## 17: [Ibram X. Kendi: Gurometer Rating (Patreon Preview)](https://decoding-the-gurus.captivate.fm/episode/ibram-x-kendi-gurometer-rating-patreon-preview)
+## [Ibram X. Kendi: Gurometer Rating (Patreon Preview)](https://decoding-the-gurus.captivate.fm/episode/ibram-x-kendi-gurometer-rating-patreon-preview)
  
-
 ***Date Published:*** 2021-03-12
  
 ***Show Notes:***
@@ -3066,9 +2925,8 @@ Our new subreddit can also be found here.
 
  
  --- 
-## 16: [Ibram X. Kendi: Inside you are two wolves. One of them is racist.](https://decoding-the-gurus.captivate.fm/episode/ibram-x-kendi-inside-you-are-two-wolves-one-of-them-is-racist)
+## [Ibram X. Kendi: Inside you are two wolves. One of them is racist.](https://decoding-the-gurus.captivate.fm/episode/ibram-x-kendi-inside-you-are-two-wolves-one-of-them-is-racist)
  
-
 ***Date Published:*** 2021-03-06
  
 ***Show Notes:***
@@ -3096,9 +2954,8 @@ In this episode, Matt and Chris, until now famed for being not racist (honestly)
 
  
  --- 
-## 15: [Special Episode: Interview with Matthew Remski on Conspirituality](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-matthew-remski-on-conspirituality)
+## [Special Episode: Interview with Matthew Remski on Conspirituality](https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-matthew-remski-on-conspirituality)
  
-
 ***Date Published:*** 2021-02-20
  
 ***Show Notes:***
@@ -3130,9 +2987,8 @@ More from Matthew Remski:
 
  
  --- 
-## 14: [Nassim N. Taleb: Everything these idiots, frauds, and assholes don't understand](https://decoding-the-gurus.captivate.fm/episode/nassim-n-taleb-everything-these-morons-frauds-and-assholes-dont-understand)
+## [Nassim N. Taleb: Everything these idiots, frauds, and assholes don't understand](https://decoding-the-gurus.captivate.fm/episode/nassim-n-taleb-everything-these-morons-frauds-and-assholes-dont-understand)
  
-
 ***Date Published:*** 2021-02-09
  
 ***Show Notes:***
@@ -3160,9 +3016,8 @@ All of these questions, and more, will remain unanswered in this fresh new DTG e
 
  
  --- 
-## 13: [Special Episode: Interview with Thi Nguyen, a Gurometer's Guru](https://decoding-the-gurus.captivate.fm/episode/special-episode-thi-nguyen-a-gurometers-guru)
+## [Special Episode: Interview with Thi Nguyen, a Gurometer's Guru](https://decoding-the-gurus.captivate.fm/episode/special-episode-thi-nguyen-a-gurometers-guru)
  
-
 ***Date Published:*** 2021-01-29
  
 ***Show Notes:***
@@ -3206,9 +3061,8 @@ Thi writes about many things, including echo chambers, epistemic bubbles and the
 
  
  --- 
-## 12: [Douglas Murray: Can indulgent dinner conversation save OUR civilisation?](https://decoding-the-gurus.captivate.fm/episode/douglas-murray-can-indulgent-dinner-conversation-save-our-civilisation)
+## [Douglas Murray: Can indulgent dinner conversation save OUR civilisation?](https://decoding-the-gurus.captivate.fm/episode/douglas-murray-can-indulgent-dinner-conversation-save-our-civilisation)
  
-
 ***Date Published:*** 2021-01-22
  
 ***Show Notes:***
@@ -3228,9 +3082,8 @@ Along the way you will learn the *real* truth about the coronavirus, the value o
 
  
  --- 
-## 11: [Special Episode: Calibrating the Gurometer](https://decoding-the-gurus.captivate.fm/episode/calibrating-the-gurometer)
+## [Special Episode: Calibrating the Gurometer](https://decoding-the-gurus.captivate.fm/episode/calibrating-the-gurometer)
  
-
 ***Date Published:*** 2021-01-09
  
 ***Show Notes:***
@@ -3250,9 +3103,8 @@ Listeners will learn about important concepts, like science hipsterism and pseud
 
  
  --- 
-## 10: [Contrapoints: Making Philosophy Fabulous Again](https://decoding-the-gurus.captivate.fm/episode/contrapoints-making-philosophy-fabulous-again)
+## [Contrapoints: Making Philosophy Fabulous Again](https://decoding-the-gurus.captivate.fm/episode/contrapoints-making-philosophy-fabulous-again)
  
-
 ***Date Published:*** 2020-12-28
  
 ***Show Notes:***
@@ -3274,9 +3126,8 @@ All these questions, and more, will be answered in this exciting new episode!
 
  
  --- 
-## 9: [Special Episode: Entering the Portal](https://decoding-the-gurus.captivate.fm/episode/special-episode-entering-the-portal-)
+## [Special Episode: Entering the Portal](https://decoding-the-gurus.captivate.fm/episode/special-episode-entering-the-portal-)
  
-
 ***Date Published:*** 2020-12-18
  
 ***Show Notes:***
@@ -3298,9 +3149,8 @@ We will be back next week with our regular episode on Contrapoints.
 
  
  --- 
-## 8: [Scott Adams: Chris and Matt Go to Hell](https://decoding-the-gurus.captivate.fm/episode/scott-adams-chris-and-matt-go-to-hell)
+## [Scott Adams: Chris and Matt Go to Hell](https://decoding-the-gurus.captivate.fm/episode/scott-adams-chris-and-matt-go-to-hell)
  
-
 ***Date Published:*** 2020-12-10
  
 ***Show Notes:***
@@ -3330,9 +3180,8 @@ So, if this sounds like fun to you, join Chris and Matt as they go to hell and b
 
  
  --- 
-## 7: [Russell Brand: Spiritual Transcendence and Anarchic Revolution is Praxis](https://decoding-the-gurus.captivate.fm/episode/russell-brand-spiritual-transcendence-and-anarchic-revolution-is-praxis)
+## [Russell Brand: Spiritual Transcendence and Anarchic Revolution is Praxis](https://decoding-the-gurus.captivate.fm/episode/russell-brand-spiritual-transcendence-and-anarchic-revolution-is-praxis)
  
-
 ***Date Published:*** 2020-11-21
  
 ***Show Notes:***
@@ -3360,9 +3209,8 @@ Regardless, come ride this unstoppable and frenetic juggernaut of mind-expanding
 
  
  --- 
-## 6: [Rutger Bregman: Piglets vs. Toddlers](https://decoding-the-gurus.captivate.fm/episode/rutger-bregman-piglets-vs-toddlers)
+## [Rutger Bregman: Piglets vs. Toddlers](https://decoding-the-gurus.captivate.fm/episode/rutger-bregman-piglets-vs-toddlers)
  
-
 ***Date Published:*** 2020-11-07
  
 ***Show Notes:***
@@ -3382,9 +3230,8 @@ Join them this week as they delve into one of Rutger's talks and address Noble S
 
  
  --- 
-## 5: [Special Episode: Is Eric Weinstein Feynman-Negative?](https://decoding-the-gurus.captivate.fm/episode/special-episode-is-eric-weinstein-feynman-negative-)
+## [Special Episode: Is Eric Weinstein Feynman-Negative?](https://decoding-the-gurus.captivate.fm/episode/special-episode-is-eric-weinstein-feynman-negative-)
  
-
 ***Date Published:*** 2020-10-30
  
 ***Show Notes:***
@@ -3404,9 +3251,8 @@ Chris and Matt set themselves the task of deciding whether this is serious analy
 
  
  --- 
-## 4: [JP Sears: Get Ultra Spiritual, Resist the Government, and Promote Coronavirus Conspiracies](https://decoding-the-gurus.captivate.fm/episode/jp-sears-get-ultra-spiritual-resist-the-government-and-promote-coronavirus-conspiracies)
+## [JP Sears: Get Ultra Spiritual, Resist the Government, and Promote Coronavirus Conspiracies](https://decoding-the-gurus.captivate.fm/episode/jp-sears-get-ultra-spiritual-resist-the-government-and-promote-coronavirus-conspiracies)
  
-
 ***Date Published:*** 2020-10-23
  
 ***Show Notes:***
@@ -3426,9 +3272,8 @@ As Chris and Matt dig deeper, it becomes clear that JP occupies an interesting p
 
  
  --- 
-## 3: [Jordan Peterson: The Alchemical Lemon explains the Crystalline Structure of Logos](https://decoding-the-gurus.captivate.fm/episode/jordan-peterson-the-alchemical-nature-of-a-lemon-explains-the-crystalline-structure-of-logos)
+## [Jordan Peterson: The Alchemical Lemon explains the Crystalline Structure of Logos](https://decoding-the-gurus.captivate.fm/episode/jordan-peterson-the-alchemical-nature-of-a-lemon-explains-the-crystalline-structure-of-logos)
  
-
 ***Date Published:*** 2020-10-09
  
 ***Show Notes:***
@@ -3452,9 +3297,8 @@ Some people will say this episode is too cynical, but it's like... 'No. It isn't
 
  
  --- 
-## 2: [James Lindsay: The monkey is out of the box and it HATES liberalism](https://decoding-the-gurus.captivate.fm/episode/james-lindsay-the-monkey-is-out-of-the-box-and-it-hates-liberalism)
+## [James Lindsay: The monkey is out of the box and it HATES liberalism](https://decoding-the-gurus.captivate.fm/episode/james-lindsay-the-monkey-is-out-of-the-box-and-it-hates-liberalism)
  
-
 ***Date Published:*** 2020-09-23
  
 ***Show Notes:***
@@ -3478,9 +3322,8 @@ Most importantly, the duo establish definitively that, despite James' assertions
 
  
  --- 
-## 1: [Eric and Bret Weinstein: A Dark Horse Gallops through the Portal](https://decoding-the-gurus.captivate.fm/episode/eric-and-bret-weinstein-a-dark-horse-gallops-through-the-portal)
+## [Eric and Bret Weinstein: A Dark Horse Gallops through the Portal](https://decoding-the-gurus.captivate.fm/episode/eric-and-bret-weinstein-a-dark-horse-gallops-through-the-portal)
  
-
 ***Date Published:*** 2020-09-09
  
 ***Show Notes:***
@@ -3489,4 +3332,4 @@ Matt and Chris introduce themselves and the overall concept for the podcast then
  
 
  
- --- 
+ ---

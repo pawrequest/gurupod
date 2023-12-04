@@ -14,13 +14,6 @@ def episode_markup_one(episode, markup_funcs_):
     return text
 
 
-def episode_markup_many_set(eps, markup_funcs):
-    text = markup_funcs['head_text'](eps)
-    for ep in eps:
-        text += episode_markup_one(ep, markup_funcs)
-    text += markup_funcs['tail_text']()
-    return text
-
 def episode_markup_many_list(eps, markup_funcs):
     text = markup_funcs['head_text'](eps)
     for ep in eps:
@@ -35,3 +28,11 @@ def save_markup(outfile: Path, markup: str):
         return
     with open(outfile, "w", encoding='utf-8') as output:
         output.write(markup)
+
+
+def episode_markup_many_set(eps, markup_funcs):
+    text = markup_funcs['head_text'](eps)
+    for ep in eps:
+        text += episode_markup_one(ep, markup_funcs)
+    text += markup_funcs['tail_text']()
+    return text

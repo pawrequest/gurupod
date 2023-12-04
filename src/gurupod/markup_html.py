@@ -21,7 +21,7 @@ def head_text_html(episodes):
 def build_table_of_contents(eps:list[Episode]):
     toc = "<h2>Table of Contents</h2>\n"
     for ep in eps:
-        toc += f"<a href='#ep-{ep.num}'>#{ep.num} - {ep.show_date}: {ep.show_name}</a><br>\n"
+        toc += f"<a href='#ep-{ep.num}'>#{ep.num} - {ep.show_name} ({ep.show_date})</a><br>\n"
     return toc
 
 

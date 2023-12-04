@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+from gurupod.episodes import Episode
+
+
+# def build_table_of_contents_reddit(eps: list[Episode]):
+#     toc = "### GuruPod Episodes:\n \n"
+#     for ep in eps:
+#         toc += f"{ep.num}: [{ep.show_name}](#{ep.num})\n \n"
+#     return toc
+
 
 def head_text_reddit(episodes):
     return ""
@@ -10,11 +19,12 @@ def tail_text_reddit():
 
 
 def title_text_reddit(episode):
-    return f"## [{episode.show_name}]({episode.show_url})\n \n"
+    # return f'## This is the introduction <a name="{episode.num}"></a>'
+    return f'## {episode.num}: [{episode.show_name}]({episode.show_url})\n \n'
 
 
 def date_text_reddit(date_pub):
-    return f"***Date Published:*** {date_pub}\n \n"
+    return f"\n***Date Published:*** {date_pub}\n \n"
 
 
 def notes_text_reddit(show_notes):
