@@ -9,16 +9,13 @@ from gurupod.data.consts import MAIN_URL
 from gurupod.episodes import _url_from_pagenum, ep_soup_date, ep_soup_from_link, ep_soup_links, \
     ep_soup_notes
 
+
 @pytest.fixture
 async def session_():
     session = aiohttp.ClientSession()
     yield session
     await session.close()
 
-# @pytest.fixture
-# async def session_():
-#     async with aiohttp.ClientSession() as session:
-#         yield session
 
 @pytest.fixture
 def ep_soup_():
