@@ -5,7 +5,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime
 from json import JSONDecodeError
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Set
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -27,23 +27,27 @@ class Episode:
         if isinstance(self.show_date, str):
             self.show_date = datetime.strptime(self.show_date, "%Y-%m-%d").date()
 
+    def __lt__(self, other):
+        return self.show_date < other.show_date
+
+    def __gt__(self, other):
+        return self.show_date > other.show_date
+
+    def __eq__(self, other):
+        return self.show_date == other.show_date and self.show_name == other.show_name
+
+    def __str__(self):
+        return self.show_name
+
+    def __repr__(self):
+        return f"Episode({self.__dict__})"
+
+    def __hash__(self):
+        return hash(self.show_name + str(self.show_date))
+
     @property
     def details(self):
         return {k: v for k, v in self.__dict__.items() if k != "show_name"}
-
-    @classmethod
-    def from_tup_n_soup(cls, ep_tup, ep_soup) -> Episode:
-        return cls(
-            show_name=ep_tup[0],
-            show_url=ep_tup[1],
-            show_date=ep_soup_date(ep_soup),
-            show_notes=ep_soup_notes(ep_soup),
-            show_links=ep_soup_links(ep_soup),
-        )
-
-    @classmethod
-    def from_tuppies(cls, ep_tup: EpTup, ep_details: EpDetails) -> Episode:
-        return cls(*ep_tup, *ep_details)
 
 
 class EpTup(NamedTuple):
@@ -72,14 +76,17 @@ class EpDetails(NamedTuple):
         )
 
 
-def all_episodes_():
-    existing_dict, existing_eps = existing_episodes_()
-    new_eps = asyncio.run(get_new_eps(MAIN_URL, existing_d=existing_dict))
-    all_eps = existing_eps + new_eps
-    all_eps.sort(key=lambda epi: epi.show_date, reverse=True)
-    for number, ep in enumerate(all_eps):
+def sort_n_number_eps(eps):
+    eps.sort(key=lambda epi: epi.show_date, reverse=True)
+    for number, ep in enumerate(reversed(eps), start=1):
         ep.num = number
 
+
+def all_episodes_():
+    existing_dict, existing_eps = existing_episodes_()
+    new_eps = asyncio.run(new_episodes_(MAIN_URL, existing_d=existing_dict))
+    all_eps = existing_eps + new_eps
+    sort_n_number_eps(all_eps)
     if new_eps:
         export_episodes_json(all_eps)
     return all_eps
@@ -96,13 +103,7 @@ def existing_episodes_() -> (dict, List[Episode]):
     return existing_d, existing_eps
 
 
-def export_episodes_json(episodes: List[Episode]):
-    with open(EPISODES_JSON, "w") as outfile:
-        json.dump({ep.show_name: ep.details for ep in episodes}, outfile, default=str, indent=4,
-                  ensure_ascii=True)
-
-
-async def get_new_eps(main_url: str, existing_d: dict or None = None) -> List[Episode]:
+async def new_episodes_(main_url: str, existing_d: dict or None = None) -> List[Episode]:
     episodes = []
     async with aiohttp.ClientSession() as session:
         pages = await listing_pages_(main_url, session)
@@ -114,30 +115,26 @@ async def get_new_eps(main_url: str, existing_d: dict or None = None) -> List[Ep
     return episodes
 
 
+def export_episodes_json(episodes: List[Episode]):
+    with open(EPISODES_JSON, "w") as outfile:
+        json.dump({ep.show_name: ep.details for ep in episodes}, outfile, default=str, indent=4,
+                  ensure_ascii=True)
+
+
 async def episodes_from_page(
         page_url: str, session, existing_d: dict or None = None) -> List[Episode]:
     existing_d = existing_d or {}
     new_eps = []
 
-    async for tup in names_n_links(page_url, session):
-        if tup.name in existing_d:
-            print(f"Already Exists: {tup[0]}")
+    async for ep_tup in ep_tups_from_url(page_url, session):
+        if ep_tup.name in existing_d:
+            print(f"Already Exists: {ep_tup.name}")
             return new_eps
 
-        print(f"New episode found: {tup}")
-        ep_soup = await ep_soup_from_link(tup.url, session)
-        # ep_details_ = ep_soup_details(ep_soup)
+        print(f"New episode found: {ep_tup.name}")
+        ep_soup = await ep_soup_from_link(ep_tup.url, session)
         ep_details_ = EpDetails.from_soup(ep_soup)
-        # new_eps.append(Episode.from_tuppies(tup, ep_details_))
-        new_e = Episode(*tup, *ep_details_)
-        new_eps.append(Episode(*tup, *ep_details_))
-        # new_eps.append(Episode(
-        #     show_name=tup.name,
-        #     show_url=tup.url,
-        #     show_date=ep_soup_date(ep_soup),
-        #     show_notes=ep_soup_notes(ep_soup),
-        #     show_links=ep_soup_links(ep_soup),
-        # ))
+        new_eps.append(Episode(*ep_tup, *ep_details_))
 
     return new_eps
 
@@ -173,7 +170,7 @@ def ep_soup_links(soup: BeautifulSoup) -> dict:
 
 
 ###########
-async def names_n_links(page_url: str, session):
+async def ep_tups_from_url(page_url: str, session):
     async with session.get(page_url) as response:
         text = await response.text()
     soup = BeautifulSoup(text, "html.parser")
@@ -216,3 +213,57 @@ async def _get_num_pages(main_url: str, session) -> int:
     lastpage = page_links[-1]['href']
     num_pages = lastpage.split("/")[-1].split("#")[0]
     return int(num_pages)
+
+
+##### setty
+
+
+def all_episodes_set():
+    existing_dict, existing_eps = existing_episodes_set()
+    new_eps = asyncio.run(
+        new_episodes_set(MAIN_URL, existing_d=existing_dict))
+    all_eps = existing_eps.union(new_eps)
+    if new_eps:
+        export_episodes_json(all_eps)
+    return all_eps
+
+
+def existing_episodes_set() -> (dict, Set[Episode]):
+    try:
+        with open(EPISODES_JSON, "r") as infile:
+            existing_d = json.load(infile)
+            existing_eps = {Episode(name, **ep) for name, ep in existing_d.items()}
+    except JSONDecodeError:
+        print("existing episodes file is empty")
+        existing_eps = set()
+    return existing_d, existing_eps
+
+
+async def new_episodes_set(main_url: str, existing_d: dict or None = None) -> set[Episode]:
+    episodes = set()
+    async with aiohttp.ClientSession() as session:
+        pages = await listing_pages_(main_url, session)
+        for page in pages:
+            eps = await episodes_from_page_set(page, session, existing_d)
+            if not eps:
+                break
+            episodes.update(eps)
+    return episodes
+
+
+async def episodes_from_page_set(
+        page_url: str, session, existing_d: dict or None = None) -> set[Episode]:
+    existing_d = existing_d or {}
+    new_eps = set()
+
+    async for ep_tup in ep_tups_from_url(page_url, session):
+        if ep_tup.name in existing_d:
+            print(f"Already Exists: {ep_tup.name}")
+            return new_eps
+
+        print(f"New episode found: {ep_tup.name}")
+        ep_soup = await ep_soup_from_link(ep_tup.url, session)
+        ep_details_ = EpDetails.from_soup(ep_soup)
+        new_eps.add(Episode(*ep_tup, *ep_details_))
+
+    return new_eps

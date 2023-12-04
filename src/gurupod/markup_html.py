@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from gurupod.consts import PAGE_TITLE
+from gurupod.episodes import Episode
 
 
 def head_text_html(episodes):
@@ -17,10 +18,10 @@ def head_text_html(episodes):
     """
 
 
-def build_table_of_contents(eps):
+def build_table_of_contents(eps:list[Episode]):
     toc = "<h2>Table of Contents</h2>\n"
-    for i, ep in enumerate(eps):
-        toc += f"<a href='#ep-{i}'>{ep.show_name}</a><br>\n"
+    for ep in eps:
+        toc += f"<a href='#ep-{ep.num}'>#{ep.num} - {ep.show_date}: {ep.show_name}</a><br>\n"
     return toc
 
 
