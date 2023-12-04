@@ -1,12 +1,24 @@
+import asyncio
 import datetime
 
+import aiohttp
 import pytest
 from bs4 import BeautifulSoup
 
 from gurupod.data.consts import MAIN_URL
-from src.gurupod.episode_sync import _url_from_pagenum, ep_soup_from_link, ep_soup_date, ep_soup_notes, \
-    ep_soup_links
+from gurupod.episodes import _url_from_pagenum, ep_soup_date, ep_soup_from_link, ep_soup_links, \
+    ep_soup_notes
 
+@pytest.fixture
+async def session_():
+    session = aiohttp.ClientSession()
+    yield session
+    await session.close()
+
+# @pytest.fixture
+# async def session_():
+#     async with aiohttp.ClientSession() as session:
+#         yield session
 
 @pytest.fixture
 def ep_soup_():
@@ -35,9 +47,13 @@ def test_ep_soup_links(ep_soup_):
 def ep_url():
     yield _url_from_pagenum(MAIN_URL, 0)
 
+#
+# def test_ep_soup_from_link(ep_url, session_):
+#     soup = ep_soup_from_link(ep_url, session_)
+#     assert isinstance(soup, BeautifulSoup)
+#
 
-def test_ep_soup_from_link(ep_url):
-    soup = ep_soup_from_link(ep_url)
+@pytest.mark.asyncio
+async def test_ep_soup_from_link(ep_url, session_):
+    soup = asyncio.run(ep_soup_from_link(ep_url, session_))
     assert isinstance(soup, BeautifulSoup)
-
-
