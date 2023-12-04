@@ -6,6 +6,11 @@ authors = [
     { name = "pawrequest", email = "paw@pawrequest.com" }
 ]
 dependencies = [
+    'python-dotenv',
+    'django-select2',
+    'django-addanother',
+    'djangorestframework',
+    'django',
     "praw",
     "requests",
     "beautifulsoup4",

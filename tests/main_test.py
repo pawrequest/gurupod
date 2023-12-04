@@ -5,8 +5,8 @@ import aiohttp
 import pytest
 from bs4 import BeautifulSoup
 
-from gurupod.data.consts import MAIN_URL
-from gurupod.episodes import _url_from_pagenum, ep_soup_date, ep_soup_from_link, ep_soup_links, \
+from data.consts import MAIN_URL
+from gurupod.models import _url_from_pagenum, ep_soup_date, ep_soup_from_link, ep_soup_links, \
     ep_soup_notes
 
 
