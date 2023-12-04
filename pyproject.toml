@@ -11,6 +11,7 @@ dependencies = [
     "beautifulsoup4",
     "python-dateutil",
     "aiohttp>=3.9.1",
+    "pytest-asyncio>=0.23.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
