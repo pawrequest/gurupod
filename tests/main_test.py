@@ -47,11 +47,6 @@ def test_ep_soup_links(ep_soup_):
 def ep_url():
     yield _url_from_pagenum(MAIN_URL, 0)
 
-#
-# def test_ep_soup_from_link(ep_url, session_):
-#     soup = ep_soup_from_link(ep_url, session_)
-#     assert isinstance(soup, BeautifulSoup)
-#
 
 @pytest.mark.xfail
 @pytest.mark.asyncio
