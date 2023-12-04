@@ -46,15 +46,26 @@ class EpTup(NamedTuple):
     name: str
     url: str
 
+    @classmethod
+    def from_soup(cls, ep_soup):
+        """ ep_soup is a subset of an episodes listing page"""
+        return cls(ep_soup.select_one(".episode-title a").text,
+                   str(ep_soup.select_one(".episode-title a")['href']))
+
 
 class EpDetails(NamedTuple):
     date: datetime.date
     notes: list
     links: dict
 
+    @classmethod
+    def from_soup(cls, ep_soup):
+        """ ep_soup is a complete episode-specific page"""
+        return cls(ep_soup_date(ep_soup), ep_soup_notes(ep_soup), ep_soup_links(ep_soup))
 
-def ep_soup_details(ep_soup) -> EpDetails:
-    return EpDetails(ep_soup_date(ep_soup), ep_soup_notes(ep_soup), ep_soup_links(ep_soup))
+
+# def ep_soup_details(ep_soup) -> EpDetails:
+#     return EpDetails(ep_soup_date(ep_soup), ep_soup_notes(ep_soup), ep_soup_links(ep_soup))
 
 
 def ep_tup_from_soup(ep_soup) -> EpTup:
@@ -108,8 +119,7 @@ async def episodes_from_page(
         page_url: str, session, existing_d: dict or None = None) -> List[Episode]:
     existing_d = existing_d or {}
     new_eps = []
-    # async for tup in names_n_links(page_url, session):
-        # if tup[0] in existing_d:
+
     async for tup in names_n_links(page_url, session):
         if tup.name in existing_d:
             print(f"Already Exists: {tup[0]}")
