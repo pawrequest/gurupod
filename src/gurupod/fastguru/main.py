@@ -1,3 +1,4 @@
+import copy
 import json
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -15,6 +16,9 @@ connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
 
 
+def get_session():
+    with Session(engine) as session:
+        yield session
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
@@ -28,16 +32,21 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.post("/eps/", response_model=EpisodeRead)
-async def create_episode(episode: EpisodeCreate):
-    await episode.get_data()
+@app.post("/ep_from_url/", response_model=EpisodeRead)
+async def ep_from_name_url(episode: EpisodeCreate, session: Session = Depends(get_session)):
+    """ requires name and url"""
+    try:
+        await episode.get_data()
 
-    with Session(engine) as session:
         db_ep = Episode.model_validate(episode)
         session.add(db_ep)
         session.commit()
         session.refresh(db_ep)
         return db_ep
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return f'FAILED TO ADD EPISODE {episode.name}\nERROR:{e}'
 
 
 @app.get("/eps/", response_model=List[EpisodeRead])
@@ -48,22 +57,16 @@ def read_episodes():
 
 
 
-def get_session():
-    with Session(engine) as session:
-        yield session
 
 
-@app.get("/pop/")
-async def populate(session: Session = Depends(get_session)):
-    with open(EPISODES_JSON, "r") as f:
-        epsdict = json.load(f)
+
+@app.post("/json_in/")
+async def json_in(epsdict: dict, session: Session = Depends(get_session)):
     exist = session.query(Episode).all()
     exists = {e.name for e in exist}
+    new_eps_in = [(name, ep) for name, ep in epsdict.items() if name not in exists]
 
-    for name, ep in epsdict.items():
-        if name in exists:
-            print('ALREADY EXISTS')
-            continue
+    for name, ep in new_eps_in:
         try:
             ep_ob = Episode(name=name,
                             url=ep['show_url'],
@@ -78,8 +81,9 @@ async def populate(session: Session = Depends(get_session)):
 
     if session.dirty or session.new or session.deleted:
         try:
+            new_made = copy.deepcopy(session.new)
             session.commit()
-            return 'SUCCESS'
+            return [e for e in new_made]
         except Exception as e:
             print(e)
             session.rollback()
