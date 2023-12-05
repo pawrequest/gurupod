@@ -5,11 +5,13 @@ import json
 from dataclasses import dataclass
 from datetime import datetime
 from json import JSONDecodeError
-from typing import List, NamedTuple, Set
+from typing import Dict, List, NamedTuple, Set
 
 import aiohttp
 from bs4 import BeautifulSoup
 from dateutil import parser
+from pydantic import BaseModel, field_validator
+from sqlmodel import Field, SQLModel, JSON
 
 from data.consts import EPISODES_JSON, MAIN_URL
 
@@ -50,6 +52,7 @@ class Episode:
         return {k: v for k, v in self.__dict__.items() if k != "show_name"}
 
 
+
 class EpTup(NamedTuple):
     name: str
     url: str
@@ -76,27 +79,27 @@ class EpDetails(NamedTuple):
         )
 
 
-def sort_n_number_eps(eps):
+def _sort_n_number_eps(eps):
     eps.sort(key=lambda epi: epi.show_date, reverse=True)
     for number, ep in enumerate(reversed(eps), start=1):
         ep.num = number
 
 
-def all_episodes_():
-    existing_dict, existing_eps = existing_episodes_()
-    new_eps = asyncio.run(new_episodes_(MAIN_URL, existing_d=existing_dict))
+def fetch_episodes(main_url=MAIN_URL, injson=EPISODES_JSON):
+    existing_dict, existing_eps = existing_from_json(injson=injson)
+    new_eps = asyncio.run(new_episodes_(main_url, existing_d=existing_dict))
     all_eps = existing_eps + new_eps
-    sort_n_number_eps(all_eps)
+    _sort_n_number_eps(all_eps)
     if new_eps:
         export_episodes_json(all_eps)
     return all_eps
 
 
-def existing_episodes_() -> (dict, List[Episode]):
+def existing_from_json(injson) -> (dict, List[Episode]):
     try:
-        with open(EPISODES_JSON, "r") as infile:
+        with open(injson, "r") as infile:
             existing_d = json.load(infile)
-            existing_eps = [Episode(name, **ep) for name, ep in existing_d.items()]
+            existing_eps = [Episode(show_name=name, **ep) for name, ep in existing_d.items()]
     except JSONDecodeError:
         print("existing episodes file is empty")
         existing_eps = []
@@ -120,7 +123,16 @@ def export_episodes_json(episodes: List[Episode]):
         json.dump({ep.show_name: ep.details for ep in episodes}, outfile, default=str, indent=4,
                   ensure_ascii=True)
 
-
+async def episode_from_link(link, session) -> Episode:
+    async with session.get(link) as response:
+        text = await response.text()
+        soup = BeautifulSoup(text, "html.parser")
+        ep_details_ = EpDetails.from_soup(soup)
+        return Episode(show_name=soup.select_one(".episode-title").text,
+                       show_url=link,
+                       show_notes=ep_details_.notes,
+                       show_links=ep_details_.links,
+                       show_date=ep_details_.date)
 async def episodes_from_page(
         page_url: str, session, existing_d: dict or None = None) -> List[Episode]:
     existing_d = existing_d or {}
@@ -134,8 +146,11 @@ async def episodes_from_page(
         print(f"New episode found: {ep_tup.name}")
         ep_soup = await ep_soup_from_link(ep_tup.url, session)
         ep_details_ = EpDetails.from_soup(ep_soup)
-        new_eps.append(Episode(*ep_tup, *ep_details_))
-
+        new_eps.append(Episode(show_name=ep_tup.name,
+                               show_url=ep_tup.url,
+                               show_notes=ep_details_.notes,
+                               show_links=ep_details_.links,
+                               show_date=ep_details_.date))
     return new_eps
 
 
@@ -148,14 +163,14 @@ async def ep_soup_from_link(link, session) -> BeautifulSoup:
 ##############################
 
 
-def ep_soup_date(ep_soup) -> datetime.date:
+def ep_soup_date(ep_soup) -> datetime:
     date_str = ep_soup.select_one(".publish-date").text
     datey = parser.parse(date_str)
-    return datey.date()
+    return datey
 
 
 def ep_soup_notes(soup: BeautifulSoup) -> list:
-    ''' some listing have literal("Links") as heading for next section some dont '''
+    """ some listing have literal("Links") as heading for next section some dont """
 
     paragraphs = soup.select(".show-notes p")
     show_notes = [p.text for p in paragraphs if p.text != "Links"]
@@ -232,7 +247,7 @@ def existing_episodes_set() -> (dict, Set[Episode]):
     try:
         with open(EPISODES_JSON, "r") as infile:
             existing_d = json.load(infile)
-            existing_eps = {Episode(name, **ep) for name, ep in existing_d.items()}
+            existing_eps = {Episode(show_name=name, **ep) for name, ep in existing_d.items()}
     except JSONDecodeError:
         print("existing episodes file is empty")
         existing_eps = set()
@@ -264,6 +279,10 @@ async def episodes_from_page_set(
         print(f"New episode found: {ep_tup.name}")
         ep_soup = await ep_soup_from_link(ep_tup.url, session)
         ep_details_ = EpDetails.from_soup(ep_soup)
-        new_eps.add(Episode(*ep_tup, *ep_details_))
+        new_eps.add(Episode(show_name=ep_tup.name,
+                            show_url=ep_tup.url,
+                            show_date=ep_details_.date,
+                            show_links=ep_details_.links,
+                            show_notes=ep_details_.notes))
 
     return new_eps

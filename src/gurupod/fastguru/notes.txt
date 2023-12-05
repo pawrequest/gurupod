@@ -1,0 +1,8 @@
+Optional Dependencies¶
+
+Used by Pydantic:
+
+    email_validator - for email validation.
+    pydantic-settings - for settings management.
+    pydantic-extra-types - for extra types to be used with Pydantic.
+orjson - Required if you want to use ORJSONResponse.

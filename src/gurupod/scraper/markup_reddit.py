@@ -18,7 +18,7 @@ def tail_text_reddit():
 
 def title_text_reddit(episode):
     # return f'## This is the introduction <a name="{episode.num}"></a>'
-    return f'## {episode.num}: [{episode.show_name}]({episode.show_url})\n \n'
+    return f'## {episode.num}: [{episode.name}]({episode.url})\n \n'
 
 
 def date_text_reddit(date_pub):

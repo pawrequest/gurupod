@@ -21,7 +21,7 @@ def head_text_html(episodes):
 def build_table_of_contents(eps:list[Episode]):
     toc = "<h2>Table of Contents</h2>\n"
     for ep in eps:
-        toc += f"<a href='#ep-{ep.num}'>#{ep.num} - {ep.show_name} ({ep.show_date})</a><br>\n"
+        toc += f"<a href='#ep-{ep.num}'>#{ep.num} - {ep.name} ({ep.date})</a><br>\n"
     return toc
 
 
@@ -30,7 +30,7 @@ def tail_text_html():
 
 
 def title_text_html(episode):
-    return f"<h1 id='ep-{episode.num}'>{episode.show_name}</h1>\n<a href='{episode.show_url}'>Play on Captivate.fm</a>\n"
+    return f"<h1 id='ep-{episode.num}'>{episode.name}</h1>\n<a href='{episode.url}'>Play on Captivate.fm</a>\n"
 
 
 def date_text_html(date_pub):

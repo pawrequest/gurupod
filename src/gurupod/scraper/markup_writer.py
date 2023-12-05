@@ -5,11 +5,11 @@ from pathlib import Path
 
 def episode_markup_one(episode, markup_funcs_):
     text = markup_funcs_['title_text'](episode)
-    text += markup_funcs_['date_text'](episode.show_date)
-    if episode.show_notes:
-        text += markup_funcs_['notes_text'](episode.show_notes)
-    if episode.show_links:
-        text += markup_funcs_['links_text'](episode.show_links)
+    text += markup_funcs_['date_text'](episode.date_published)
+    if episode.notes:
+        text += markup_funcs_['notes_text'](episode.notes)
+    if episode.links:
+        text += markup_funcs_['links_text'](episode.links)
     text += markup_funcs_['final_text']()
     return text
 
