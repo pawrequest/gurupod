@@ -13,6 +13,7 @@ folder = Path(__file__).parent
 EPISODES_MD = folder / "episodes.md"
 EPISODES_JSON = folder / "episodes.json"
 EPISODES_HTML = folder / 'episodes.html'
+GURU_DB = folder / 'guru.db'
 
 # strings
 SUBRED = 'DecodingTheGurus'

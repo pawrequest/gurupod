@@ -6,7 +6,6 @@ authors = [
     { name = "pawrequest", email = "paw@pawrequest.com" }
 ]
 dependencies = [
-    'pydantic-extra-types',
     'sqlmodel',
     "uvicorn[standard]",
     'fastapi',

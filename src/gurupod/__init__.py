@@ -1,1 +1,2 @@
-from gurupod.models.episode import fetch_episodes as fetch_episodes  # noqa: F401
+from gurupod.markupguru.markup_writer import episodes_markup
+from gurupod.reddit import edit_reddit_wiki
