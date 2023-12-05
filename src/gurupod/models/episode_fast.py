@@ -24,14 +24,17 @@ class Episode(EpisodeBase, table=True):
 
 class EpisodeCreate(EpisodeBase):
     async def get_data(self):
+        if all([self.notes, self.links, self.date_published]):
+            return
+
         async with (aiohttp.ClientSession() as session):
             async with session.get(self.url) as response:
                 text = await response.text()
         soup = BeautifulSoup(text, "html.parser")
         ep_details_ = EpDetails.from_soup(soup)
-        self.notes = '\n'.join(ep_details_.notes)
-        self.links = ep_details_.links
-        self.date_published = ep_details_.date
+        self.notes = self.notes or '\n'.join(ep_details_.notes)
+        self.links = self.links or ep_details_.links
+        self.date_published = self.date_published or ep_details_.date
 
 
 class EpisodeRead(EpisodeBase):
@@ -50,14 +53,14 @@ def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
     yield
 
+
 app = FastAPI(lifespan=lifespan)
+
 
 @app.post("/eps/", response_model=EpisodeRead)
 async def create_episode(episode: EpisodeCreate):
