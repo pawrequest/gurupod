@@ -1,2 +1,2 @@
 from gurupod.markupguru.markup_writer import episodes_markup
-from gurupod.reddit import edit_reddit_wiki
+from gurupod.redditguru.reddit import edit_reddit_wiki

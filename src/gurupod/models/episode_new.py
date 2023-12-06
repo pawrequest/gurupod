@@ -24,7 +24,7 @@ class Episode(EpisodeCreate, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
     @classmethod
-    async def ep_scraped(cls, name, url, session):
+    async def ep_scraped(cls, name, url):
         async with (aiohttp.ClientSession() as session):
             async with session.get(url) as response:
                 text = await response.text()

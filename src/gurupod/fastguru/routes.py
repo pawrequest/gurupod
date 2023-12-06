@@ -1,14 +1,11 @@
-import json
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
-from data.consts import EPISODES_JSON
 from gurupod.fastguru.database import engine, get_session
 from gurupod.fastguru.ep_funcs import commit_new, filter_existing, add_validate_ep
-from gurupod.models.episode_new import Episode, EpisodeBase, EpisodeCreate, EpisodeRead, ep_loaded, \
-    ep_scraped
+from gurupod.models.episode_new import Episode, EpisodeBase, EpisodeCreate, EpisodeRead
 
 router = APIRouter()
 
@@ -63,8 +60,3 @@ async def put_ep_scrape(episode_data: EpisodeBase, session: Session = Depends(ge
         raise HTTPException(status_code=500, detail=str(e))
 
 
-async def populate_from_json():
-    with open(EPISODES_JSON, 'r') as f:
-        eps = json.load(f)
-        with Session(engine) as session:
-            await put_ep_json(eps, session)

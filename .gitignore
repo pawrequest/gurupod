@@ -1,2 +1,15 @@
 /data/client_secrets.json
 .env
+/src/data/guru.db
+
+/.idea/dataSources.xml
+/.idea/encodings.xml
+/epi-fast.db
+/.idea/gurupod.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/ruff.xml
+/.idea/vcs.xml
+/.idea/webResources.xml
