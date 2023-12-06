@@ -38,3 +38,34 @@ class EpisodeCreate(EpisodeBase):
 class EpisodeRead(EpisodeBase):
     id: int
     date_published: datetime
+
+
+
+
+async def ep_loaded(ep_dict: dict, name):
+    try:
+        return Episode(
+            name=name,
+            url=ep_dict.get('show_url'),
+            notes=ep_dict.get('show_notes'),
+            links=ep_dict.get('show_links'),
+            date_published=datetime.strptime(ep_dict['show_date'], '%Y-%m-%d')
+        )
+    except Exception as e:
+        ...
+        raise Exception(f'FAILED TO ADD EPISODE {name}\nERROR:{e}')
+
+
+async def ep_scraped(name, url):
+    async with (aiohttp.ClientSession() as session):
+        async with session.get(url) as response:
+            text = await response.text()
+    soup = BeautifulSoup(text, "html.parser")
+
+    return Episode(
+        name=name,
+        url=url,
+        notes=ep_soup_notes(soup),
+        links=ep_soup_links(soup),
+        date_published=ep_soup_date(soup),
+    )
