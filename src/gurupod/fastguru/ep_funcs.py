@@ -1,11 +1,11 @@
 import copy
 
-from sqlmodel import select
+from sqlmodel import Session, select
 
-from gurupod.models.episode_new import Episode
+from gurupod.models.episode_new import Episode, EpisodeCreate
 
 
-def add_validate_ep(episode, session) -> Episode:
+def add_validate_ep(episode, session:Session) -> Episode:
     try:
         vali = Episode.model_validate(episode)
         session.add(vali)
@@ -16,21 +16,26 @@ def add_validate_ep(episode, session) -> Episode:
         raise Exception(f'FAILED TO ADD EPISODE {episode.name}\nERROR:{e}')
 
 
-async def filter_existing(epsdict, session):
-    # exist = session.query(Episode).all()
-    # exist_names = {e.name for e in exist}
-    # exist_names = {name[0] for name in session.query(Episode.name).all()}
+async def filter_existing(eps: list[EpisodeCreate], session):
     exist_names = session.exec(select(Episode.name)).all()
-    new = {name:ep for name, ep in epsdict.items() if name not in exist_names}
+    new = [ep for ep in eps if ep.name not in exist_names]
     return new
 
 
-async def commit_new(session):
+async def filter_existing2(eps: [EpisodeCreate], session):
+    exist_names = session.exec(select(Episode.name)).all()
+    return [ep for ep in eps if ep.name not in exist_names]
+
+    # new = {name:ep for name, ep in epsdict.items() if name not in exist_names}
+    # return new
+
+
+async def commit_new(session: Session):
     try:
-        new_made = copy.deepcopy(session.new)
-        session.commit()
-        rs = [e for e in new_made]
-        return rs
+        if new_made := copy.deepcopy(session.new):
+            session.commit()
+            return new_made
     except Exception as e:
+        breakpoint()
         session.rollback()
         raise Exception(f'FAILED TO ADD EPISODES\nERROR:{e}')

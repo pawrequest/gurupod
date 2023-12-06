@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from gurupod.models.episode_old import Episode
+    from legacy.episode_old2 import Episode
 
 def episodes_markup(eps:list, markup_funcs:dict) -> str:
     text = markup_funcs['head_text'](eps)
@@ -16,7 +16,7 @@ def episodes_markup(eps:list, markup_funcs:dict) -> str:
 
 def episode_markup_one(episode:Episode, markup_funcs_):
     text = markup_funcs_['title_text'](episode)
-    text += markup_funcs_['date_text'](episode.date_published)
+    text += markup_funcs_['date_text'](episode.date)
     if episode.notes:
         text += markup_funcs_['notes_text'](episode.notes)
     if episode.links:

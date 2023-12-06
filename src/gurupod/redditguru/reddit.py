@@ -53,8 +53,5 @@ def submit_episiode(episode: 'Episode'):
 
 if __name__ == '__main__':
     # guru_flair()
-    submit_episiode()
-"""
-
-
-"""
+    # submit_episiode()
+    ...

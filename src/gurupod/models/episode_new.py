@@ -3,6 +3,7 @@ from typing import Optional
 
 import aiohttp
 from bs4 import BeautifulSoup
+from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, SQLModel
 
@@ -17,7 +18,24 @@ class EpisodeBase(SQLModel):
 class EpisodeCreate(EpisodeBase):
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
-    date_published: Optional[datetime] = Field(default=None)
+    date: Optional[datetime] = Field(default=None)
+
+    @field_validator('date', mode='before')
+    def parse_date(cls, v):
+        if isinstance(v, str):
+            return datetime.strptime(v, '%Y-%m-%d')
+        return v
+
+
+
+    # slug: Optional[str] = Field(default=None)
+    #
+    # @field_validator('slug', mode='after')
+    # def create_slug(cls, v, values):
+    #     if 'title' in values:
+    #         return slugify(values['title'])
+    #     return v
+    #
 
 
 class Episode(EpisodeCreate, table=True):
@@ -35,18 +53,32 @@ class Episode(EpisodeCreate, table=True):
             url=url,
             notes=ep_soup_notes(soup),
             links=ep_soup_links(soup),
-            date_published=ep_soup_date(soup),
+            date=ep_soup_date(soup),
         )
 
     @classmethod
-    async def ep_loaded(cls, ep_dict: dict, name):
+    async def ep_loaded(cls, ep_dict: dict):
+        try:
+            return cls(
+                name=ep_dict.get('name'),
+                url=ep_dict.get('url'),
+                notes=ep_dict.get('notes'),
+                links=ep_dict.get('links'),
+                date=datetime.strptime(ep_dict['date'], '%Y-%m-%d')
+            )
+        except Exception as e:
+            ...
+            raise Exception(f'FAILED TO ADD EPISODE {ep_dict=}\nERROR:{e}')
+
+    @classmethod
+    async def ep_loadedold(cls, ep_dict: dict, name):
         try:
             return cls(
                 name=name,
-                url=ep_dict.get('show_url'),
-                notes=ep_dict.get('show_notes'),
-                links=ep_dict.get('show_links'),
-                date_published=datetime.strptime(ep_dict['show_date'], '%Y-%m-%d')
+                url=ep_dict.get('url'),
+                notes=ep_dict.get('notes'),
+                links=ep_dict.get('links'),
+                date=datetime.strptime(ep_dict['date'], '%Y-%m-%d')
             )
         except Exception as e:
             ...
@@ -55,8 +87,20 @@ class Episode(EpisodeCreate, table=True):
 
 class EpisodeRead(EpisodeBase):
     id: int
-    date_published: datetime
-    id: Optional[int]
+    name: str
+    url: str
+    date: datetime
     notes: Optional[list[str]]
     links: Optional[dict[str, str]]
-    date_published: Optional[datetime]
+
+#
+# def slugify(value: str) -> str:
+#     """
+#     Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
+#     dashes to single dashes. Also strip leading and trailing whitespace, dashes,
+#     and underscores.
+#     """
+#     value = str(value)
+#     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+#     value = re.sub(r'[^\w\s-]', '', value.lower())
+#     return re.sub(r'[-\s]+', '-', value).strip('-_')

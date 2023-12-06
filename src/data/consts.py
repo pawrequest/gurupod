@@ -15,6 +15,7 @@ REDIRECT = "http://localhost:8080"
 folder = Path(__file__).parent
 EPISODES_MD = folder / "episodes.md"
 EPISODES_JSON = folder / "episodes.json"
+NEWEPS_JSON = folder / 'episodes2.json'
 EPISODES_HTML = folder / 'episodes.html'
 GURU_DB = folder / 'guru.db'
 
