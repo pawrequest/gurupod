@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from gurupod.models.episode import Episode
+    from gurupod.models.episode_old import Episode
 
 def episodes_markup(eps:list, markup_funcs:dict) -> str:
     text = markup_funcs['head_text'](eps)

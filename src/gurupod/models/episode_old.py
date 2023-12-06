@@ -12,7 +12,6 @@ from gurupod.scrape import ep_soup_date, ep_soup_links, ep_soup_notes
 class EpisodeBase(SQLModel):
     name: str = Field(index=True, unique=True)
     url: str
-    # notes: Optional[str] = Field(default=None)
     notes: Optional[list] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict] = Field(default=None, sa_column=Column(JSON))
     date_published: Optional[datetime] = Field(default=None)

@@ -20,7 +20,7 @@ def tail_text_reddit():
 
 def title_text_reddit(episode):
     # return f'## This is the introduction <a name="{episode.num}"></a>'
-    return f'# [{episode.name}]({episode.url})\n \n'
+    return f'# {episode.name}\n \n[play on captivate.fm]({episode.url})'
 
 
 def date_text_reddit(date_pub:datetime):
