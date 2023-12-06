@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 
 # def build_table_of_contents_reddit(eps: list[Episode]):
 #     toc = "### GuruPod Episodes:\n \n"
@@ -18,20 +20,20 @@ def tail_text_reddit():
 
 def title_text_reddit(episode):
     # return f'## This is the introduction <a name="{episode.num}"></a>'
-    return f'## {episode.num}: [{episode.name}]({episode.url})\n \n'
+    return f'# [{episode.name}]({episode.url})\n \n'
 
 
-def date_text_reddit(date_pub):
-    return f"\n***Date Published:*** {date_pub}\n \n"
+def date_text_reddit(date_pub:datetime):
+    return f"\n### Published {date_pub:%A %B %d %Y}\n \n"
 
 
 def notes_text_reddit(show_notes):
-    return "***Show Notes:***\n \n" + "\n \n".join(show_notes) + "\n \n" if show_notes else ""
+    text = f"### Show Notes\n\n{"\n\n".join(show_notes)}\n\n" if show_notes else ""
+    return text
 
 
 def links_text_reddit(show_links):
-    return "***Show Links:***\n \n" + "\n \n".join(
-        [f"[{text}]({link})" for text, link in show_links.items()]) + "\n \n"
+    return f"### Show Links\n\n{"\n\n".join([f"[{text}]({link})" for text, link in show_links.items()])}\n\n"
 
 
 def final_text_reddit():

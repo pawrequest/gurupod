@@ -7,8 +7,11 @@ from typing import List
 from fastapi import Depends, FastAPI
 from sqlmodel import SQLModel, Session, create_engine, select
 
-from data.consts import EPISODES_JSON, GURU_DB
+from data.consts import EPISODES_JSON, GURU_DB, REDDIT_SUB_KEY
+from gurupod.markupguru.markup_reddit import reddit_functions
+from gurupod.markupguru.markup_writer import episode_markup_one
 from gurupod.models.episode import Episode, EpisodeCreate, EpisodeRead
+from gurupod.reddit import submit_episiode
 
 sqlite_file_name = GURU_DB
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -26,15 +29,32 @@ def create_db_and_tables():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
+    with open(EPISODES_JSON, 'r') as f:
+        eps = json.load(f)
+        with Session(engine) as session:
+            await json_in(eps, session)
     yield
 
 
 app = FastAPI(lifespan=lifespan)
 
+@app.get('/new_episode_reddit/{key}/{ep_id}')
+async def new_episode_reddit(key, ep_id, session: Session = Depends(get_session)):
+    if key != REDDIT_SUB_KEY:
+        return 'wrong key'
+    episode = session.get(Episode, ep_id)
+
+    return submit_episiode(episode)
+
 
 @app.post("/ep_from_url/", response_model=EpisodeRead)
 async def ep_from_name_url(episode: EpisodeCreate, session: Session = Depends(get_session)):
     """ requires name and url"""
+
+    if returned_ep := session.get(Episode, episode.name):
+        print(f'found {returned_ep.name} in db')
+        return returned_ep
+
     try:
         await episode.get_data()
 
@@ -56,27 +76,32 @@ def read_episodes():
         return episodes
 
 
-
+@app.get("/eps/{ep_id}", response_model=EpisodeRead)
+def read_one_episode(ep_id:int):
+    with Session(engine) as session:
+        eppy = session.get(Episode, ep_id)
+        return eppy
 
 
 
 @app.post("/json_in/")
 async def json_in(epsdict: dict, session: Session = Depends(get_session)):
     exist = session.query(Episode).all()
-    exists = {e.name for e in exist}
-    new_eps_in = [(name, ep) for name, ep in epsdict.items() if name not in exists]
+    exist_names = {e.name for e in exist}
+    new_eps_in = [(name, ep) for name, ep in epsdict.items() if name not in exist_names]
 
     for name, ep in new_eps_in:
         try:
             ep_ob = Episode(name=name,
                             url=ep['show_url'],
-                            notes='\n'.join(ep['show_notes']),
+                            notes=ep['show_notes'],
                             links=ep['show_links'],
                             date_published=datetime.strptime(ep['show_date'], '%Y-%m-%d')
                             )
             db_ep = Episode.model_validate(ep_ob)
             session.add(db_ep)
         except Exception:
+            breakpoint()
             ...
 
     if session.dirty or session.new or session.deleted:
