@@ -9,9 +9,8 @@ from typing import List, NamedTuple, Set
 
 import aiohttp
 from bs4 import BeautifulSoup
-from dateutil import parser
-
 from data.consts import EPISODES_JSON, MAIN_URL
+from dateutil import parser
 
 
 @dataclass
@@ -133,8 +132,8 @@ async def episode_from_link(link, session) -> Episode:
                        show_date=ep_details_.date)
 
 
-async def episodes_from_page(
-        page_url: str, session, existing_d: dict or None = None) -> List[Episode]:
+async def episodes_from_page(page_url: str, session, existing_d: dict or None = None) \
+        -> List[Episode]:
     existing_d = existing_d or {}
     new_eps = []
 

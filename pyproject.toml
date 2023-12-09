@@ -11,16 +11,12 @@ dependencies = [
     'fastapi',
     'pydantic',
     'python-dotenv',
-    'django-select2',
-    'django-addanother',
-    'djangorestframework',
-    'django',
     "praw",
     "requests",
     "beautifulsoup4",
     "python-dateutil",
-    "aiohttp>=3.9.1",
-    "pytest-asyncio>=0.23.1",
+    "aiohttp",
+    "pytest-asyncio",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -32,7 +28,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-    "pytest>=7.4.3",
+    "pytest",
 ]
 
 [tool.hatch.metadata]
