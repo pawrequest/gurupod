@@ -1,6 +1,7 @@
 /data/client_secrets.json
 .env
 /src/data/guru.db
+/.idea
 
 #/.idea/dataSources.xml
 #/.idea/encodings.xml
