@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import asyncio
 from datetime import datetime
-from typing import Literal, NamedTuple, TYPE_CHECKING
+from typing import Generator, Literal, NamedTuple, TYPE_CHECKING
 
-import aiohttp
-from bs4 import BeautifulSoup
+from aiohttp import ClientError, ClientSession as AioSession
+from bs4 import BeautifulSoup, Tag
 from dateutil import parser
 
 from data.consts import MAIN_URL
@@ -13,9 +15,9 @@ MAYBE_ATTR = Literal['name', 'notes', 'links', 'date']
 if TYPE_CHECKING:
     from gurupod.models.episode import Episode
 
-    EP_TYP = Episode
+    EPISODE_TYPE = Episode
 else:
-    EP_TYP = dict
+    EPISODE_TYPE = dict
 
 
 def deet_from_soup(deet: MAYBE_ATTR, soup: BeautifulSoup):
@@ -31,7 +33,7 @@ def deet_from_soup(deet: MAYBE_ATTR, soup: BeautifulSoup):
         raise ValueError(f'invalid deet: {deet}')
 
 
-def soup_date(soup) -> datetime:
+def soup_date(soup: BeautifulSoup) -> datetime:
     date_st = soup.select_one(".publish-date").text
     return parser.parse(date_st)
 
@@ -58,35 +60,39 @@ def soup_title(soup: BeautifulSoup) -> str:
 ########################
 
 
-async def scrape_new_eps(session, main_url=MAIN_URL, existing_eps: set or None = None,
-                         max_dupes=5) -> list[EP_TYP]:
-    if not existing_eps:
+async def scrape_new_eps_url(aiosession: AioSession, main_url: str = MAIN_URL,
+                             existing_urls: set or None = None,
+                             max_dupes: int = 5) -> list[EPISODE_TYPE]:
+    if not existing_urls:
         print('no existing episodes provided, fetching all episodes')
-        existing_eps = set()
+        existing_urls = set()
     new_eps = []
     dupes = 0
 
-    for listing_page in await listing_pages_(main_url, session):
-        async for name, url in _get_names_urls(listing_page, session):
-            if name in existing_eps:
-                print(f'Already Exists: {name}')
+    for listing_page in await listing_pages_(main_url, aiosession):
+        async for url in _get_episdode_urls(listing_page, aiosession):
+            if url in existing_urls:
+                print(f'Already Exists: {url}')
                 if dupes >= max_dupes:
                     print(f"{max_dupes=} stopping")
                     return new_eps
                 dupes += 1
                 continue
             else:
-                print(f"New episode found: {name}")
-                ep_page = await _get_response(url, session)
-                ep_soup = BeautifulSoup(ep_page, "html.parser")
-                episode = EP_TYP(name=name, url=url, notes=soup_notes(ep_soup),
-                                    links=soup_links(ep_soup), date=soup_date(ep_soup))
-                # new_eps.append(EP_TYP(name=name, url=url, notes=soup_notes(ep_soup),
-                #                       links=soup_links(ep_soup), date=soup_date(ep_soup)))
+                new_eps.append(await fetch_new_ep(aiosession, url))
     return new_eps
 
 
-async def listing_pages_(main_url, session):
+async def fetch_new_ep(aiosession: AioSession, url: str):
+    ep_page = await _get_response(url, aiosession)
+    ep_soup = BeautifulSoup(ep_page, "html.parser")
+    name = soup_title(ep_soup)
+    print(f"New episode found: {name}")
+    return EPISODE_TYPE(name=name, url=url, notes=soup_notes(ep_soup),
+                        links=soup_links(ep_soup), date=soup_date(ep_soup))
+
+
+async def listing_pages_(main_url: str, session: AioSession):
     main_html = await _get_response(main_url, session)
     main_soup = BeautifulSoup(main_html, "html.parser")
     num_pages = _get_num_pages(main_soup)
@@ -94,26 +100,18 @@ async def listing_pages_(main_url, session):
     return listing_pages
 
 
-async def get_lists(main_url, session):
-    main_html = await _get_response(main_url, session)
-    main_soup = BeautifulSoup(main_html, "html.parser")
-    num_pages = _get_num_pages(main_soup)
-    listing_pages = listing_page_strs_(main_url, num_pages)
-    return listing_pages
-
-
-async def _get_response(url: str, session):
+async def _get_response(url: str, session: AioSession):
     for _ in range(3):
         try:
             async with session.get(url) as response:
                 response.raise_for_status()
                 return await response.text()
-        except aiohttp.ClientError as e:
+        except ClientError as e:
             print(f"Request failed: {e}")
             await asyncio.sleep(2)
             continue
     else:
-        raise aiohttp.ClientError("Request failed 3 times")
+        raise ClientError("Request failed 3 times")
 
 
 def listing_page_strs_(main_url: str, num_pages: int) -> list[str]:
@@ -127,20 +125,13 @@ def _get_num_pages(soup: BeautifulSoup) -> int:
     return int(num_pages)
 
 
-async def _get_names_urls(lisitng_page: str, session):
-    text = await _get_response(lisitng_page, session)
+async def _get_episdode_urls(lisitng_page: str, aiosession: AioSession) -> Generator[
+    str, None, None]:
+    text = await _get_response(lisitng_page, aiosession)
     listing_soup = BeautifulSoup(text, "html.parser")
     episodes_soup = listing_soup.select(".episode")
     for ep_soup in episodes_soup:
-        yield _EpTup.from_soup(ep_soup)
+        yield str(ep_soup.select_one(".episode-title a")['href'])
 
 
-class _EpTup(NamedTuple):
-    name: str
-    url: str
 
-    @classmethod
-    def from_soup(cls, ep_soup):
-        """ ep_soup is a subset of an episodes listing page"""
-        return cls(ep_soup.select_one(".episode-title a").text,
-                   str(ep_soup.select_one(".episode-title a")['href']))

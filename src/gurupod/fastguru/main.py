@@ -1,3 +1,4 @@
+import itertools
 import json
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -8,10 +9,9 @@ from sqlmodel import Session, select
 
 from data.consts import MAIN_URL, NEWEPS_JSON
 from gurupod.fastguru.database import create_db_and_tables, engine
-from gurupod.fastguru.episode_routes import add_new_epps, put, router
+from gurupod.fastguru.episode_routes import fetch_episodes, put, router
 from gurupod.models.episode import EpisodeDB, Episode
 from gurupod.redditguru import reddit
-from gurupod.scrape import scrape_new_eps
 
 
 @asynccontextmanager
@@ -19,8 +19,9 @@ async def lifespan(app: FastAPI):
     create_db_and_tables()
     with Session(engine) as session:
         await populate_from_json(session)
-        if new := await add_new_epps(session):
-            [reddit.post_episode(_) for _ in new]
+        if new := await fetch_episodes(session):
+            ...
+            # [reddit.post_episode(_) for _ in new]
     yield
 
 
