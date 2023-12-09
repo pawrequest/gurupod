@@ -1,43 +1,37 @@
 from datetime import datetime
 from typing import Literal, Optional
 
-import aiohttp
-import requests
-from bs4 import BeautifulSoup
-from pydantic import field_validator, model_validator
-from pydantic_core.core_schema import FieldValidationInfo
+from dateutil import parser
+from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, SQLModel
-
-from gurupod.scrape import deet_from_soup
 
 MAYBE_ATTRS = ('notes', 'links', 'date', 'name')
 MAYBE_TYPE = Literal['notes', 'links', 'date', 'name']
 
-class EpisodeBase(SQLModel):
+
+class Episode(SQLModel):
     url: str
     name: Optional[str] = Field(index=True, default=None, unique=True)
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
 
-
-
-class EpisodeIn(EpisodeBase):
-
     @field_validator('date', mode='before')
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
-            return datetime.strptime(v, '%Y-%m-%d')
+            try:
+                return datetime.strptime(v, '%Y-%m-%d')
+            except Exception:
+                return parser.parse(v)
         return v
 
 
-
-class EpisodeDB(EpisodeBase, table=True):
+class EpisodeDB(Episode, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 
-class EpisodeOut(EpisodeIn):
+class EpisodeOut(Episode):
     id: int
     name: str
     url: str

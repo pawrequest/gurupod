@@ -40,9 +40,9 @@ def guru_flair():
             submission.flair.select("f0c29d96-93e4-11ee-bdde-e666ed3aa602", text="Guru")
 
 
-def submit_episiode(episode: 'Episode'):
+def post_episode(episode: 'Episode', sub_reddit: str = DTG_SUB):
     reddit = reddit_()
-    subreddit = reddit.subreddit('test')
+    subreddit = reddit.subreddit(sub_reddit)
     # subreddit = reddit.subreddit(DTG_SUB)
     title = f'NEW EPISODE: {episode.name}'
     text = episode_markup_one(episode, reddit_functions)

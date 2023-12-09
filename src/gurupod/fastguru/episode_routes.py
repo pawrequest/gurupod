@@ -4,11 +4,10 @@ import aiohttp
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from data.consts import MAIN_URL, REDDIT_SUB_KEY
+from data.consts import MAIN_URL
 from gurupod.fastguru.database import engine, get_session
-from gurupod.models.episode import EpisodeDB, EpisodeIn, EpisodeOut
-from gurupod.redditguru.reddit import submit_episiode
-from gurupod.scrape import parse_main_page
+from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
+from gurupod.scrape import scrape_new_eps
 
 router = APIRouter()
 
@@ -26,41 +25,38 @@ def read_all():
 
 
 @router.post("/put/", response_model=List[EpisodeOut])
-async def put(episodes: list[EpisodeIn], session: Session = Depends(get_session)):
+async def put(episodes: list[Episode], session: Session = Depends(get_session)):
     new_eps = filter_existing(episodes, session)
-    if valid := [EpisodeDB.model_validate(episode) for episode in new_eps]:
-        session.add_all(valid)
-        session.commit()
-        [session.refresh(_) for _ in valid]
-        return valid
+    return validate_add(new_eps, session, commit=True)
 
 
-@router.get('/check_new_eps', response_model=List[EpisodeOut])
-async def check_new_eps(session: Session = Depends(get_session)):
-    existing_eps = session.exec(select(EpisodeDB.name)).all()
-    print(f'found{len(existing_eps)} episodes {existing_eps[:5:-1]}')
+@router.get('/scrape_add', response_model=List[EpisodeOut])
+async def scrape_add(session: Session = Depends(get_session)):
+    valid_new = await new_eps(session)
+
+    return validate_add(valid_new, session, commit=True)
+
+
+
+@router.get('/new_eps', response_model=List[EpisodeOut])
+async def new_eps(session: Session = Depends(get_session)):
+    existing_eps = set(session.exec(select(EpisodeDB.name).order_by(EpisodeDB.date)).all())
+    print(f'found{len(existing_eps)} existing episodes {existing_eps[:-5:-1]}...')
+
     async with aiohttp.ClientSession() as aio_session:
-        epis = await parse_main_page(aio_session, main_url=MAIN_URL, existing_eps=existing_eps)
+        return await scrape_new_eps(aio_session, main_url=MAIN_URL, existing_eps=existing_eps)
 
-        if valid := [EpisodeDB.model_validate(_) for _ in epis]:
-            session.add_all(valid)
+
+def validate_add(eps: list[Episode], session, commit=False) -> List[Episode | EpisodeOut]:
+    valid = [EpisodeDB.model_validate(_) for _ in eps]
+    if valid:
+        session.add_all(valid)
+        if commit:
             session.commit()
             [session.refresh(_) for _ in valid]
-            return valid
-
-        else:
-            return []
+    return valid or []
 
 
-@router.get('/new_episode_reddit/{key}/{ep_id}')
-async def post_episode_reddit(key, ep_id, session: Session = Depends(get_session)):
-    if key != REDDIT_SUB_KEY:
-        return 'wrong key'
-    episode = session.get(EpisodeDB, ep_id)
-
-    return submit_episiode(episode)
-
-
-def filter_existing(eps: list[EpisodeIn], session):
+def filter_existing(eps: list[Episode], session) -> List[Episode]:
     exist_names = session.exec(select(EpisodeDB.name)).all()
     return [ep for ep in eps if ep.name not in exist_names]
