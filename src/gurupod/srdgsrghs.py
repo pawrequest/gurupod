@@ -17,15 +17,6 @@ from data.consts import EPISODES_JSON, MAIN_URL
 
 
 
-class EpTup(NamedTuple):
-    name: str
-    url: str
-
-    @classmethod
-    def from_soup(cls, ep_soup):
-        """ ep_soup is a subset of an episodes listing page"""
-        return cls(ep_soup.select_one(".episode-title a").text,
-                   str(ep_soup.select_one(".episode-title a")['href']))
 
 
 class EpDetails(NamedTuple):

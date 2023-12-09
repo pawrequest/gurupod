@@ -1,12 +1,14 @@
 from typing import List
 
+import aiohttp
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from data.consts import REDDIT_SUB_KEY
+from data.consts import MAIN_URL, REDDIT_SUB_KEY
 from gurupod.fastguru.database import engine, get_session
 from gurupod.models.episode import EpisodeDB, EpisodeIn, EpisodeOut
 from gurupod.redditguru.reddit import submit_episiode
+from gurupod.scrape import parse_main_page
 
 router = APIRouter()
 
@@ -25,19 +27,29 @@ def read_all():
 
 @router.post("/put/", response_model=List[EpisodeOut])
 async def put(episodes: list[EpisodeIn], session: Session = Depends(get_session)):
-    unique_eps = filter_existing(episodes, session)
-    if validated := [EpisodeDB.model_validate(episode) for episode in unique_eps]:
-        for ep in validated:
-            session.add(ep)
+    new_eps = filter_existing(episodes, session)
+    if valid := [EpisodeDB.model_validate(episode) for episode in new_eps]:
+        session.add_all(valid)
         session.commit()
-        [session.refresh(valid) for valid in validated]
-        return validated
+        [session.refresh(_) for _ in valid]
+        return valid
 
 
-@router.get('/check_new_eps')
+@router.get('/check_new_eps', response_model=List[EpisodeOut])
 async def check_new_eps(session: Session = Depends(get_session)):
-    new_eps = await new_episodes_()
-    return new_eps
+    existing_eps = session.exec(select(EpisodeDB.name)).all()
+    print(f'found{len(existing_eps)} episodes {existing_eps[:5:-1]}')
+    async with aiohttp.ClientSession() as aio_session:
+        epis = await parse_main_page(aio_session, main_url=MAIN_URL, existing_eps=existing_eps)
+
+        if valid := [EpisodeDB.model_validate(_) for _ in epis]:
+            session.add_all(valid)
+            session.commit()
+            [session.refresh(_) for _ in valid]
+            return valid
+
+        else:
+            return []
 
 
 @router.get('/new_episode_reddit/{key}/{ep_id}')
