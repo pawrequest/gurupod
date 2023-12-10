@@ -1,6 +1,6 @@
 import json
 
-from data.consts import EPISODES_JSON, NEWEPS_JSON
+from data.consts import EPISODES_JSON, EPISODES_MOD
 
 with open(EPISODES_JSON) as injs:
     eps = json.load(injs)
@@ -15,5 +15,5 @@ with open(EPISODES_JSON) as injs:
         )
 
         out_dict.append(new_dict)
-with open(NEWEPS_JSON, 'w') as outjs:
+with open(EPISODES_MOD, 'w') as outjs:
     json.dump(out_dict, outjs, indent=4)
