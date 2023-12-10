@@ -7,9 +7,9 @@ from asyncpraw.reddit import Reddit, Subreddit
 from data.consts import DTG_SUB, TEST_SUB, TEST_WIKI
 from data.gurunames import GURUS
 from gurupod.redditguru.reddit import edit_reddit_wiki, \
-    find_submission_in_subreddit_stream, \
-    get_one_submission_with_gurus_in_title, guru_flair, reddit_cm, \
-    submissions_with_gurus_in_title, submit_episode_subreddit, \
+    submission_id_in_subreddit, \
+    one_guru_submission, guru_flair, reddit_cm, \
+    guru_submissions, submit_episode_subreddit, \
     subreddit_cm, wiki_page_cm
 
 
@@ -49,7 +49,7 @@ async def test_edit_wiki(markup_sample):
 async def test_post_to_subreddit(episode_validated_fxt):
     async with subreddit_cm(TEST_SUB) as subreddit:
         posted = await submit_episode_subreddit(episode_validated_fxt, subreddit)
-        found = await find_submission_in_subreddit_stream(posted.id, subreddit)
+        found = await submission_id_in_subreddit(posted.id, subreddit)
         assert found == posted
 
 
@@ -60,7 +60,7 @@ async def test_submissions_with_gurus_in_title():
             ...
 
     async with subreddit_cm(DTG_SUB) as subreddit:
-        subsy = submissions_with_gurus_in_title(subreddit, gurus=GURUS)
+        subsy = guru_submissions(subreddit, gurus=GURUS)
         try:
             await asyncio.wait_for(consume_submissions(subsy), timeout=10)
 
@@ -74,6 +74,6 @@ async def test_submissions_with_gurus_in_title():
 @pytest.mark.asyncio
 async def test_apply_flair_one():
     async with subreddit_cm(DTG_SUB) as subreddit:
-        gf = await get_one_submission_with_gurus_in_title(subreddit, gurus=GURUS)
+        gf = await one_guru_submission(subreddit, gurus=GURUS)
         res = await guru_flair([gf])
         ...

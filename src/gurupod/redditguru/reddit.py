@@ -62,14 +62,14 @@ async def wiki_page_cm(sub_name: str | None = None, page_name: str | None = None
             ...
 
 
-async def find_title_in_subreddit_stream(title, subreddit: Subreddit):
+async def title_in_subreddit(title, subreddit: Subreddit):
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if title in submission.title:
             return submission
 
 
-async def find_submission_in_subreddit_stream(submission_id: str, subreddit: Subreddit):
+async def submission_id_in_subreddit(submission_id: str, subreddit: Subreddit):
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if submission_id == submission.id:
@@ -85,7 +85,7 @@ async def guru_flair(guruflairs: list[GuruFlairs]):
     return True
 
 
-async def submissions_with_gurus_in_title(subreddit: Subreddit, gurus=GURUS) -> AsyncGenerator[
+async def guru_submissions(subreddit: Subreddit, gurus=GURUS) -> AsyncGenerator[
     Submission, list[str]]:
     async for submission in subreddit.stream.submissions():
         found_gurus = []
@@ -97,7 +97,7 @@ async def submissions_with_gurus_in_title(subreddit: Subreddit, gurus=GURUS) -> 
             yield submission, found_gurus
 
 
-async def get_one_submission_with_gurus_in_title(subreddit: Subreddit, gurus=GURUS) -> GuruFlairs:
+async def one_guru_submission(subreddit: Subreddit, gurus=GURUS) -> GuruFlairs:
     async for submission in subreddit.stream.submissions():
         found_gurus = []
         for guru in gurus:
@@ -126,7 +126,3 @@ async def edit_reddit_wiki(markup, wiki: WikiPage):
     return res
 
 
-if __name__ == '__main__':
-    # guru_flair()
-    # submit_episiode()
-    ...
