@@ -8,10 +8,10 @@ from sqlalchemy.pool import StaticPool
 from sqlmodel import Session
 from starlette.testclient import TestClient
 
-from data.consts import GURU_WIKI_TEST
+from data.consts import TEST_WIKI
 from gurupod.database import get_session
 from gurupod.models.episode import Episode, EpisodeDB
-from gurupod.redditguru.reddit import reddit_
+from gurupod.redditguru.reddit import reddit_cm
 from main import app
 
 TEST_DB = "sqlite://"
@@ -47,6 +47,14 @@ def episode_validated_fxt(episode_interview_fxt):
     return Episode.model_validate(episode_interview_fxt)
 
 
+async def override_subreddit():
+    try:
+        reddit = Reddit()
+        subreddit = await reddit.subreddit('test')
+        yield subreddit
+    finally:
+        reddit.close()
+
 def override_session():
     try:
         session = Session(engine)
@@ -69,6 +77,7 @@ def episode_ipsum_data():
 client = TestClient(app)
 
 app.dependency_overrides[get_session] = override_session
+app.dependency_overrides[reddit_cm()] = override_subreddit()
 
 
 @pytest.fixture()
@@ -113,23 +122,5 @@ Back soon with a Decoding episode!
 
 
  
- --- 
-"""
+ ---"""
 
-#
-# @pytest.fixture(scope="function")
-# async def reddit_fxt(test_db):
-#     return await reddit_()
-#
-#
-# @pytest.fixture(scope="function")
-# async def subreddit_testing(reddit_fxt, test_db):
-#     reddit: Reddit = await reddit_fxt
-#     return await reddit.subreddit('test')
-#
-#
-# @pytest.fixture(scope="function")
-# async def wiki_testing(subreddit_testing, test_db):
-#     subred = await subreddit_testing
-#     wiki: WikiPage = await subred.wiki.get_page(GURU_WIKI_TEST)
-#     return wiki

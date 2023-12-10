@@ -1,17 +1,7 @@
-from asyncpraw.models import WikiPage
-from asyncpraw.reddit import Reddit, Subreddit
-from fastapi import APIRouter, Depends
-from sqlmodel import Session, select
+from fastapi import APIRouter
 
-from data.consts import REDDIT_SEND_KEY
-from gurupod.database import get_session
-from gurupod.markupguru.markup_writer import episodes_wiki
-from gurupod.models.episode import EpisodeDB
-from gurupod.redditguru.reddit import edit_reddit_wiki, submit_episode_subreddit, \
-    subreddit_dflt, wiki_page_dflt
 
 red_router = APIRouter()
-
 
 # @red_router.post('/post_sub')
 # async def post_episode_subreddit(key: str, episode: EpisodeDB,

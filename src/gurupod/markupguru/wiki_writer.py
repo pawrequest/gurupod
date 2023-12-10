@@ -48,3 +48,27 @@ wiki_markup_funcs = {
     'links_text': links_text_wiki,
     'final_text': final_text_wiki,
 }
+
+
+
+
+
+
+
+def oldmarkluop(episode):
+    markup_text = f"## [{episode.name}]({episode.url})\n \n"
+    markup_text += f"***Date Published:*** {episode.date}\n \n"
+    # markup_text += f"[Play on Captivate.fm]({show_url})"
+
+    if episode.notes:
+        markup_text += "***Show Notes:***\n \n"
+        for note in episode.notes:
+            markup_text += f"{note}\n \n"
+
+    if episode.links:
+        markup_text += "***Show Links:***\n \n"
+        for text, link in episode.links.items():
+            markup_text += f"[{text}]({link}) \n \n"
+
+    markup_text += "\n \n --- \n"
+    return markup_text

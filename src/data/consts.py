@@ -23,7 +23,7 @@ GURU_DB = folder / 'guru.db'
 DTG_SUB = 'DecodingTheGurus'
 TEST_SUB = 'test'
 EPISODES_WIKI = "episodes"
-GURU_WIKI_TEST = "gurus"
+TEST_WIKI = "gurus"
 PAGE_TITLE = 'Decoding The Gurus Episodes'
 
 
