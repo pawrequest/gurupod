@@ -4,8 +4,8 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, StaticPool, create_engine
 
-from gurupod.fastguru.database import get_session
-from gurupod.fastguru.main import app
+from gurupod.database import get_session
+from main import app
 from gurupod.models import episode
 from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
 
@@ -16,10 +16,6 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
 )
-
-
-# TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-# Episode.metadata.create_all(bind=engine)
 
 
 def override_session():
@@ -58,7 +54,6 @@ def test_db():
     EpisodeDB.metadata.drop_all(bind=engine)
 
 
-
 def test_import_new_episodes(episode_data, test_db):
     response = client.post("/eps/import", json=episode_data)
     assert response.status_code == 200
@@ -70,13 +65,6 @@ def test_import_new_episodes(episode_data, test_db):
     assert resp.name == episode_data[0]['name']
     assert resp.url == episode_data[0]['url']
     assert resp.date == datetime.fromisoformat(episode_data[0]['date'])
-
-    # assert response_data[0]['url'] == episode_data[0]['url']
-    # assert response_data[0]['name'] == episode_data[0]['name']
-    # assert response_data[0]['notes'] == episode_data[0]['notes']
-    # assert response_data[0]['links'] == episode_data[0]['links']
-    # assert datetime.fromisoformat(response_data[0]['date']).date() == datetime.fromisoformat(
-    #     episode_data[0]['date']).date()
 
 
 def test_import_existing_episodes(episode_data, test_db):

@@ -5,9 +5,10 @@ from fastapi import FastAPI
 from sqlmodel import Session
 
 from data.consts import EPISODES_MOD
-from gurupod.fastguru.database import create_db_and_tables, engine_
-from gurupod.fastguru.episode_routes import fetch, import_episodes, router
+from gurupod.database import create_db_and_tables, engine_
+from gurupod.routing.episode_routes import import_episodes, ep_router
 from gurupod.models.episode import Episode
+from gurupod.routing.reddit_routes import red_router
 
 
 @asynccontextmanager
@@ -22,7 +23,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(router, prefix="/eps")
+app.include_router(ep_router, prefix="/eps")
+app.include_router(red_router, prefix="/red")
 
 
 async def populate_from_json(session: Session):

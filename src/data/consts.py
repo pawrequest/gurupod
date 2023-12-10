@@ -21,16 +21,14 @@ GURU_DB = folder / 'guru.db'
 
 # strings
 DTG_SUB = 'DecodingTheGurus'
-EPISODES_WIKI = "episodes"
-# WIKINAME = "gurus"
+# EPISODES_WIKI = "episodes"
+WIKINAME = "gurus"
+PAGE_TITLE = 'Decoding The Gurus Episodes'
+GURUS = {'________________________________', '_______________________________'}
 
 
 # env vars
-REDDIT_USER = os.environ['REDDIT_USER']
-REDDIT_PASS = os.environ['REDDIT_PASS']
 REDDIT_CLIENT_ID = os.environ['REDDIT_CLIENT_ID']
 REDDIT_CLIENT_SEC = os.environ['REDDIT_CLIENT_SEC']
 REDDIT_REF_TOK = os.environ['REDDIT_REF_TOK']
-REDDIT_SUB_KEY = os.environ['REDDIT_SUB_KEY']
-PAGE_TITLE = 'Decoding The Gurus Episodes'
-GURUS = {'________________________________', '_______________________________'}
+REDDIT_SEND_KEY = os.environ['REDDIT_SEND_KEY']

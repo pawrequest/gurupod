@@ -6,15 +6,15 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from data.consts import MAIN_URL
-from gurupod.fastguru.database import get_session
-from gurupod.fastguru.route_funcs import filter_existing_url, validate_add
+from gurupod.database import get_session
+from gurupod.routing.route_funcs import filter_existing_url, validate_add
 from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
 from gurupod.scrape import episode_scraper, maybe_expand_episode
 
-router = APIRouter()
+ep_router = APIRouter()
 
 
-@router.post("/import", response_model=List[EpisodeOut])
+@ep_router.post("/import", response_model=List[EpisodeOut])
 async def import_episodes(episodes: list[Episode], session: Session = Depends(get_session)):
     if new_eps := filter_existing_url(episodes, session):
         for ep in new_eps:
@@ -25,8 +25,7 @@ async def import_episodes(episodes: list[Episode], session: Session = Depends(ge
         return []
 
 
-
-@router.get('/fetch{max_rtn}', response_model=List[EpisodeOut])
+@ep_router.get('/fetch{max_rtn}', response_model=List[EpisodeOut])
 async def fetch(session: Session = Depends(get_session), max_rtn=None):
     """ check captivate for new episodes and add to db"""
     if new_eps := await _scrape(session, max_rtn=max_rtn):
@@ -38,7 +37,7 @@ async def fetch(session: Session = Depends(get_session), max_rtn=None):
         return []
 
 
-@router.get('/scrape{max_rtn}', response_model=List[Episode])
+@ep_router.get('/scrape{max_rtn}', response_model=List[Episode])
 async def _scrape(session: Session = Depends(get_session), max_rtn=None):
     """ endpoint for dry-run / internal use"""
     # existing_urls = await existing_urls_(session)
@@ -48,8 +47,7 @@ async def _scrape(session: Session = Depends(get_session), max_rtn=None):
         return res
 
 
-
-@router.get("/{ep_id}", response_model=EpisodeOut)
+@ep_router.get("/{ep_id}", response_model=EpisodeOut)
 def read_one(ep_id: int, session: Session = Depends(get_session)):
     episode_db = session.get(EpisodeDB, ep_id)
     if episode_db is None:
@@ -57,13 +55,6 @@ def read_one(ep_id: int, session: Session = Depends(get_session)):
     return episode_db
 
 
-
-
-# @router.get("/{ep_id}", response_model=EpisodeOut)
-# def read_one(ep_id: int, session: Session = Depends(get_session)):
-#     return session.get(EpisodeDB, ep_id)
-
-
-@router.get("/", response_model=List[EpisodeOut])
+@ep_router.get("/", response_model=List[EpisodeOut])
 def read_all(session: Session = Depends(get_session)):
     return session.exec(select(EpisodeDB)).all()

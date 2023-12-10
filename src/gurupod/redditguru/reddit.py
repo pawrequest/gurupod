@@ -4,19 +4,24 @@ import praw
 from praw.models import WikiPage
 from praw.reddit import Submission, Subreddit
 
-from data.consts import DTG_SUB, EPISODES_WIKI, GURUS, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
-    REDDIT_REF_TOK, REDIRECT, USER_AGENT
+from data.consts import DTG_SUB, GURUS, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
+    REDDIT_REF_TOK, REDIRECT, USER_AGENT, WIKINAME
 from gurupod.markupguru.markup_reddit import reddit_functions
 from gurupod.markupguru.markup_writer import episode_markup_one
 
 
-def edit_reddit_wiki(markup):
+def edit_reddit_wiki(markup, subreddit_name=DTG_SUB, wiki_name=WIKINAME):
     reddit = reddit_()
-    subreddit: Subreddit = reddit.subreddit(DTG_SUB)
-    wiki: WikiPage = subreddit.wiki[EPISODES_WIKI]
-    if input(f"overwrite {EPISODES_WIKI} Reddit wiki?").lower()[0] == "y":
-        wiki.edit(content=markup)
-        print("edited the wiki")
+    subreddit: Subreddit = reddit.subreddit(subreddit_name)
+    wiki: WikiPage = subreddit.wiki[wiki_name]
+    wiki.edit(content=markup)
+    return {
+        'subreddit': subreddit_name,
+        'wiki': wiki_name,
+        'revision_by': wiki.revision_by,
+        'revision_date': wiki.revision_date,
+        'revision' : wiki.revision_id,
+    }
 
 
 def reddit_():
@@ -40,7 +45,7 @@ def guru_flair():
             submission.flair.select("f0c29d96-93e4-11ee-bdde-e666ed3aa602", text="Guru")
 
 
-def post_episode(episode: 'Episode', sub_reddit: str = DTG_SUB):
+def post_episode(episode: 'Episode', sub_reddit: str = 'test'):
     reddit = reddit_()
     subreddit = reddit.subreddit(sub_reddit)
     # subreddit = reddit.subreddit(DTG_SUB)
