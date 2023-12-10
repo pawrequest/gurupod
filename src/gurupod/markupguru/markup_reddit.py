@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from datetime import datetime
 
-
 # def build_table_of_contents_reddit(eps: list[Episode]):
 #     toc = "### GuruPod Episodes:\n \n"
 #     for ep in eps:
@@ -40,7 +39,7 @@ def final_text_reddit():
     return "\n \n --- \n"
 
 
-reddit_functions = {
+reddit_markup_funcs = {
     'head_text': head_text_reddit,
     'tail_text': tail_text_reddit,
     'title_text': title_text_reddit,

@@ -21,10 +21,10 @@ GURU_DB = folder / 'guru.db'
 
 # strings
 DTG_SUB = 'DecodingTheGurus'
-# EPISODES_WIKI = "episodes"
-WIKINAME = "gurus"
+TEST_SUB = 'test'
+EPISODES_WIKI = "episodes"
+GURU_WIKI_TEST = "gurus"
 PAGE_TITLE = 'Decoding The Gurus Episodes'
-GURUS = {'________________________________', '_______________________________'}
 
 
 # env vars
@@ -32,3 +32,5 @@ REDDIT_CLIENT_ID = os.environ['REDDIT_CLIENT_ID']
 REDDIT_CLIENT_SEC = os.environ['REDDIT_CLIENT_SEC']
 REDDIT_REF_TOK = os.environ['REDDIT_REF_TOK']
 REDDIT_SEND_KEY = os.environ['REDDIT_SEND_KEY']
+
+GURU_FLAIR_ID = "f0c29d96-93e4-11ee-bdde-e666ed3aa602"

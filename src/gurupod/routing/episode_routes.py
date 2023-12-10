@@ -14,8 +14,8 @@ from gurupod.scrape import episode_scraper, maybe_expand_episode
 ep_router = APIRouter()
 
 
-@ep_router.post("/import", response_model=List[EpisodeOut])
-async def import_episodes(episodes: list[Episode], session: Session = Depends(get_session)):
+@ep_router.post("/put_ep", response_model=List[EpisodeOut])
+async def put_ep(episodes: list[Episode], session: Session = Depends(get_session)):
     if new_eps := filter_existing_url(episodes, session):
         for ep in new_eps:
             await maybe_expand_episode(ep)
@@ -31,7 +31,7 @@ async def fetch(session: Session = Depends(get_session), max_rtn=None):
     if new_eps := await _scrape(session, max_rtn=max_rtn):
         print(
             f'found {len(new_eps)} new episodes to scrape: \n{"\n".join(_.name for _ in new_eps)}')
-        return await import_episodes(new_eps, session)
+        return await put_ep(new_eps, session)
     else:
         print('no new episodes found')
         return []

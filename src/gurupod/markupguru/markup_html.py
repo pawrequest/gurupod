@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from data.consts import PAGE_TITLE
-from legacy.episode_old2 import Episode
+from gurupod.models.episode import Episode
 
 
 def head_text_html(episodes):
@@ -52,7 +52,7 @@ def final_text_html():
     return "<br> <br>"
 
 
-html_functions = {
+html_markup_funcs = {
     'title_text': title_text_html,
     'date_text': date_text_html,
     'notes_text': notes_text_html,

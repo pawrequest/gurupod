@@ -88,12 +88,20 @@ def soup_title(soup: BeautifulSoup) -> str:
 
 async def episode_scraper(session: sqlmodel.Session, aiosession: ClientSession,
                           main_url: str = MAIN_URL,
-                          max_dupes: int = 5, max_return = None) -> list[Episode]:
+                          max_dupes: int = 5, max_return=None) -> list[Episode]:
     existing_urls = session.exec(select(EpisodeDB.url)).all()
     new_eps, dupes = [], 0
-    for listing_page in await listing_pages_(main_url, aiosession):
-        print(f'Scanning listing page: {listing_page}')
-        async for url in _get_episdode_urls(listing_page, aiosession):
+    listing_pages = await listing_pages_(main_url, aiosession)
+    coroutines = [_get_episdode_urls(listing_page, aiosession) for listing_page in listing_pages]
+    results = await asyncio.gather(*coroutines)
+    # urls = [*results]
+    urls = [_ for sublist in results for _ in sublist]
+    for url in urls:
+    # for url in await asyncio.gather(*coroutines):
+        if max_return and len(new_eps) >= int(max_return):
+            print(f"reached {max_return=}, stopping")
+            return new_eps
+        else:
             print(f'\tChecking episode {url}')
             if url in existing_urls:
                 print(f'\t\tAlready Exists #{dupes}\n')
@@ -104,10 +112,25 @@ async def episode_scraper(session: sqlmodel.Session, aiosession: ClientSession,
                 continue
             else:
                 new_eps.append(await fetch_new_ep(aiosession, url))
-                if max_return and len(new_eps) >= int(max_return):
-                    print(f"reached {max_return=}, stopping")
-                    return new_eps
     return new_eps
+
+
+    #     if max_return and len(new_eps) >= int(max_return):
+    #         print(f"reached {max_return=}, stopping")
+    #         return new_eps
+    #     print(f'Scanning listing page: {listing_page}')
+    #     # async for url in _get_episdode_urls(listing_page, aiosession):
+    #         print(f'\tChecking episode {url}')
+    #         if url in existing_urls:
+    #             print(f'\t\tAlready Exists #{dupes}\n')
+    #             if dupes >= max_dupes:
+    #                 print(f"reached {max_dupes=}, stopping")
+    #                 return new_eps
+    #             dupes += 1
+    #             continue
+    #         else:
+    #             new_eps.append(await fetch_new_ep(aiosession, url))
+    # return new_eps
 
 
 async def fetch_new_ep(aiosession: ClientSession, url: str):
@@ -152,10 +175,12 @@ def _get_num_pages(soup: BeautifulSoup) -> int:
     return int(num_pages)
 
 
-async def _get_episdode_urls(lisitng_page: str, aiosession: ClientSession) \
-        -> Generator[str, None, None]:
-    text = await _get_response(lisitng_page, aiosession)
+async def _get_episdode_urls(listing_page: str, aiosession: ClientSession) \
+        -> List[str]:
+        # -> Generator[str, None, None]:
+    text = await _get_response(listing_page, aiosession)
     listing_soup = BeautifulSoup(text, "html.parser")
-    episodes_soup = listing_soup.select(".episode")
-    for ep_soup in episodes_soup:
-        yield str(ep_soup.select_one(".episode-title a")['href'])
+    episodes_res = listing_soup.select(".episode")
+    return [str(ep_soup.select_one(".episode-title a")['href'])for ep_soup in episodes_res]
+    # for ep_soup in episodes_soup:
+    #     yield str(ep_soup.select_one(".episode-title a")['href'])

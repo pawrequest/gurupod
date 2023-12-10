@@ -7,12 +7,12 @@ from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
 
 async def existing_urls_(session: Session) -> list[str]:
     if existing_urls := session.exec(select(EpisodeDB.url).order_by(desc(EpisodeDB.date))).all():
-        await log_existing_urls(existing_urls)
+        _log_existing_urls(existing_urls)
         return list(existing_urls)
     return []
 
 
-async def log_existing_urls(existing_urls):
+def _log_existing_urls(existing_urls):
     print(f'\nFound {len(existing_urls)} existing episode links in DB:')
     print("\n".join(['\t' + _ for _ in existing_urls[:5]]))
     if len(existing_urls) > 5:
@@ -20,7 +20,7 @@ async def log_existing_urls(existing_urls):
     print('\n')
 
 
-def log_new_urls(new_eps):
+def _log_new_urls(new_eps):
     print(f'\nFound {len(new_eps)} new episode links:')
     print("\n".join(['\t' + _.url for _ in new_eps[:5]]))
     if len(new_eps) > 5:
@@ -56,5 +56,5 @@ def filter_existing_names(eps: list[Episode], session: Session) -> List[Episode]
 def filter_existing_url(eps: list[Episode], session: Session) -> List[Episode]:
     urls_in_db = session.exec(select(EpisodeDB.url)).all()
     new_eps = [_ for _ in eps if _.url not in urls_in_db]
-    log_new_urls(new_eps)
+    _log_new_urls(new_eps)
     return new_eps

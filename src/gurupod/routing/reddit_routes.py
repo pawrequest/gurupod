@@ -1,29 +1,35 @@
+from asyncpraw.models import WikiPage
+from asyncpraw.reddit import Reddit, Subreddit
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from data.consts import REDDIT_SEND_KEY, WIKINAME
-from gurupod import episodes_markup
+from data.consts import REDDIT_SEND_KEY
 from gurupod.database import get_session
-from gurupod.markupguru.markup_reddit import reddit_functions
-from gurupod.markupguru.wiki_writer import wiki_functions
+from gurupod.markupguru.markup_writer import episodes_wiki
 from gurupod.models.episode import EpisodeDB
-from gurupod.redditguru.reddit import edit_reddit_wiki, post_episode
+from gurupod.redditguru.reddit import edit_reddit_wiki, submit_episode_subreddit, \
+    subreddit_dflt, wiki_page_dflt
 
 red_router = APIRouter()
 
-@red_router.get('/new_episode_reddit/{key}/{ep_id}')
-async def post_episode_subreddit(key, ep_id, session: Session = Depends(get_session)):
-    if key != REDDIT_SEND_KEY:
-        return 'wrong key'
-    episode = session.get(EpisodeDB, ep_id)
 
-    return post_episode(episode, sub_reddit='test')
+# @red_router.post('/post_sub')
+# async def post_episode_subreddit(key: str, episode: EpisodeDB,
+#                                  subreddit: Subreddit = Depends(subreddit_dflt)):
+#     if key != REDDIT_SEND_KEY:
+#         return 'wrong key'
+#     subreddit = await subreddit
+#     return await submit_episode_subreddit(episode, subreddit)
 
 
-@red_router.get('/update_wiki/{key}')
-async def update_wiki(key, session: Session = Depends(get_session)):
-    if key != REDDIT_SEND_KEY:
-        return 'wrong key'
-    episodes = session.exec(select(EpisodeDB)).all()
-    markup = episodes_markup(episodes, wiki_functions)
-    return edit_reddit_wiki(markup)
+# @red_router.post('/update_wiki')
+# async def update_wiki_dflt(key, session: Session = Depends(get_session),
+#                            wiki_page: WikiPage = Depends(wiki_page_dflt)):
+#     if key != REDDIT_SEND_KEY:
+#         return 'wrong key'
+#     episodes = session.exec(select(EpisodeDB)).all()
+#     markup = episodes_wiki(episodes)
+#     res = await edit_reddit_wiki(markup, wiki_page)
+#     return res
+#
+#

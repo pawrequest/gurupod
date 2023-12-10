@@ -6,7 +6,7 @@ from sqlmodel import Session
 
 from data.consts import EPISODES_MOD
 from gurupod.database import create_db_and_tables, engine_
-from gurupod.routing.episode_routes import import_episodes, ep_router
+from gurupod.routing.episode_routes import put_ep, ep_router
 from gurupod.models.episode import Episode
 from gurupod.routing.reddit_routes import red_router
 
@@ -32,6 +32,6 @@ async def populate_from_json(session: Session):
         eps_j = json.load(f)
         print(f'\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n')
         valid = [Episode.model_validate(_) for _ in eps_j]
-        added = await import_episodes(valid, session)
+        added = await put_ep(valid, session)
         return added
 

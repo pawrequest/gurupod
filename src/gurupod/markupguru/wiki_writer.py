@@ -39,7 +39,7 @@ def final_text_wiki():
     return "\n \n --- \n"
 
 
-wiki_functions = {
+wiki_markup_funcs = {
     'head_text': head_text_wiki,
     'tail_text': tail_text_wiki,
     'title_text': title_text_wiki,
