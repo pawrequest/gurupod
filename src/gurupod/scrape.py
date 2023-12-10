@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 from datetime import datetime
 from enum import Enum
-from typing import Generator, Iterable, List
+from typing import Generator, List
 
 import sqlmodel
 from aiohttp import ClientError, ClientSession as ClientSession
@@ -86,24 +86,27 @@ def soup_title(soup: BeautifulSoup) -> str:
 ########################
 
 
-async def _scraper(session: sqlmodel.Session, aiosession: ClientSession, main_url: str = MAIN_URL,
-                   max_dupes: int = 5) -> list[Episode]:
+async def episode_scraper(session: sqlmodel.Session, aiosession: ClientSession,
+                          main_url: str = MAIN_URL,
+                          max_dupes: int = 5, max_return = None) -> list[Episode]:
     existing_urls = session.exec(select(EpisodeDB.url)).all()
     new_eps, dupes = [], 0
-
     for listing_page in await listing_pages_(main_url, aiosession):
         print(f'Scanning listing page: {listing_page}')
         async for url in _get_episdode_urls(listing_page, aiosession):
-            print(f'Checking episode {url}')
+            print(f'\tChecking episode {url}')
             if url in existing_urls:
-                print(f'\tAlready Exists #{dupes}\n')
+                print(f'\t\tAlready Exists #{dupes}\n')
                 if dupes >= max_dupes:
-                    print(f"\treached {max_dupes=}, stopping")
+                    print(f"reached {max_dupes=}, stopping")
                     return new_eps
                 dupes += 1
                 continue
             else:
                 new_eps.append(await fetch_new_ep(aiosession, url))
+                if max_return and len(new_eps) >= int(max_return):
+                    print(f"reached {max_return=}, stopping")
+                    return new_eps
     return new_eps
 
 
@@ -114,14 +117,6 @@ async def fetch_new_ep(aiosession: ClientSession, url: str):
     print(f"New episode found: {name}\n")
     return Episode(name=name, url=url, notes=soup_notes(ep_soup),
                    links=soup_links(ep_soup), date=soup_date(ep_soup))
-
-
-async def listing_pages_(main_url: str, session: ClientSession):
-    main_html = await _get_response(main_url, session)
-    main_soup = BeautifulSoup(main_html, "html.parser")
-    num_pages = _get_num_pages(main_soup)
-    listing_pages = listing_page_strs_(main_url, num_pages)
-    return listing_pages
 
 
 async def _get_response(url: str, aiosession: ClientSession):
@@ -140,6 +135,14 @@ async def _get_response(url: str, aiosession: ClientSession):
 
 def listing_page_strs_(main_url: str, num_pages: int) -> list[str]:
     return [main_url + f"/episodes/{_ + 1}/#showEpisodes" for _ in range(num_pages)]
+
+
+async def listing_pages_(main_url: str, session: ClientSession):
+    main_html = await _get_response(main_url, session)
+    main_soup = BeautifulSoup(main_html, "html.parser")
+    num_pages = _get_num_pages(main_soup)
+    listing_pages = listing_page_strs_(main_url, num_pages)
+    return listing_pages
 
 
 def _get_num_pages(soup: BeautifulSoup) -> int:

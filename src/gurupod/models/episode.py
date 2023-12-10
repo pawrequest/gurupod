@@ -1,14 +1,10 @@
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Optional
 
 from dateutil import parser
-from pydantic import field_validator, model_validator
+from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, SQLModel
-
-
-MAYBE_ATTRS = ('notes', 'links', 'date', 'name')
-MAYBE_TYPE = Literal['notes', 'links', 'date', 'name']
 
 
 class Episode(SQLModel):
@@ -26,25 +22,6 @@ class Episode(SQLModel):
             except Exception:
                 return parser.parse(v)
         return v
-
-    # @model_validator(mode='before')
-    # def maybe_expand(cls, v: dict, values):
-    #     missing = []
-    #     for name, attr in v.items():
-    #         if attr is None:
-    #             missing.append(MAYBE_ENUM(name))
-    #
-    #     v = expand_episode(v, missing)
-    #     return v
-
-    # async def expand_episode(ep: EPISODE_TYPE, aiosession: ClientSession) -> None:
-    #     if missing := [_ for _ in MAYBE_ATTRS if getattr(ep, _) is None]:
-    #         async with aiosession as aio_session:
-    #             html = await _get_response(ep.url, aio_session)
-    #             soup = BeautifulSoup(html, "html.parser")
-    #             for attr in missing:
-    #                 attr: MAYBE_LIT = attr  # apease the gods
-    #                 setattr(ep, attr, deet_from_soup(attr, soup))
 
 
 class EpisodeDB(Episode, table=True):
