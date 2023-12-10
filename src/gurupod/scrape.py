@@ -5,12 +5,14 @@ from datetime import datetime
 from enum import Enum
 from typing import Generator, Iterable, List
 
+import sqlmodel
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup
 from dateutil import parser
+from sqlmodel import select
 
 from data.consts import MAIN_URL
-from gurupod.models.episode import Episode
+from gurupod.models.episode import Episode, EpisodeDB
 
 
 ## expand episode
@@ -84,12 +86,9 @@ def soup_title(soup: BeautifulSoup) -> str:
 ########################
 
 
-async def scrape_new_eps(aiosession: ClientSession, main_url: str = MAIN_URL,
-                         existing_urls: Iterable or None = None,
-                         max_dupes: int = 5) -> list[Episode]:
-    if not existing_urls:
-        print('no existing episodes provided, fetching all episodes')
-        existing_urls = []
+async def _scraper(session: sqlmodel.Session, aiosession: ClientSession, main_url: str = MAIN_URL,
+                   max_dupes: int = 5) -> list[Episode]:
+    existing_urls = session.exec(select(EpisodeDB.url)).all()
     new_eps, dupes = [], 0
 
     for listing_page in await listing_pages_(main_url, aiosession):
