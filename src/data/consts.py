@@ -20,7 +20,7 @@ EPISODES_HTML = folder / 'episodes.html'
 GURU_DB = folder / 'guru.db'
 
 # strings
-DTG_SUB = 'DecodingTheGurus'
+GURU_SUB = 'DecodingTheGurus'
 TEST_SUB = 'test'
 EPISODES_WIKI = "episodes"
 TEST_WIKI = "gurus"

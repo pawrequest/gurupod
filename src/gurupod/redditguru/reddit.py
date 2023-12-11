@@ -1,23 +1,25 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, NamedTuple, TYPE_CHECKING
+from typing import NamedTuple, TYPE_CHECKING
 
 from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Reddit, Submission, Subreddit
 
-from data.consts import DTG_SUB, GURU_FLAIR_ID, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
+from data.consts import GURU_SUB, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
     REDDIT_REF_TOK, REDIRECT, TEST_SUB, TEST_WIKI, USER_AGENT
-from data.gurunames import GURUS
 from gurupod.markupguru.markup_writer import episodes_reddit
 
 if TYPE_CHECKING:
     from gurupod.models.episode import Episode
 
 
-class GuruFlairs(NamedTuple):
+class SubmissionFlairs(NamedTuple):
     submission: Submission
-    gurus: list[str]
+    flairs: list[str]
+
+    def __bool__(self):
+        return bool(self.flairs)
 
 
 @asynccontextmanager
@@ -33,7 +35,7 @@ async def reddit_cm() -> Reddit:
         ) as reddit:
             yield reddit
     finally:
-        reddit.close()
+        await reddit.close()
 
 
 @asynccontextmanager
@@ -51,7 +53,7 @@ async def subreddit_cm(sub_name: str = None) -> Subreddit:
 @asynccontextmanager
 async def wiki_page_cm(sub_name: str | None = None, page_name: str | None = None):
     if sub_name is None:
-        sub_name = DTG_SUB
+        sub_name = GURU_SUB
     if page_name is None:
         page_name = TEST_WIKI
     async with subreddit_cm(sub_name=sub_name) as subreddit:
@@ -62,50 +64,18 @@ async def wiki_page_cm(sub_name: str | None = None, page_name: str | None = None
             ...
 
 
-async def title_in_subreddit(title, subreddit: Subreddit):
+async def title_in_subreddit(title, subreddit: Subreddit) -> Submission:
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if title in submission.title:
             return submission
 
 
-async def submission_id_in_subreddit(submission_id: str, subreddit: Subreddit):
+async def submission_id_in_subreddit(submission_id: str, subreddit: Subreddit) -> Submission:
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if submission_id == submission.id:
             return submission
-
-
-async def guru_flair(guruflairs: list[GuruFlairs]):
-    for gf in guruflairs:
-        for guru in gf.gurus:
-            await gf.submission.flair.select(GURU_FLAIR_ID, text=guru)
-            print(f'\n{guru.upper()} tagged in "{gf.submission.title}"')
-            ...
-    return True
-
-
-async def guru_submissions(subreddit: Subreddit, gurus=GURUS) -> AsyncGenerator[
-    Submission, list[str]]:
-    async for submission in subreddit.stream.submissions():
-        found_gurus = []
-        for guru in gurus:
-            if guru in submission.title:
-                print(f'\n{guru.upper()} found in {submission.title}')
-                found_gurus.append(guru)
-        if found_gurus:
-            yield submission, found_gurus
-
-
-async def one_guru_submission(subreddit: Subreddit, gurus=GURUS) -> GuruFlairs:
-    async for submission in subreddit.stream.submissions():
-        found_gurus = []
-        for guru in gurus:
-            if guru in submission.title:
-                print(f'\n{guru.upper()} found in {submission.title}')
-                found_gurus.append(guru)
-        if found_gurus:
-            return GuruFlairs(submission, found_gurus)
 
 
 async def submit_episode_subreddit(episode: Episode, sub_reddit: Subreddit):
@@ -126,3 +96,13 @@ async def edit_reddit_wiki(markup, wiki: WikiPage):
     return res
 
 
+async def apply_flair_one(sub_flairs: SubmissionFlairs) -> bool:
+    try:
+        for guru in sub_flairs.flairs:
+            # todo turn back on
+            # await sub_flairs.submission.flair.select(GURU_FLAIR_ID, text=guru)
+            print(f'\n{guru.upper()} tagged in "{sub_flairs.submission.title}"')
+        return True
+    except Exception as e:
+        print(f'error applying flair: {e}')
+        return False
