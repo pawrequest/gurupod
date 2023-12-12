@@ -2,9 +2,10 @@ import pytest
 from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Reddit, Subreddit
 
-from data.consts import GURU_SUB, TEST_SUB, TEST_WIKI
-from gurupod.redditguru.reddit import edit_reddit_wiki, reddit_cm, submission_id_in_subreddit, \
+from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
+from gurupod.redditbot.reddit import edit_reddit_wiki, reddit_cm, submission_id_in_subreddit, \
     submit_episode_subreddit, subreddit_cm, wiki_page_cm
+from gurupod.writer.writer_oop import RPostWriter, RWikiWriter
 
 
 @pytest.mark.asyncio
@@ -25,25 +26,37 @@ async def test_wiki_cm():
         assert isinstance(wiki, WikiPage)
 
 
-@pytest.mark.skip(reason="Writes to web")
+# @pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
-async def test_edit_wiki(markup_sample):
+async def test_edit_wiki(markup_sample, episode_validated_fxt):
     async with wiki_page_cm(GURU_SUB, TEST_WIKI) as wiki:
+        wiki: WikiPage = wiki
         await edit_reddit_wiki('', wiki)
         await wiki.load()
         assert wiki.content_md == ''
 
-        await edit_reddit_wiki(markup_sample, wiki)
+        writer = RWikiWriter([episode_validated_fxt])
+        markup = writer.write_many()
+
+        await edit_reddit_wiki(markup, wiki)
         await wiki.load()
-        assert wiki.content_md == markup_sample
+        print(f'http://reddit.com/r/{GURU_SUB}/wiki/{TEST_WIKI}')
+        # assert wiki.content_md == markup_sample
 
-        cl = await edit_reddit_wiki('', wiki)
+        # cl = await edit_reddit_wiki('', wiki)
 
 
-@pytest.mark.skip(reason="Writes to web")
+# @pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
 async def test_post_to_subreddit(episode_validated_fxt):
     async with subreddit_cm(TEST_SUB) as subreddit:
         posted = await submit_episode_subreddit(episode_validated_fxt, subreddit)
         found = await submission_id_in_subreddit(posted.id, subreddit)
         assert found == posted
+
+@pytest.mark.asyncio
+async def test_get_wiki_md():
+    async with wiki_page_cm(page_name=EPISODES_WIKI) as wiki:
+        content = wiki.content_md
+        with open('wiki.md', 'w', encoding='utf8') as f:
+            f.write(content)

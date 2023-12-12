@@ -1,31 +1,27 @@
-from typing import List
+from __future__ import annotations
 
-from sqlmodel import Session, desc, select
+from typing import List, Sequence
+
+from sqlmodel import Session, select
 
 from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
 
 
-async def existing_urls_(session: Session) -> list[str]:
-    if existing_urls := session.exec(select(EpisodeDB.url).order_by(desc(EpisodeDB.date))).all():
-        _log_existing_urls(existing_urls)
-        return list(existing_urls)
-    return []
-
-
-def _log_existing_urls(existing_urls):
-    print(f'\nFound {len(existing_urls)} existing episode links in DB:')
-    print("\n".join(['\t' + _ for _ in existing_urls[:5]]))
-    if len(existing_urls) > 5:
+def _log_urls(episodes: Sequence[Episode]):
+    print("\n".join(['\t' + _.url for _ in episodes[:5]]))
+    if len(episodes) > 5:
         print(' ... more ...')
     print('\n')
 
 
-def _log_new_urls(new_eps):
-    print(f'\nFound {len(new_eps)} new episode links:')
-    print("\n".join(['\t' + _.url for _ in new_eps[:5]]))
-    if len(new_eps) > 5:
-        print(' ... more ...')
-    print('\n')
+def _log_existing_urls(episodes: Sequence[Episode]):
+    print(f'\nFound {len(episodes)} existing episode links in DB:')
+    _log_urls(episodes)
+
+
+def _log_new_urls(episodes: Sequence[Episode]):
+    print(f'\nFound {len(episodes)} new episode links:')
+    _log_urls(episodes)
 
 
 def validate_add(eps: list[Episode], session: Session, commit=False) -> List[Episode | EpisodeOut]:
@@ -40,21 +36,10 @@ def validate_add(eps: list[Episode], session: Session, commit=False) -> List[Epi
         return []
 
 
-def filter_existing_names(eps: list[Episode], session: Session) -> List[Episode]:
-    names_in_db = session.exec(select(EpisodeDB.name)).all()
-    print(f'found {len(names_in_db)} existing episodes in db')
-    new_eps = []
-    for ep in eps:
-        if ep.name in names_in_db:
-            print(f'episode {ep.name} already exists in db')
-        else:
-            print(f'adding episode {ep.name}')
-            new_eps.append(ep)
-    return new_eps
-
-
-def filter_existing_url(eps: list[Episode], session: Session) -> List[Episode]:
+def filter_existing_url(episodes: Sequence[Episode], session: Session) -> tuple[Episode] | None:
     urls_in_db = session.exec(select(EpisodeDB.url)).all()
-    new_eps = [_ for _ in eps if _.url not in urls_in_db]
-    _log_new_urls(new_eps)
-    return new_eps
+    if new_eps := tuple(_ for _ in episodes if _.url not in urls_in_db):
+        _log_new_urls(new_eps)
+    return new_eps or None
+
+

@@ -3,12 +3,6 @@ from __future__ import annotations
 from datetime import datetime
 
 
-# def build_table_of_contents_reddit(eps: list[Episode]):
-#     toc = "### GuruPod Episodes:\n \n"
-#     for ep in eps:
-#         toc += f"{ep.num}: [{ep.show_name}](#{ep.num})\n \n"
-#     return toc
-
 
 def head_text_wiki(episodes):
     return ""
@@ -32,21 +26,21 @@ def notes_text_wiki(show_notes):
 
 
 def links_text_wiki(show_links):
-    return f"### Show Links\n\n{"\n\n".join([f"[{text}]({link})" for text, link in show_links.items()])}\n\n"
+    return f"### Show Links\n\n{"\n\n".join([f"[{text}]({link})" for text, link in show_links.episodes()])}\n\n"
 
 
-def final_text_wiki():
+def ep_tail_wiki():
     return "\n \n --- \n"
 
 
-wiki_markup_funcs = {
+_wiki_markup_funcs = {
     'head_text': head_text_wiki,
     'tail_text': tail_text_wiki,
     'title_text': title_text_wiki,
     'date_text': date_text_wiki,
     'notes_text': notes_text_wiki,
     'links_text': links_text_wiki,
-    'final_text': final_text_wiki,
+    'final_text': ep_tail_wiki,
 }
 
 
@@ -67,7 +61,7 @@ def oldmarkluop(episode):
 
     if episode.links:
         markup_text += "***Show Links:***\n \n"
-        for text, link in episode.links.items():
+        for text, link in episode.links.episodes():
             markup_text += f"[{text}]({link}) \n \n"
 
     markup_text += "\n \n --- \n"

@@ -1,10 +1,17 @@
+from __future__ import annotations
+
+import inspect
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from dateutil import parser
-from pydantic import field_validator
+from pydantic import BaseModel, field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, SQLModel
+
+MAYBE_ATTRS = ['name', 'notes', 'links', 'date']
+MAYBE_ENUM = Enum('MAYBE_ENUM', MAYBE_ATTRS)
 
 
 class Episode(SQLModel):
@@ -23,6 +30,10 @@ class Episode(SQLModel):
                 return parser.parse(v)
         return v
 
+    @property
+    def data_missing(self) -> bool:
+        return any(getattr(self, _) is None for _ in MAYBE_ATTRS)
+
 
 class EpisodeDB(Episode, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -36,6 +47,7 @@ class EpisodeOut(Episode):
     notes: Optional[list[str]]
     links: Optional[dict[str, str]]
 
+
 #
 # def slugify(value: str) -> str:
 #     """
@@ -47,3 +59,30 @@ class EpisodeOut(Episode):
 #     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
 #     value = re.sub(r'[^\w\s-]', '', value.lower())
 #     return re.sub(r'[-\s]+', '-', value).strip('-_')
+class EpisodeMeta(BaseModel):
+    length: int
+    calling_func: str
+    msg: str = ''
+
+
+class EpisodeResponse(BaseModel):
+    meta: EpisodeMeta
+    episodes: list[EpisodeOut]
+
+    @classmethod
+    def from_episodes(cls, episodes: list[Episode], msg='') -> EpisodeResponse:
+        meta_data = EpisodeMeta(
+            length=len(episodes),
+            calling_func=inspect.stack()[1][3],
+            msg=msg
+        )
+        return cls.model_validate(dict(episodes=episodes, meta=meta_data))
+
+    @classmethod
+    def empty(cls, msg: str = 'No Episodes Found'):
+        meta_data = EpisodeMeta(length=0, calling_func=inspect.stack()[1][3], msg=msg)
+        return cls.model_validate(dict(episodes=[], meta=meta_data))
+
+    @classmethod
+    def no_new(cls):
+        return cls.empty('No new episodes')

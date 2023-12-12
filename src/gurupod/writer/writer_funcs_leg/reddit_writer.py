@@ -32,14 +32,14 @@ def notes_text_reddit(show_notes):
 
 
 def links_text_reddit(show_links):
-    return f"### Show Links\n\n{"\n\n".join([f"[{text}]({link})" for text, link in show_links.items()])}\n\n"
+    return f"### Show Links\n\n{"\n\n".join([f"[{text}]({link})" for text, link in show_links.episodes()])}\n\n"
 
 
 def final_text_reddit():
     return "\n \n --- \n"
 
 
-reddit_markup_funcs = {
+_reddit_markup_funcs = {
     'head_text': head_text_reddit,
     'tail_text': tail_text_reddit,
     'title_text': title_text_reddit,

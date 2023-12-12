@@ -1,7 +1,7 @@
 # import praw
 #
 # from data.consts import DTG_SUB, GURUS
-# from gurupod.redditguru.reddit import reddit_
+# from gurupod.redditbot.reddit import reddit_
 #
 # texty = GURUS.pop() + ' lots of other text'
 # print(f'{texty=}')

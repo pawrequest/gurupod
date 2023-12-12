@@ -1,9 +1,11 @@
+""" Scrape website for new episodes """
+
 from __future__ import annotations
 
 import asyncio
 from datetime import datetime
 from enum import Enum
-from typing import Generator, List
+from typing import List
 
 import sqlmodel
 from aiohttp import ClientError, ClientSession as ClientSession
@@ -13,17 +15,41 @@ from sqlmodel import select
 
 from data.consts import MAIN_URL
 from gurupod.models.episode import Episode, EpisodeDB
+from gurupod.scraper_oop import EpisodeSoup
 
 
-## expand episode
+# todo dispatcher
+
 class MAYBE_ENUM(Enum):
     name = 'name'
     notes = 'notes'
     links = 'links'
     date = 'date'
 
+#
+# async def maybe_expand_episode(ep: Episode, client_session: ClientSession = None) -> Episode:
+#     if ep.data_missing:
+#         async with ClientSession() as sesh:
+#
+#
+#
+#             html = await _get_response(ep.url, sesh)
+#             soup = EpisodeSoup(html, "html.parser")
+#             ep = soup.get_episode()
+#     return ep
+#
+# async def maybe_expand_episode(ep: Episode, client_session: ClientSession = None) -> Episode:
+#     if missing := get_missing(ep):
+#         print(f'\n{ep.name=} is missing data: {[_.value for _ in missing]}')
+#         client_session = client_session or ClientSession
+#         async with ClientSession() as sesh:
+#             html = await _get_response(ep.url, sesh)
+#             soup = EpisodeSoup(html, "html.parser")
+#             ep = soup.get_episode()
+#     return ep
 
-async def maybe_expand_episode(ep: Episode) -> Episode:
+
+async def maybe_expand_episodeold(ep: Episode) -> Episode:
     if missing := get_missing(ep):
         print(f'\n{ep.name=} is missing data: {[_.value for _ in missing]}')
         ep = await _expand_episode(ep, missing)
@@ -97,7 +123,7 @@ async def episode_scraper(session: sqlmodel.Session, aiosession: ClientSession,
     # urls = [*results]
     urls = [_ for sublist in results for _ in sublist]
     for url in urls:
-    # for url in await asyncio.gather(*coroutines):
+        # for url in await asyncio.gather(*coroutines):
         if max_return and len(new_eps) >= int(max_return):
             print(f"reached {max_return=}, stopping")
             return new_eps
@@ -113,7 +139,6 @@ async def episode_scraper(session: sqlmodel.Session, aiosession: ClientSession,
             else:
                 new_eps.append(await fetch_new_ep(aiosession, url))
     return new_eps
-
 
     #     if max_return and len(new_eps) >= int(max_return):
     #         print(f"reached {max_return=}, stopping")
@@ -177,10 +202,10 @@ def _get_num_pages(soup: BeautifulSoup) -> int:
 
 async def _get_episdode_urls(listing_page: str, aiosession: ClientSession) \
         -> List[str]:
-        # -> Generator[str, None, None]:
+    # -> Generator[str, None, None]:
     text = await _get_response(listing_page, aiosession)
     listing_soup = BeautifulSoup(text, "html.parser")
     episodes_res = listing_soup.select(".episode")
-    return [str(ep_soup.select_one(".episode-title a")['href'])for ep_soup in episodes_res]
+    return [str(ep_soup.select_one(".episode-title a")['href']) for ep_soup in episodes_res]
     # for ep_soup in episodes_soup:
     #     yield str(ep_soup.select_one(".episode-title a")['href'])

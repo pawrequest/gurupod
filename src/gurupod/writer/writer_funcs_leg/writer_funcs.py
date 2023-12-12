@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from functools import partial
 from pathlib import Path
-from typing import Sequence, TYPE_CHECKING
+from typing import Sequence
 
-from gurupod.markupguru.markup_html import html_markup_funcs
-from gurupod.markupguru.markup_reddit import reddit_markup_funcs
-from gurupod.markupguru.wiki_writer import wiki_markup_funcs
-
-if TYPE_CHECKING:
-    from gurupod.models.episode import Episode
+from gurupod.models.episode import Episode
+from gurupod.writer.writer_funcs_leg.html_writer import _html_markup_funcs
+from gurupod.writer.writer_funcs_leg.reddit_writer import _reddit_markup_funcs
+from gurupod.writer.writer_funcs_leg.wiki_writer import _wiki_markup_funcs
 
 
 def _episodes_markup(episodes: Sequence[Episode], markup_funcs: dict) -> str:
@@ -39,6 +37,6 @@ def save_markup(outfile: Path, markup: str):
         output.write(markup)
 
 
-episodes_wiki = partial(_episodes_markup, markup_funcs=wiki_markup_funcs)
-episodes_reddit = partial(_episodes_markup, markup_funcs=reddit_markup_funcs)
-episodes_html = partial(_episodes_markup, markup_funcs=html_markup_funcs)
+ep_markup_wiki = partial(_episodes_markup, markup_funcs=_wiki_markup_funcs)
+ep_markup_reddit = partial(_episodes_markup, markup_funcs=_reddit_markup_funcs)
+ep_markup_html = partial(_episodes_markup, markup_funcs=_html_markup_funcs)

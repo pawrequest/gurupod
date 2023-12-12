@@ -1,14 +1,14 @@
 from sqlmodel import Session, select
 from gurupod.database import get_session
 
-from asyncpraw.reddit import Reddit, Submission, Subreddit
+from asyncpraw.reddit import Subreddit
 from asyncpraw.models import WikiPage
 from fastapi import APIRouter, Depends
 
 from data.consts import REDDIT_SEND_KEY
-from gurupod.markupguru.markup_writer import episodes_wiki
+from gurupod.writer.writer_funcs_leg.writer_funcs import ep_markup_wiki
 from gurupod.models.episode import EpisodeDB
-from gurupod.redditguru.reddit import edit_reddit_wiki, submit_episode_subreddit, subreddit_cm, \
+from gurupod.redditbot.reddit import edit_reddit_wiki, submit_episode_subreddit, subreddit_cm, \
     wiki_page_cm
 
 red_router = APIRouter()
@@ -28,7 +28,7 @@ async def update_wiki_dflt(key, session: Session = Depends(get_session), wiki_pa
         return 'wrong key'
     episodes = session.exec(select(EpisodeDB)).all()
     wiki = await wiki_page
-    markup = episodes_wiki(episodes)
+    markup = ep_markup_wiki(episodes)
     res = await edit_reddit_wiki(markup, wiki)
     return res
 

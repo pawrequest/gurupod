@@ -6,7 +6,7 @@ from asyncpraw.reddit import Submission, Subreddit
 
 from data.consts import GURU_SUB
 from data.gurunames import GURUS
-from gurupod.redditguru.reddit import SubmissionFlairs, apply_flair_one, subreddit_cm
+from gurupod.redditbot.reddit import SubmissionFlairs, apply_flair_one, subreddit_cm
 
 
 async def _find_flairables(subreddit: Subreddit, tags=GURUS) -> AsyncGenerator[

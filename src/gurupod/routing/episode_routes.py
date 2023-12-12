@@ -1,28 +1,42 @@
-from fastapi import HTTPException
 from typing import List
 
 from aiohttp import ClientSession
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from data.consts import MAIN_URL
 from gurupod.database import get_session
-from gurupod.routing.route_funcs import filter_existing_url, validate_add
-from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
-from gurupod.scrape import episode_scraper, maybe_expand_episode
+from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut, EpisodeResponse
+from gurupod.routing.route_funcs import _log_new_urls, filter_existing_url, validate_add
+from gurupod.scrape import episode_scraper
+from gurupod.scraper_oop import expand_and_sort
 
 ep_router = APIRouter()
 
 
-@ep_router.post("/put_ep", response_model=List[EpisodeOut])
+@ep_router.post("/put_ep", response_model=EpisodeResponse)
 async def put_ep(episodes: list[Episode], session: Session = Depends(get_session)):
     if new_eps := filter_existing_url(episodes, session):
-        for ep in new_eps:
-            await maybe_expand_episode(ep)
-        new_eps = sorted(new_eps, key=lambda x: x.date)
-        return validate_add(new_eps, session, commit=True)
+        _log_new_urls(new_eps)
+        eps = expand_and_sort(new_eps)
+        res:List[Episode] = validate_add(eps, session, commit=True)
+        resp = EpisodeResponse.from_episodes(res)
+        return resp
     else:
-        return []
+        resp = EpisodeResponse.no_new()
+        return resp
+
+
+#
+# @ep_router.post("/put_ep", response_model=List[EpisodeOut])
+# async def put_ep(episodes: list[Episode], session: Session = Depends(get_session)):
+#     if new_eps := filter_existing_url(episodes, session):
+#         for ep in new_eps:
+#             await maybe_expand_episode(ep)
+#         new_eps = sorted(new_eps, key=lambda x: x.date)
+#         return validate_add(new_eps, session, commit=True)
+#     else:
+#         return []
 
 
 @ep_router.get('/fetch{max_rtn}', response_model=List[EpisodeOut])

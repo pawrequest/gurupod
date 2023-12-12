@@ -8,7 +8,7 @@ from asyncpraw.reddit import Reddit, Submission, Subreddit
 
 from data.consts import GURU_SUB, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
     REDDIT_REF_TOK, REDIRECT, TEST_SUB, TEST_WIKI, USER_AGENT
-from gurupod.markupguru.markup_writer import episodes_reddit
+from gurupod.writer import writer_funcs, RWikiWriter, RPostWriter
 
 if TYPE_CHECKING:
     from gurupod.models.episode import Episode
@@ -60,6 +60,9 @@ async def wiki_page_cm(sub_name: str | None = None, page_name: str | None = None
         wiki_page = await subreddit.wiki.get_page(page_name)
         try:
             yield wiki_page
+        except Exception as e:
+            print(f'error in wiki_page_cm: {e}')
+            raise e
         finally:
             ...
 
@@ -80,7 +83,8 @@ async def submission_id_in_subreddit(submission_id: str, subreddit: Subreddit) -
 
 async def submit_episode_subreddit(episode: Episode, sub_reddit: Subreddit):
     title = f'NEW EPISODE: {episode.name}'
-    text = episodes_reddit([episode])
+    writer = RPostWriter([episode])
+    text = writer.write_many()
     submission: Submission = await sub_reddit.submit(title, selftext=text)
     return submission
 
