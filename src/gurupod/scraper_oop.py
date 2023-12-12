@@ -8,32 +8,38 @@ from dateutil import parser
 
 from gurupod.models.episode import Episode
 
-def expand_and_sort(episodes):
-    new_eps = (expand_episode(_) if _.data_missing else _ for _ in episodes)
-    return sorted(new_eps, key=lambda x: x.date)
+
+async def expand_and_sort(episodes:tuple[Episode]):
+    complete = [_ for _ in episodes if not _.data_missing]
+    if missing := [_ for _ in episodes if _.data_missing]:
+        coroutines = [expand_episode(_) for _ in missing]
+        expanded = await asyncio.gather(*coroutines)
+        complete.extend(expanded)
+
+    return sorted(complete, key=lambda x: x.date)
 
 
-def expand_episode(url_or_ep: str | Episode) -> Episode:
+async def expand_episode(url_or_ep: str | Episode) -> Episode:
     if isinstance(url_or_ep, Episode):
         url = url_or_ep.url
     else:
         url = url_or_ep
 
-    soup = asyncio.run(get_soup(url))
-    return Episode(**soup.get_ep_d())
+    # soup = await get_soup(url)
+    soup = await EpisodeSoup.from_url(url)
+    res = Episode(**soup.get_ep_d())
+    res.url = url
+    return res
 
 
 class EpisodeSoup(BeautifulSoup):
-    def __init__(self, markup: str, parser: str = "html.parser"):
+    def __init__(self, markup: str, parser: str = "html.parser", url=None):
         super().__init__(markup, parser)
+        self.episode_url = url
 
     @property
     def episode_name(self):
         return self.select_one(".episode-title").text
-
-    @property
-    def episode_url(self):
-        return self.find('link', {'rel': 'canonical'}).get('href')
 
     @property
     def episode_notes(self):
@@ -43,7 +49,7 @@ class EpisodeSoup(BeautifulSoup):
         return show_notes or None
 
     @property
-    def epsisode_links(self):
+    def episode_links(self):
         show_links_html = self.select(".show-notes a")
         show_links_dict = {aref.text: aref['href'] for aref in show_links_html}
         return show_links_dict
@@ -63,11 +69,19 @@ class EpisodeSoup(BeautifulSoup):
         )
         return episode
 
+    @classmethod
+    async def from_url(cls, url: str) -> EpisodeSoup:
+        async with ClientSession() as aiosession:
+            html = await get_response(url, aiosession)
+            soup = EpisodeSoup(html, "html.parser", url=url)
+            return soup
+
 
 async def get_soup(url) -> EpisodeSoup:
     async with ClientSession() as aiosession:
         html = await get_response(url, aiosession)
-        return EpisodeSoup(html, "html.parser")
+        soup = EpisodeSoup(html, "html.parser")
+        return soup
 
 
 async def get_response(url: str, aiosession: ClientSession):

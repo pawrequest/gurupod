@@ -69,14 +69,20 @@ class EpisodeResponse(BaseModel):
     meta: EpisodeMeta
     episodes: list[EpisodeOut]
 
+    class Config:
+        allow_population_by_field_name = True
+
     @classmethod
-    def from_episodes(cls, episodes: list[Episode], msg='') -> EpisodeResponse:
+    def from_episodes(cls, episodes: list[EpisodeDB], msg='') -> EpisodeResponse:
+        if not isinstance(episodes, list):
+            episodes = [episodes]
+        valid = [EpisodeOut.model_validate(_) for _ in episodes]
         meta_data = EpisodeMeta(
-            length=len(episodes),
+            length=len(valid),
             calling_func=inspect.stack()[1][3],
             msg=msg
         )
-        return cls.model_validate(dict(episodes=episodes, meta=meta_data))
+        return cls.model_validate(dict(episodes=valid, meta=meta_data))
 
     @classmethod
     def empty(cls, msg: str = 'No Episodes Found'):
@@ -86,3 +92,18 @@ class EpisodeResponse(BaseModel):
     @classmethod
     def no_new(cls):
         return cls.empty('No new episodes')
+
+class EpisodeResponseNoDB(EpisodeResponse):
+    episodes: list[Episode]
+    @classmethod
+    def from_episodes(cls, episodes: list[Episode], msg='') -> EpisodeResponse:
+        if not isinstance(episodes, list):
+            episodes = [episodes]
+        valid = [Episode.model_validate(_) for _ in episodes]
+        meta_data = EpisodeMeta(
+            length=len(valid),
+            calling_func=inspect.stack()[1][3],
+            msg=msg
+        )
+        return cls.model_validate(dict(episodes=valid, meta=meta_data))
+

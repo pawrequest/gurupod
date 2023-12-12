@@ -10,6 +10,5 @@ text =  RPostWriter.write_many() /
 
 from __future__ import annotations
 
-from .writer_funcs_leg import writer_funcs as writer_funcs
 from .writer_oop import HtmlWriter as HtmlWriter, RPostWriter as RPostWriter, \
     RWikiWriter as RWikiWriter

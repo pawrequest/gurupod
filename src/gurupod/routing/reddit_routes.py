@@ -6,10 +6,10 @@ from asyncpraw.models import WikiPage
 from fastapi import APIRouter, Depends
 
 from data.consts import REDDIT_SEND_KEY
-from gurupod.writer.writer_funcs_leg.writer_funcs import ep_markup_wiki
 from gurupod.models.episode import EpisodeDB
 from gurupod.redditbot.reddit import edit_reddit_wiki, submit_episode_subreddit, subreddit_cm, \
     wiki_page_cm
+from gurupod.writer import RWikiWriter
 
 red_router = APIRouter()
 
@@ -28,7 +28,8 @@ async def update_wiki_dflt(key, session: Session = Depends(get_session), wiki_pa
         return 'wrong key'
     episodes = session.exec(select(EpisodeDB)).all()
     wiki = await wiki_page
-    markup = ep_markup_wiki(episodes)
+    writer = RWikiWriter(wiki)
+    markup = writer.write_many(episodes)
     res = await edit_reddit_wiki(markup, wiki)
     return res
 

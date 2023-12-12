@@ -24,16 +24,14 @@ def _log_new_urls(episodes: Sequence[Episode]):
     _log_urls(episodes)
 
 
-def validate_add(eps: list[Episode], session: Session, commit=False) -> List[Episode | EpisodeOut]:
+def validate_add(eps: list[Episode], session: Session, commit=False) -> List[EpisodeDB]:
     valid = [EpisodeDB.model_validate(_) for _ in eps]
     if valid:
         session.add_all(valid)
         if commit:
             session.commit()
             [session.refresh(_) for _ in valid]
-        return valid
-    else:
-        return []
+    return valid
 
 
 def filter_existing_url(episodes: Sequence[Episode], session: Session) -> tuple[Episode] | None:

@@ -8,7 +8,7 @@ from asyncpraw.reddit import Reddit, Submission, Subreddit
 
 from data.consts import GURU_SUB, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
     REDDIT_REF_TOK, REDIRECT, TEST_SUB, TEST_WIKI, USER_AGENT
-from gurupod.writer import writer_funcs, RWikiWriter, RPostWriter
+from gurupod.writer import RWikiWriter, RPostWriter
 
 if TYPE_CHECKING:
     from gurupod.models.episode import Episode
@@ -74,7 +74,7 @@ async def title_in_subreddit(title, subreddit: Subreddit) -> Submission:
             return submission
 
 
-async def submission_id_in_subreddit(submission_id: str, subreddit: Subreddit) -> Submission:
+async def submission_in_stream_by_id(submission_id: str, subreddit: Subreddit) -> Submission:
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if submission_id == submission.id:

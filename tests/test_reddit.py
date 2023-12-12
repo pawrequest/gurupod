@@ -3,7 +3,7 @@ from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Reddit, Subreddit
 
 from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
-from gurupod.redditbot.reddit import edit_reddit_wiki, reddit_cm, submission_id_in_subreddit, \
+from gurupod.redditbot.reddit import edit_reddit_wiki, reddit_cm, submission_in_stream_by_id, \
     submit_episode_subreddit, subreddit_cm, wiki_page_cm
 from gurupod.writer.writer_oop import RPostWriter, RWikiWriter
 
@@ -28,14 +28,15 @@ async def test_wiki_cm():
 
 # @pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
-async def test_edit_wiki(markup_sample, episode_validated_fxt):
+async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird):
     async with wiki_page_cm(GURU_SUB, TEST_WIKI) as wiki:
         wiki: WikiPage = wiki
         await edit_reddit_wiki('', wiki)
         await wiki.load()
         assert wiki.content_md == ''
 
-        writer = RWikiWriter([episode_validated_fxt])
+        # writer = RWikiWriter([random_episode_validated])
+        writer = RWikiWriter(episodes_weird)
         markup = writer.write_many()
 
         await edit_reddit_wiki(markup, wiki)
@@ -48,10 +49,10 @@ async def test_edit_wiki(markup_sample, episode_validated_fxt):
 
 # @pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
-async def test_post_to_subreddit(episode_validated_fxt):
+async def test_post_to_subreddit(random_episode_validated):
     async with subreddit_cm(TEST_SUB) as subreddit:
-        posted = await submit_episode_subreddit(episode_validated_fxt, subreddit)
-        found = await submission_id_in_subreddit(posted.id, subreddit)
+        posted = await submit_episode_subreddit(random_episode_validated, subreddit)
+        found = await submission_in_stream_by_id(posted.id, subreddit)
         assert found == posted
 
 @pytest.mark.asyncio
