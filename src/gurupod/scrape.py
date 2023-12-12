@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import asyncio
-from asyncio import create_task
 from typing import List
 
 import sqlmodel
@@ -12,10 +11,7 @@ from bs4 import BeautifulSoup
 from sqlmodel import select
 
 from data.consts import MAIN_URL
-from gurupod.disptaching import _worker
 from gurupod.models.episode import Episode, EpisodeDB
-
-
 
 
 async def episode_scraper(session: sqlmodel.Session, aiosession: ClientSession,
@@ -62,7 +58,7 @@ async def _get_response(url: str, aiosession: ClientSession):
         raise ClientError("Request failed 3 times")
 
 
-async def listing_pages_(main_url: str, session: ClientSession):
+async def listing_pages_(main_url: str, session: ClientSession) -> list[str]:
     main_html = await _get_response(main_url, session)
     main_soup = BeautifulSoup(main_html, "html.parser")
     num_pages = _get_num_pages(main_soup)
@@ -90,5 +86,3 @@ async def _get_episdode_urls(listing_page: str, aio_session: ClientSession) \
     return [str(ep_soup.select_one(".episode-title a")['href']) for ep_soup in episodes_res]
     # for ep_soup in episodes_soup:
     #     yield str(ep_soup.select_one(".episode-title a")['href'])
-
-
