@@ -7,7 +7,9 @@ from gurupod.models.episode import Episode
 
 
 class EpisodeWriter(ABC):
-    def __init__(self, episodes: list[Episode]):
+    def __init__(self, episodes: Episode | list[Episode]):
+        if not isinstance(episodes, list):
+            episodes = [episodes]
         self.episodes = episodes
 
     def write_many(self, eps=None) -> str:
