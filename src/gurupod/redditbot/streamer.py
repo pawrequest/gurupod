@@ -9,24 +9,30 @@ from data.gurunames import GURUS
 from gurupod.redditbot.reddit import SubmissionFlairs, apply_flair_one, subreddit_cm
 
 
-async def _find_flairables(subreddit: Subreddit, tags=GURUS) -> AsyncGenerator[
-    Submission, list[str]]:
+async def _find_jobs(subreddit: Subreddit, tags=GURUS) -> AsyncGenerator[Submission, list[str]]:
     async for submission in subreddit.stream.submissions():
+        print("Starting stream...")
         found_tags = []
-        for guru in tags:
-            if guru in submission.title:
-                print(f'\n{guru.upper()} found in {submission.title}')
-                found_tags.append(guru)
+        for found in tags:
+            if found in submission.title:
+                print(f'\n{submission.title} contains {found.upper()}')
+                found_tags.append(found)
         if found_tags:
             yield submission, found_tags
 
 
-async def _flair_streamer(subreddit: Subreddit) -> AsyncGenerator[SubmissionFlairs, None]:
-    print("Starting stream...")
-    async for submission, flairs in _find_flairables(subreddit, tags=GURUS):
+async def _prepare_jobs(subreddit: Subreddit) -> AsyncGenerator[SubmissionFlairs, None]:
+    async for submission, flairs in _find_jobs(subreddit, tags=GURUS):
         gf = SubmissionFlairs(submission, flairs)
-        print(f'Found flairs: {gf.flairs}')
         yield gf
+
+
+async def _dispatcher(subreddit: Subreddit, queue: asyncio.Queue, job=apply_flair_one,
+                      queue_timeout=None):
+    async for sub_flairs in _prepare_jobs(subreddit):
+        task = create_task(job(sub_flairs))
+        await queue.put(task)
+    await asyncio.wait_for(queue.join(), timeout=queue_timeout)
 
 
 async def _worker(queue: asyncio.Queue):
@@ -40,17 +46,12 @@ async def _worker(queue: asyncio.Queue):
             queue.task_done()
 
 
-async def _dispatcher(subreddit: Subreddit, queue: asyncio.Queue, queue_timeout=None):
-    async for sub_flairs in _flair_streamer(subreddit):
-        task = create_task(apply_flair_one(sub_flairs))
-        await queue.put(task)
-    await asyncio.wait_for(queue.join(), timeout=queue_timeout)
 
-
-async def do_flair_jobs(subreddit: Subreddit, dispatch_timeout: int or None = 30):
+async def do_jobs(subreddit: Subreddit, job,
+                  dispatch_timeout: int or None = 30, queue_timeout: int or None = None):
     queue = asyncio.Queue()
     workers = [create_task(_worker(queue)) for _ in range(5)]
-    dispatcher = create_task(_dispatcher(subreddit, queue))
+    dispatcher = create_task(_dispatcher(subreddit, queue, job=job))
 
     try:
         await asyncio.wait([dispatcher], timeout=dispatch_timeout)
@@ -65,8 +66,7 @@ async def do_flair_jobs(subreddit: Subreddit, dispatch_timeout: int or None = 30
 
 async def main():
     async with subreddit_cm(GURU_SUB) as subreddit:
-        await do_flair_jobs(subreddit, dispatch_timeout=30)
+        await do_jobs(subreddit, job=apply_flair_one, dispatch_timeout=30)
 
-
-if __name__ == '__main__':
-    asyncio.run(main())
+        if __name__ == '__main__':
+            asyncio.run(main())
