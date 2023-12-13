@@ -102,11 +102,13 @@ async def edit_reddit_wiki(markup, wiki: WikiPage):
 
 async def apply_flair_one(sub_flairs: SubmissionFlairs) -> bool:
     try:
-        for guru in sub_flairs.flairs:
+        for tag in sub_flairs.flairs:
             # todo turn back on
             # await sub_flairs.submission.flair.select(GURU_FLAIR_ID, text=guru)
-            print(f'\n{guru.upper()} tagged in "{sub_flairs.submission.title}"')
+            print(f'\n{tag.upper()} tagged in "{sub_flairs.submission.title}"')
         return True
     except Exception as e:
         print(f'error applying flair: {e}')
         return False
+
+
