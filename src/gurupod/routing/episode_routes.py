@@ -1,24 +1,28 @@
+from typing import Sequence
+
 from aiohttp import ClientSession
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from data.consts import MAIN_URL
 from gurupod.database import get_session
-from gurupod.models.episode import Episode, EpisodeDB, EpisodeResponse, \
-    EpisodeResponseNoDB
-from gurupod.routing.route_funcs import _log_new_urls, filter_existing_url, validate_add
-from gurupod.scrape import episode_scraper
-from gurupod.scraper_oop import expand_and_sort
+from gurupod.models.episode import Episode, EpisodeDB
+from gurupod.models.responses import EpisodeResponse, EpisodeResponseNoDB, repack_episodes
+from gurupod.routing.episode_funcs import remove_existing_episodes, \
+    remove_existing_urls, validate_add
+from gurupod.scrape import scrape_urls
+from gurupod.soup_expander import expand_and_sort
 
 ep_router = APIRouter()
 
 
 @ep_router.post("/put_ep", response_model=EpisodeResponse)
-async def put_ep(episodes: list[Episode], session: Session = Depends(get_session)):
-    if new_eps := filter_existing_url(episodes, session):
-        _log_new_urls(new_eps)
-        eps = await expand_and_sort(new_eps)
-        res = validate_add(eps, session, commit=True)
+async def put_ep(episodes: Episode | Sequence[Episode],
+                 session: Session = Depends(get_session)) -> EpisodeResponse:
+    if new_eps := remove_existing_episodes(episodes, session):
+        repacked: tuple = repack_episodes(new_eps)
+        sorted: list = await expand_and_sort(repacked)
+        res = validate_add(sorted, session, commit=True)
         resp = EpisodeResponse.from_episodes(res)
         return resp
     else:
@@ -27,7 +31,7 @@ async def put_ep(episodes: list[Episode], session: Session = Depends(get_session
 
 
 @ep_router.get('/fetch{max_rtn}', response_model=EpisodeResponse)
-async def fetch(session: Session = Depends(get_session), max_rtn=None):
+async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
     """ check captivate for new episodes and add to db"""
     scraped = await _scrape(session, max_rtn=max_rtn)
     eps = scraped.episodes
@@ -35,11 +39,16 @@ async def fetch(session: Session = Depends(get_session), max_rtn=None):
 
 
 @ep_router.get('/scrape{max_rtn}', response_model=EpisodeResponseNoDB)
-async def _scrape(session: Session = Depends(get_session), max_rtn=None):
+async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
     """ endpoint for dry-run / internal use"""
     async with ClientSession() as aio_session:
-        res = await episode_scraper(session, aio_session, main_url=MAIN_URL, max_return=max_rtn)
-        return EpisodeResponseNoDB.from_episodes(res)
+        scraped_urls = await scrape_urls(main_url=MAIN_URL, aiosession=aio_session, max_rtn=max_rtn)
+        new_urls = remove_existing_urls(scraped_urls, session)
+        new_eps = [Episode(url=_) for _ in new_urls]
+        expanded = await expand_and_sort(new_eps)
+        if expanded:
+            return EpisodeResponseNoDB.from_episodes(expanded)
+        return EpisodeResponseNoDB.no_new()
 
 
 @ep_router.get("/{ep_id}", response_model=EpisodeResponse)

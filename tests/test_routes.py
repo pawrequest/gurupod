@@ -3,7 +3,8 @@ from datetime import datetime
 
 import pytest
 
-from gurupod.models.episode import Episode, EpisodeOut, EpisodeResponse, EpisodeResponseNoDB
+from gurupod.models.episode import Episode, EpisodeOut
+from gurupod.models.responses import EpisodeResponse, EpisodeResponseNoDB
 from tests.conftest import client
 
 
@@ -99,17 +100,9 @@ def test_maybe_expand(random_episode_validated, test_db):
 
 @pytest.mark.asyncio
 def test_scraper_skips_existing(blank_test_db):
-    two_scraped = client.get("/eps/scrape2").json()
-    response_1 = EpisodeResponseNoDB.model_validate(two_scraped)
-    scraped_ep1, scraped_ep2 = response_1.episodes
-
-    fetched = client.get("/eps/fetch1").json()
-    fetched_response = EpisodeResponse.model_validate(fetched)
-    fetched_ep = fetched_response.episodes[0]
+    client.get("/eps/scrape2").json()
+    client.get("/eps/fetch1").json()
 
     rescraped = client.get("/eps/scrape1").json()
     rescraped_response = EpisodeResponseNoDB.model_validate(rescraped)
-    rescraped_ep1 = rescraped_response.episodes[0]
-
-    assert rescraped_ep1 != scraped_ep1
-    assert scraped_ep2 == rescraped_ep1
+    assert rescraped_response == EpisodeResponseNoDB.no_new()

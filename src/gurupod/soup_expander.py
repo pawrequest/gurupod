@@ -1,16 +1,19 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Sequence
 
-from aiohttp import ClientError, ClientSession
+from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from dateutil import parser
 
 from gurupod.models.episode import Episode
+from gurupod.scrape import _response
 
 
-async def expand_and_sort(episodes:tuple[Episode]):
-    complete = [_ for _ in episodes if not _.data_missing]
+async def expand_and_sort(episodes: Sequence[Episode]) -> list[Episode]:
+    complete: list[Episode] = [_ for _ in episodes if not _.data_missing]
+
     if missing := [_ for _ in episodes if _.data_missing]:
         coroutines = [expand_episode(_) for _ in missing]
         expanded = await asyncio.gather(*coroutines)
@@ -25,7 +28,6 @@ async def expand_episode(url_or_ep: str | Episode) -> Episode:
     else:
         url = url_or_ep
 
-    # soup = await get_soup(url)
     soup = await EpisodeSoup.from_url(url)
     res = Episode(**soup.get_ep_d())
     res.url = url
@@ -70,29 +72,9 @@ class EpisodeSoup(BeautifulSoup):
         return episode
 
     @classmethod
-    async def from_url(cls, url: str) -> EpisodeSoup:
-        async with ClientSession() as aiosession:
-            html = await get_response(url, aiosession)
+    async def from_url(cls, url: str, aiosession: ClientSession = None) -> EpisodeSoup:
+        aiosession = aiosession or ClientSession()
+        async with aiosession:
+            html = await _response(url, aiosession)
             soup = EpisodeSoup(html, "html.parser", url=url)
             return soup
-
-
-async def get_soup(url) -> EpisodeSoup:
-    async with ClientSession() as aiosession:
-        html = await get_response(url, aiosession)
-        soup = EpisodeSoup(html, "html.parser")
-        return soup
-
-
-async def get_response(url: str, aiosession: ClientSession):
-    for _ in range(3):
-        try:
-            async with aiosession.get(url) as response:
-                response.raise_for_status()
-                return await response.text()
-        except ClientError as e:
-            print(f"Request failed: {e}")
-            await asyncio.sleep(.2)
-            continue
-    else:
-        raise ClientError("Request failed 3 times")

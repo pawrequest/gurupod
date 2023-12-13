@@ -5,7 +5,7 @@ from asyncpraw.reddit import Reddit, Subreddit
 from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
 from gurupod.redditbot.reddit import edit_reddit_wiki, reddit_cm, submission_in_stream_by_id, \
     submit_episode_subreddit, subreddit_cm, wiki_page_cm
-from gurupod.writer.writer_oop import RPostWriter, RWikiWriter
+from gurupod.writer import RWikiWriter
 
 
 @pytest.mark.asyncio
@@ -26,7 +26,7 @@ async def test_wiki_cm():
         assert isinstance(wiki, WikiPage)
 
 
-# @pytest.mark.skip(reason="Writes to web")
+@pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
 async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird):
     async with wiki_page_cm(GURU_SUB, TEST_WIKI) as wiki:
@@ -47,13 +47,14 @@ async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird
         # cl = await edit_reddit_wiki('', wiki)
 
 
-# @pytest.mark.skip(reason="Writes to web")
+@pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
 async def test_post_to_subreddit(random_episode_validated):
     async with subreddit_cm(TEST_SUB) as subreddit:
         posted = await submit_episode_subreddit(random_episode_validated, subreddit)
         found = await submission_in_stream_by_id(posted.id, subreddit)
         assert found == posted
+
 
 @pytest.mark.asyncio
 async def test_get_wiki_md():
