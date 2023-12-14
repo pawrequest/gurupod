@@ -7,8 +7,9 @@ from fastapi import APIRouter, Depends
 
 from data.consts import REDDIT_SEND_KEY
 from gurupod.models.episode import EpisodeDB
-from gurupod.redditbot.reddit import edit_reddit_wiki, submit_episode_subreddit, subreddit_cm, \
+from gurupod.redditbot.managers import subreddit_cm, \
     wiki_page_cm
+from gurupod.redditbot.wrrite_to_web import edit_reddit_wiki, submit_episode_subreddit
 from gurupod.writer import RWikiWriter
 
 red_router = APIRouter()

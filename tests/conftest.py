@@ -12,7 +12,7 @@ from starlette.testclient import TestClient
 
 from gurupod.database import get_session
 from gurupod.models.episode import Episode, EpisodeDB
-from gurupod.redditbot.reddit import reddit_cm
+from gurupod.redditbot.managers import reddit_cm
 from main import app
 
 TEST_DB = "sqlite://"
