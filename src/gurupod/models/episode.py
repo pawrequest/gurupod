@@ -22,9 +22,12 @@ class Episode(SQLModel):
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
             try:
-                return datetime.strptime(v, '%Y-%m-%d')
+                res = datetime.strptime(v, '%Y-%m-%d')
+                print(f'Parsed date: {v} = {res}')
             except Exception:
-                return parser.parse(v)
+                print(f'Could not parse date: {v} with standard format %Y-%m-%d')
+                res = parser.parse(v)
+                print(f'Auto-parsed date: {v} = {res}')
         return v
 
     @property
