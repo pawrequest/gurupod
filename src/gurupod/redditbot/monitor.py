@@ -13,7 +13,6 @@ from gurupod.redditbot.classes import FlairTags
 from gurupod.redditbot.managers import subreddit_cm
 
 
-
 async def _find_jobs(job_source, tags=GURUS) -> AsyncGenerator[Submission, list[str]]:
     print("Starting stream...")
     async for submission in job_source():
@@ -90,7 +89,5 @@ async def main():
         await run_jobs(subreddit, job=flair_submission_write_optional)
 
 
-
 if __name__ == '__main__':
     asyncio.run(main())
-
