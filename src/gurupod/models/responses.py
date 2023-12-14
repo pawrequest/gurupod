@@ -21,7 +21,7 @@ def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
     return episodes
 
 
-def repack_episode_db(episodes: EpisodeDB | Sequence[EpisodeDB]):
+def repack_episode_dbs(episodes: EpisodeDB | Sequence[EpisodeDB]) -> tuple[EpisodeDB]:
     return _repack_episodes(episodes)
 
 
