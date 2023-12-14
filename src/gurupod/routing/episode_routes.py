@@ -20,8 +20,8 @@ ep_router = APIRouter()
 async def put_ep(episodes: Episode | Sequence[Episode],
                  session: Session = Depends(get_session)) -> EpisodeResponse:
     if new_eps := remove_existing_episodes(episodes, session):
-        repacked: tuple = repack_episodes(new_eps)
-        sorted: list = await expand_and_sort(repacked)
+        repacked = repack_episodes(new_eps)
+        sorted = await expand_and_sort(repacked)
         res = validate_add(sorted, session, commit=True)
         resp = EpisodeResponse.from_episodes(res)
         return resp
