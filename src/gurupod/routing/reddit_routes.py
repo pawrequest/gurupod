@@ -14,6 +14,7 @@ from gurupod.writer import RWikiWriter
 
 red_router = APIRouter()
 
+
 @red_router.post('/post_sub')
 async def post_episode_subreddit(key: str, episode: EpisodeDB,
                                  subreddit: Subreddit = Depends(subreddit_cm)):
@@ -24,7 +25,8 @@ async def post_episode_subreddit(key: str, episode: EpisodeDB,
 
 
 @red_router.post('/update_wiki')
-async def update_wiki_dflt(key, session: Session = Depends(get_session), wiki_page: WikiPage = Depends(wiki_page_cm)):
+async def update_wiki_dflt(key, session: Session = Depends(get_session),
+                           wiki_page: WikiPage = Depends(wiki_page_cm)):
     if key != REDDIT_SEND_KEY:
         return 'wrong key'
     episodes = session.exec(select(EpisodeDB)).all()
@@ -33,5 +35,3 @@ async def update_wiki_dflt(key, session: Session = Depends(get_session), wiki_pa
     markup = writer.write_many(episodes)
     res = await edit_reddit_wiki(markup, wiki)
     return res
-
-

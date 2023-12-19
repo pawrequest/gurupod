@@ -1,4 +1,5 @@
 from __future__ import annotations
+from loguru import logger
 
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
@@ -51,7 +52,7 @@ async def wiki_page_cm(sub_name: str | None = None, page_name: str | None = None
         try:
             yield wiki_page
         except Exception as e:
-            print(f'error in wiki_page_cm: {e}')
+            logger.error(f'error in wiki_page_cm: {e}')
             raise e
         finally:
             ...

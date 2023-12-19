@@ -6,6 +6,7 @@ import asyncio
 
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup
+from loguru import logger
 
 
 async def scrape_urls(aiosession, main_url, max_rtn=None) -> list[str]:
@@ -33,7 +34,7 @@ async def _response(url: str, aiosession: ClientSession):
                 response.raise_for_status()
                 return await response.text()
         except ClientError as e:
-            print(f"Request failed: {e}")
+            logger.error(f"Request failed: {e}")
             await asyncio.sleep(2)
             continue
     else:

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from loguru import logger
 
 import asyncio
 from asyncio import create_task
@@ -14,7 +15,7 @@ from gurupod.redditbot.managers import subreddit_cm
 
 
 async def _find_jobs(job_source, tags=GURUS) -> AsyncGenerator[Submission, list[str]]:
-    print("Starting stream...")
+    logger.info("Starting stream...")
     async for submission in job_source():
         found_tags = []
         for tag in tags:
@@ -44,7 +45,7 @@ async def _worker(queue: asyncio.Queue):
         try:
             await task
         except Exception as e:
-            print(f"Task raised an exception: {e}")
+            logger.error(f"Task raised an exception: {e}")
         finally:
             queue.task_done()
 
@@ -58,7 +59,7 @@ async def run_jobs(subreddit: Subreddit, job,
     try:
         await asyncio.wait([dispatcher], timeout=dispatch_timeout)
     except asyncio.TimeoutError:
-        print("Timeout")
+        logger.warning("Timeout")
         await asyncio.wait_for(queue.join(), timeout=queue_timeout)
     finally:
         for worker in workers:
@@ -73,10 +74,10 @@ async def flair_submission_write_optional(flair_tags: FlairTags, commit=False) -
         for tag in tags:
             if commit:
                 await flair_tags.tagee.flair.select(GURU_FLAIR_ID, text=tag)
-        print(f'\n{', '.join(_.upper() for _ in tags)} tagged in "{flair_tags.tagee.title}"')
+        logger.info(f'\n{', '.join(_.upper() for _ in tags)} tagged in "{flair_tags.tagee.title}"')
         return True
     except Exception as e:
-        print(f'error applying flair: {e}')
+        logger.error(f'error applying flair: {e}')
         breakpoint()
         raise AssertionError(f'error applying flair: {e}')
 

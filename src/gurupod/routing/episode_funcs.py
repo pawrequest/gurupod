@@ -5,14 +5,15 @@ from typing import List, Sequence
 from sqlmodel import Session, select
 
 from gurupod.models.episode import Episode, EpisodeDB
+from loguru import logger
 
 
 def _log_urls(urls: Sequence[str], msg: str = None):
-    print(msg or '')
-    print("\n".join(['\t' + _ for _ in urls[:5]]))
+    logger.info(msg or '')
+    logger.info("\n".join(['\t' + _ for _ in urls[:5]]))
     if len(urls) > 5:
-        print(' ... more ...')
-    print('\n')
+        logger.info(' ... more ...')
+    logger.info('\n')
 
 
 def log_existing_urls(urls: Sequence[str]):

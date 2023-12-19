@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Optional
 
 from dateutil import parser
+from loguru import logger
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, SQLModel
@@ -22,12 +23,13 @@ class Episode(SQLModel):
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
             try:
+                logger.info(f'\nParsing date: {v}')
                 v = datetime.strptime(v, '%Y-%m-%d')
-                print(f'Parsed date: {v} = {v}')
+                logger.info(f'\nParsed date: {v}')
             except Exception:
-                print(f'Could not parse date: {v} with standard format %Y-%m-%d')
+                logger.warning(f'\nCould not parse date: {v} with standard format %Y-%m-%d')
                 v = parser.parse(v)
-                print(f'Auto-parsed date: {v} = {v}')
+                logger.info(f'\nAuto-parsed date: {v}')
         return v
 
     @property

@@ -10,10 +10,8 @@ async def submission_in_stream_by_id(submission_id: str, subreddit: Subreddit) -
             return submission
 
 
-
 async def title_in_subreddit(title, subreddit: Subreddit) -> Submission:
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if title in submission.title:
             return submission
-
