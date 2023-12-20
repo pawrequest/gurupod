@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NAME=gurupod
-DIR=/home/gurupod/fastapi-nginx-gunicorn
+DIR=/home/paw/gurupod
 USER=paw
 GROUP=paw
 WORKERS=3
@@ -13,7 +13,7 @@ LOG_LEVEL=info
 cd $DIR
 source $VENV
 
-exec gunicorn main:app \
+exec /home/paw/gurupod/.venv/bin/gunicorn main:app \
   --name $NAME \
   --workers $WORKERS \
   --worker-class $WORKER_CLASS \
