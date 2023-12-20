@@ -73,7 +73,7 @@ async def flair_submission_write_optional(flair_tags: FlairTags, commit=False) -
     try:
         tags = flair_tags.tags
         logger.info(
-            f'{', '.join(_.upper() for _ in tags)} found in "{flair_tags.tagee.title} @ {flair_tags.tagee.shortlink}"')
+            f'{", ".join(_.upper() for _ in tags)} found in "{flair_tags.tagee.title}" @ {flair_tags.tagee.shortlink}')
         for tag in tags:
             if commit:
                 await flair_tags.tagee.flair.select(GURU_FLAIR_ID, text=tag)

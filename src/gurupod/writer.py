@@ -95,13 +95,23 @@ class HtmlWriter(EpisodeWriter):
     #          links.items()]) + "\n" if links else ""
     #     return links
 
-    def _links_text(self, links) -> str:
-        links = f"""
-        <h3>Show Links:</h3>\n 
-        {'\n'.join([f'<a href={link}>{text}</a><br>' for text, link in links.episodes()])}  
-         """ if links else ""
+    # def _links_text(self, links) -> str:
+    #     links = f"""
+    #     <h3>Show Links:</h3>\n
+    #     {'\n'.join([f'<a href={link}>{text}</a><br>' for text, link in links.episodes()])}
+    #      """ if links else ""
+    #
+    #     return links
 
-        return links
+    def _links_text(self, links) -> str:
+        if links:
+            links_html = '\n'.join(
+                [f'<a href="{link}">{text}</a><br>' for text, link in links.episodes()])
+            return f"<h3>Show Links:</h3>\n{links_html}"
+        return ""
+
+
+
 
     def _ep_tail_text(self) -> str:
         return "<br> <br>"
