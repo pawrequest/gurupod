@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Optional, Sequence
 
 from aiohttp import ClientSession
 from fastapi import APIRouter, Depends, HTTPException
@@ -16,7 +16,7 @@ from gurupod.soup_expander import expand_and_sort
 ep_router = APIRouter()
 
 
-@ep_router.post("/put_ep", response_model=EpisodeResponse)
+@ep_router.post("/put", response_model=EpisodeResponse)
 async def put_ep(episodes: Episode | Sequence[Episode],
                  session: Session = Depends(get_session)) -> EpisodeResponse:
     if new_eps := remove_existing_episodes(episodes, session):
@@ -30,7 +30,7 @@ async def put_ep(episodes: Episode | Sequence[Episode],
         return resp
 
 
-@ep_router.get('/fetch{max_rtn}', response_model=EpisodeResponse)
+@ep_router.get('/fetch', response_model=EpisodeResponse)
 async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
     """ check captivate for new episodes and add to db"""
     scraped = await _scrape(session, max_rtn=max_rtn)
@@ -38,7 +38,7 @@ async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
     return await put_ep(eps, session)
 
 
-@ep_router.get('/scrape{max_rtn}', response_model=EpisodeResponseNoDB)
+@ep_router.get('/scrape', response_model=EpisodeResponseNoDB)
 async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
     """ endpoint for dry-run / internal use"""
     async with ClientSession() as aio_session:
