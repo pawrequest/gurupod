@@ -7,18 +7,15 @@ authors = [
 ]
 dependencies = [
     'sqlmodel',
-    "uvicorn[standard]",
+    "uvicorn>=0.24.0.post1",
     'fastapi',
     'pydantic',
     'python-dotenv',
-    "praw",
-    "requests",
     "beautifulsoup4",
     "python-dateutil",
     "aiohttp",
-    "pytest-asyncio",
     "asyncpraw",
-    "loguru>=0.7.2",
+    "loguru",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -30,6 +27,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
+    "pytest-asyncio",
     "httpx",
     "pytest",
     "coverage>=7.3.2",
