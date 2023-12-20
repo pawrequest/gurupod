@@ -1,5 +1,5 @@
 from __future__ import annotations
-from loguru import logger
+from gurupod.gurulog import logger
 
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING

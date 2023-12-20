@@ -8,7 +8,7 @@ from gurupod.redditbot.managers import reddit_cm, \
     subreddit_cm, wiki_page_cm
 from gurupod.redditbot.wrrite_to_web import edit_reddit_wiki, submit_episode_subreddit
 from gurupod.redditbot.subred import submission_in_stream_by_id
-from gurupod.redditbot.monitor import _find_jobs, main, run_jobs, flair_submission_write_optional, \
+from gurupod.redditbot.monitor import _find_jobs, launch_monitor, run_jobs, flair_submission_write_optional, \
     flair_submission_write
 from gurupod.writer import RWikiWriter
 

@@ -1,4 +1,4 @@
-from loguru import logger
+from gurupod.gurulog import logger
 import asyncio
 from asyncio import create_task
 from typing import AsyncGenerator, NamedTuple

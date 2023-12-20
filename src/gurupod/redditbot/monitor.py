@@ -1,5 +1,5 @@
 from __future__ import annotations
-from loguru import logger
+from gurupod.gurulog import logger
 
 import asyncio
 from asyncio import create_task
@@ -15,7 +15,6 @@ from gurupod.redditbot.managers import subreddit_cm
 
 
 async def _find_jobs(job_source, tags=GURUS) -> AsyncGenerator[Submission, list[str]]:
-    logger.info("Starting stream...")
     async for submission in job_source():
         found_tags = []
         for tag in tags:
@@ -26,6 +25,8 @@ async def _find_jobs(job_source, tags=GURUS) -> AsyncGenerator[Submission, list[
 
 
 async def _prepare_jobs(subreddit: Subreddit) -> AsyncGenerator[FlairTags, None]:
+    logger.debug(f"Starting stream: {subreddit.display_name}")
+
     async for submission, flairs in _find_jobs(subreddit.stream.submissions, tags=GURUS):
         gf = FlairTags(submission, flairs)
         yield gf
@@ -71,24 +72,22 @@ async def run_jobs(subreddit: Subreddit, job,
 async def flair_submission_write_optional(flair_tags: FlairTags, commit=False) -> bool:
     try:
         tags = flair_tags.tags
+        logger.info(
+            f'{', '.join(_.upper() for _ in tags)} found in "{flair_tags.tagee.title} @ {flair_tags.tagee.shortlink}"')
         for tag in tags:
             if commit:
                 await flair_tags.tagee.flair.select(GURU_FLAIR_ID, text=tag)
-        logger.info(f'\n{', '.join(_.upper() for _ in tags)} tagged in "{flair_tags.tagee.title}"')
+                logger.info(f'flair applied: {tag}')
         return True
     except Exception as e:
         logger.error(f'error applying flair: {e}')
-        breakpoint()
-        raise AssertionError(f'error applying flair: {e}')
+        return False
 
 
 flair_submission_write = partial(flair_submission_write_optional, commit=True)
 
 
-async def main():
-    async with subreddit_cm(GURU_SUB) as subreddit:
-        await run_jobs(subreddit, job=flair_submission_write_optional)
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
+async def launch_monitor(subreddit_name=GURU_SUB, timeout: int or None = 30):
+    async with subreddit_cm(subreddit_name) as subreddit_name:
+        await run_jobs(subreddit_name, job=flair_submission_write_optional,
+                       dispatch_timeout=timeout)

@@ -6,7 +6,7 @@ import asyncio
 
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup
-from loguru import logger
+from gurupod.gurulog import logger
 
 
 async def scrape_urls(aiosession, main_url, max_rtn=None) -> list[str]:

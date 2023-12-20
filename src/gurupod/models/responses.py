@@ -44,7 +44,7 @@ class EpisodeResponse(BaseModel):
     episodes: list[EpisodeOut]
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True
 
     @classmethod
     def from_episodes(cls, episodes: EP_FIN_TYP | Sequence[EP_FIN_TYP], msg='') -> EpisodeResponse:
