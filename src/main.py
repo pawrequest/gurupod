@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -14,7 +15,7 @@ from gurupod.routing.episode_routes import ep_router, put_ep
 from gurupod.routing.reddit_routes import red_router
 
 logger = get_logger()
-
+monitior_sub = os.environ.get("MONITOR_SUB", False)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
