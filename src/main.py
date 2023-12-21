@@ -17,6 +17,7 @@ from gurupod.routing.reddit_routes import red_router
 logger = get_logger()
 monitior_sub = os.environ.get("MONITOR_SUB", False)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting lifespan")
@@ -26,9 +27,7 @@ async def lifespan(app: FastAPI):
         # await populate_from_json(session)
         # await fetch(session)
         # [reddit.post_episode(_) for _ in new]
-    monitor_task = asyncio.create_task(
-        launch_monitor(subreddit_name=GURU_SUB, timeout=None)
-    )
+    monitor_task = asyncio.create_task(launch_monitor(subreddit_name=GURU_SUB, timeout=None))
     logger.info("Started monitor")
     yield
     monitor_task.cancel()

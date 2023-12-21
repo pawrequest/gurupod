@@ -1,4 +1,3 @@
-import asyncio
 from datetime import datetime
 
 import pytest
@@ -68,7 +67,7 @@ def test_read_one_episode_not_found(test_db):
 @pytest.mark.asyncio
 async def test_read_all_episodes(all_episodes_json, blank_test_db):
     client.post("/eps/put", json=all_episodes_json)
-    await asyncio.sleep(1)
+    # await asyncio.sleep(1)
     response = client.get("/eps/")
     assert response.status_code == 200
     res = EpisodeResponse.model_validate(response.json())

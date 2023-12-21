@@ -15,9 +15,7 @@ EP_VAR = TypeVar("EP_VAR", bound=EP_TYP)
 def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
     if not isinstance(episodes, Sequence):
         if not isinstance(episodes, EP_TYP):
-            raise ValueError(
-                f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}"
-            )
+            raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
         episodes = (episodes,)
     return episodes
 
@@ -94,9 +92,7 @@ class EpisodeResponse(BaseModel):
         populate_by_name = True
 
     @classmethod
-    def from_episodes(
-        cls, episodes: EP_FIN_TYP | Sequence[EP_FIN_TYP], msg=""
-    ) -> EpisodeResponse:
+    def from_episodes(cls, episodes: EP_FIN_TYP | Sequence[EP_FIN_TYP], msg="") -> EpisodeResponse:
         if not any([msg, episodes]):
             msg = "No Episodes Found"
         repacked = _repack_episodes(episodes)

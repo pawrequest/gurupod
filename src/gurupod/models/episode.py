@@ -27,10 +27,10 @@ class Episode(SQLModel):
             try:
                 if len(v) == 10:
                     v = v + "T00:00:00"
-                    logger.debug("appending time")
-                logger.debug(f"Parsing date: {v}")
+                    # logger.debug("appending time")
+                # logger.debug(f"Parsing date: {v}")
                 v = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S")
-                logger.debug(f"Parsed date: {v}")
+                # logger.debug(f"Parsed date: {v}")
             except Exception:
                 logger.warning(
                     f"Could not parse date: {v} with standard format %Y-%m-%dT%H:%M:%S"

@@ -25,16 +25,6 @@ logger = get_logger()
 ep_router = APIRouter()
 
 
-# a decorator to log endpioint hits
-def log_endpoint(func):
-    async def wrapper(*args, **kwargs):
-        logger.info(f"Endpoint hit: {func.__name__}")
-        return await func(*args, **kwargs)
-
-    return wrapper
-
-
-@log_endpoint
 @ep_router.post("/put", response_model=EpisodeResponse)
 async def put_ep(
     episodes: Episode | Sequence[Episode], session: Session = Depends(get_session)
@@ -49,7 +39,6 @@ async def put_ep(
     return resp
 
 
-@log_endpoint
 @ep_router.get("/fetch", response_model=EpisodeResponse)
 async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
     """check captivate for new episodes and add to db"""
@@ -58,7 +47,6 @@ async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
     return await put_ep(eps, session)
 
 
-@log_endpoint
 @ep_router.get("/scrape", response_model=EpisodeResponseNoDB)
 async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
     """endpoint for dry-run / internal use"""
@@ -70,12 +58,8 @@ async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
         new_eps = [Episode(url=_) for _ in new_urls]
         expanded = await expand_and_sort(new_eps)
         return EpisodeResponseNoDB.from_episodes(expanded)
-        # if expanded:
-        #     return EpisodeResponseNoDB.from_episodes(expanded)
-        # return EpisodeResponseNoDB.empty()
 
 
-@log_endpoint
 @ep_router.get("/{ep_id}", response_model=EpisodeResponse)
 async def read_one(ep_id: int, session: Session = Depends(get_session)):
     episode_db = session.get(EpisodeDB, ep_id)
@@ -83,12 +67,11 @@ async def read_one(ep_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Episode not found")
     elif isinstance(episode_db, EpisodeDB):
         episode_: EpisodeDB = episode_db
-        return EpisodeResponse.from_episodes([episode_])
+        return EpisodeResponse.from_episodes(episode_)
     else:
         raise HTTPException(status_code=500, detail="returned data not EpisodeDB")
 
 
-@log_endpoint
 @ep_router.get("/", response_model=EpisodeResponse)
 async def read_all(session: Session = Depends(get_session)):
     eps = session.exec(select(EpisodeDB)).all()
