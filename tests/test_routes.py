@@ -30,18 +30,16 @@ def test_import_existing_episodes(random_episode_json, test_db):
     client.post("/eps/put", json=[random_episode_json])
     response = client.post("/eps/put", json=[random_episode_json])
     assert response.status_code == 200
-    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.no_new()
+    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
 
 
 @pytest.mark.asyncio
-def test_scrape_new_episode(test_db):
-    response = client.get("/eps/scrape?1")
-    assert response.status_code == 200
-    res = EpisodeResponseNoDB.model_validate(response.json())
+async def test_scrape_new_episode(test_db, cached_scrape):
+    res = await cached_scrape
     assert isinstance(res.episodes[0], Episode)
 
 
-
+@pytest.mark.skip(reason="duplicates scrape and put")
 @pytest.mark.asyncio
 def test_fetch_new_episode(test_db):
     response = client.get("/eps/fetch?max_rtn=1")
@@ -84,10 +82,10 @@ async def test_read_all_episodes(all_episodes_json, blank_test_db):
 
 
 @pytest.mark.asyncio
-def test_fetch_empty(test_db):
-    response = client.get("/eps/fetch?max_rtn=0")
+def test_scrape_empty(test_db):
+    response = client.get("/eps/scrape?max_rtn=0")
     assert response.status_code == 200
-    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.no_new()
+    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
 
 
 @pytest.mark.asyncio
@@ -105,4 +103,4 @@ def test_scraper_skips_existing(blank_test_db):
 
     rescraped = client.get("/eps/scrape?max_rtn=1").json()
     rescraped_response = EpisodeResponseNoDB.model_validate(rescraped)
-    assert rescraped_response == EpisodeResponseNoDB.no_new()
+    assert rescraped_response == EpisodeResponseNoDB.empty()

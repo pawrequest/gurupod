@@ -12,7 +12,9 @@ from starlette.testclient import TestClient
 
 from gurupod.database import get_session
 from gurupod.models.episode import Episode, EpisodeDB
+from gurupod.models.responses import EpisodeResponseNoDB
 from gurupod.redditbot.managers import reddit_cm
+from gurupod.routing.episode_routes import _scrape
 from main import app
 
 TEST_DB = "sqlite://"
@@ -45,6 +47,14 @@ client = TestClient(app)
 app.dependency_overrides[get_session] = override_session
 app.dependency_overrides[reddit_cm()] = override_subreddit()
 
+
+@pytest.mark.asyncio
+@pytest.fixture(scope="session")
+async def cached_scrape():
+    response = client.get("/eps/scrape")
+    assert response.status_code == 200
+    res = EpisodeResponseNoDB.model_validate(response.json())
+    return res
 
 @pytest.fixture(scope="session")
 def all_episodes_json():

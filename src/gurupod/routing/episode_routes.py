@@ -27,7 +27,7 @@ async def put_ep(episodes: Episode | Sequence[Episode],
         resp = EpisodeResponse.from_episodes(res)
         return resp
     else:
-        resp = EpisodeResponse.no_new()
+        resp = EpisodeResponse.empty()
         return resp
 
 
@@ -47,9 +47,10 @@ async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
         new_urls = remove_existing_urls(scraped_urls, session)
         new_eps = [Episode(url=_) for _ in new_urls]
         expanded = await expand_and_sort(new_eps)
-        if expanded:
-            return EpisodeResponseNoDB.from_episodes(expanded)
-        return EpisodeResponseNoDB.no_new()
+        return EpisodeResponseNoDB.from_episodes(expanded)
+        # if expanded:
+        #     return EpisodeResponseNoDB.from_episodes(expanded)
+        # return EpisodeResponseNoDB.empty()
 
 
 @ep_router.get("/{ep_id}", response_model=EpisodeResponse)
