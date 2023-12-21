@@ -16,13 +16,13 @@ def test_import_new_episodes(random_episode_json, test_db):
     ep_response = EpisodeResponse.model_validate(response_data)
     assert isinstance(ep_response, EpisodeResponse)
 
-    episode = EpisodeOut.model_validate(response_data['episodes'][0])
+    episode = EpisodeOut.model_validate(response_data["episodes"][0])
     assert isinstance(episode, EpisodeOut)
-    assert episode.notes == random_episode_json['notes']
-    assert episode.links == random_episode_json['links']
-    assert episode.name == random_episode_json['name']
-    assert episode.url == random_episode_json['url']
-    assert episode.date == datetime.fromisoformat(random_episode_json['date'])
+    assert episode.notes == random_episode_json["notes"]
+    assert episode.links == random_episode_json["links"]
+    assert episode.name == random_episode_json["name"]
+    assert episode.url == random_episode_json["url"]
+    assert episode.date == datetime.fromisoformat(random_episode_json["date"])
 
 
 @pytest.mark.asyncio
@@ -49,8 +49,6 @@ def test_fetch_new_episode(test_db):
     assert data.meta.length == 1
 
 
-
-
 @pytest.mark.asyncio
 def test_read_one_episode(random_episode_json, test_db):
     client.post("/eps/put", json=[random_episode_json])
@@ -67,8 +65,6 @@ def test_read_one_episode_not_found(test_db):
     assert response.status_code == 404
 
 
-
-
 @pytest.mark.asyncio
 async def test_read_all_episodes(all_episodes_json, blank_test_db):
     client.post("/eps/put", json=all_episodes_json)
@@ -80,7 +76,6 @@ async def test_read_all_episodes(all_episodes_json, blank_test_db):
     assert isinstance(res.episodes[0], EpisodeOut)
 
 
-
 @pytest.mark.asyncio
 def test_scrape_empty(test_db):
     response = client.get("/eps/scrape?max_rtn=0")
@@ -90,8 +85,7 @@ def test_scrape_empty(test_db):
 
 @pytest.mark.asyncio
 def test_maybe_expand(random_episode_validated, test_db):
-    ep = Episode(
-        url=random_episode_validated.url)
+    ep = Episode(url=random_episode_validated.url)
     response = client.post("/eps/put", json=[ep.model_dump()])
     assert response.status_code == 200
 

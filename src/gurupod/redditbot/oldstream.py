@@ -1,4 +1,3 @@
-from gurupod.gurulog import logger
 import asyncio
 from asyncio import create_task
 from typing import AsyncGenerator, NamedTuple
@@ -7,6 +6,9 @@ from asyncpraw.reddit import Submission, Subreddit
 
 from data.consts import GURU_SUB
 from data.gurunames import GURUS
+from gurupod.gurulog import get_logger
+
+logger = get_logger()
 from gurupod.redditbot.managers import subreddit_cm
 
 
@@ -26,27 +28,30 @@ async def print_flair(sub_flairs: SubmissionFlairs) -> bool:
             logger.info(f'\n{guru.upper()} tagged in "{sub_flairs.submission.title}"')
         return True
     except Exception as e:
-        logger.error(f'error applying flair: {e}')
+        logger.error(f"error applying flair: {e}")
         return False
 
 
-async def _find_flairables(subreddit: Subreddit, tags=GURUS) -> AsyncGenerator[
-    Submission, list[str]]:
+async def _find_flairables(
+    subreddit: Subreddit, tags=GURUS
+) -> AsyncGenerator[Submission, list[str]]:
     async for submission in subreddit.stream.submissions():
         found_tags = []
         for guru in tags:
             if guru in submission.title:
-                logger.info(f'\n{guru.upper()} found in {submission.title}')
+                logger.info(f"\n{guru.upper()} found in {submission.title}")
                 found_tags.append(guru)
         if found_tags:
             yield submission, found_tags
 
 
-async def _flair_streamer(subreddit: Subreddit) -> AsyncGenerator[SubmissionFlairs, None]:
+async def _flair_streamer(
+    subreddit: Subreddit,
+) -> AsyncGenerator[SubmissionFlairs, None]:
     logger.info("Starting stream...")
     async for submission, flairs in _find_flairables(subreddit, tags=GURUS):
         gf = SubmissionFlairs(submission, flairs)
-        logger.info(f'Found flairs: {gf.flairs}')
+        logger.info(f"Found flairs: {gf.flairs}")
         yield gf
 
 
@@ -61,7 +66,9 @@ async def doneworkerbee(queue: asyncio.Queue):
             queue.task_done()
 
 
-async def done__flair_dispatch(subreddit: Subreddit, queue: asyncio.Queue, queue_timeout=None):
+async def done__flair_dispatch(
+    subreddit: Subreddit, queue: asyncio.Queue, queue_timeout=None
+):
     async for sub_flairs in _flair_streamer(subreddit):
         task = create_task(print_flair(sub_flairs))
         await queue.put(task)
@@ -89,5 +96,5 @@ async def main():
         await flair_submissions(subreddit, dispatch_timeout=30)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())

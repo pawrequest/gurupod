@@ -2,15 +2,15 @@ from sqlalchemy import create_engine
 from sqlmodel import SQLModel, Session
 
 
-
 def engine_(config=None):
     if config is None:
         from data.consts import GURU_DB
+
         db_url = f"sqlite:///{GURU_DB}"
         connect_args = {"check_same_thread": False}
     else:
-        db_url = config['db_url']
-        connect_args = config.get('connect_args', {})
+        db_url = config["db_url"]
+        connect_args = config.get("connect_args", {})
     return create_engine(db_url, echo=True, connect_args=connect_args)
 
 

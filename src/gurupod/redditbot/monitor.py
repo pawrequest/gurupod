@@ -1,5 +1,4 @@
 from __future__ import annotations
-from gurupod.gurulog import logger
 
 import asyncio
 from asyncio import create_task
@@ -10,6 +9,9 @@ from asyncpraw.reddit import Submission, Subreddit
 
 from data.consts import GURU_FLAIR_ID, GURU_SUB
 from data.gurunames import GURUS
+from gurupod.gurulog import get_logger
+
+logger = get_logger()
 from gurupod.redditbot.classes import FlairTags
 from gurupod.redditbot.managers import subreddit_cm
 
@@ -27,13 +29,16 @@ async def _find_jobs(job_source, tags=GURUS) -> AsyncGenerator[Submission, list[
 async def _prepare_jobs(subreddit: Subreddit) -> AsyncGenerator[FlairTags, None]:
     logger.debug(f"Starting stream: {subreddit.display_name}")
 
-    async for submission, flairs in _find_jobs(subreddit.stream.submissions, tags=GURUS):
+    async for submission, flairs in _find_jobs(
+        subreddit.stream.submissions, tags=GURUS
+    ):
         gf = FlairTags(submission, flairs)
         yield gf
 
 
-async def _dispatcher(subreddit: Subreddit, queue: asyncio.Queue, job,
-                      queue_timeout=None):
+async def _dispatcher(
+    subreddit: Subreddit, queue: asyncio.Queue, job, queue_timeout=None
+):
     async for sub_flairs in _prepare_jobs(subreddit):
         task = create_task(job(sub_flairs))
         await queue.put(task)
@@ -51,8 +56,12 @@ async def _worker(queue: asyncio.Queue):
             queue.task_done()
 
 
-async def run_jobs(subreddit: Subreddit, job,
-                   dispatch_timeout: int or None = 30, queue_timeout: int or None = None):
+async def run_jobs(
+    subreddit: Subreddit,
+    job,
+    dispatch_timeout: int or None = 30,
+    queue_timeout: int or None = None,
+):
     queue = asyncio.Queue()
     workers = [create_task(_worker(queue)) for _ in range(5)]
     dispatcher = create_task(_dispatcher(subreddit, queue, job=job))
@@ -73,14 +82,15 @@ async def flair_submission_write_optional(flair_tags: FlairTags, commit=False) -
     try:
         tags = flair_tags.tags
         logger.info(
-            f'{", ".join(_.upper() for _ in tags)} found in "{flair_tags.tagee.title}" @ {flair_tags.tagee.shortlink}')
+            f'{", ".join(_.upper() for _ in tags)} found in "{flair_tags.tagee.title}" @ {flair_tags.tagee.shortlink}'
+        )
         for tag in tags:
             if commit:
                 await flair_tags.tagee.flair.select(GURU_FLAIR_ID, text=tag)
-                logger.info(f'flair applied: {tag}')
+                logger.info(f"flair applied: {tag}")
         return True
     except Exception as e:
-        logger.error(f'error applying flair: {e}')
+        logger.error(f"error applying flair: {e}")
         return False
 
 
@@ -89,5 +99,8 @@ flair_submission_write = partial(flair_submission_write_optional, commit=True)
 
 async def launch_monitor(subreddit_name=GURU_SUB, timeout: int or None = 30):
     async with subreddit_cm(subreddit_name) as subreddit_name:
-        await run_jobs(subreddit_name, job=flair_submission_write_optional,
-                       dispatch_timeout=timeout)
+        await run_jobs(
+            subreddit_name,
+            job=flair_submission_write_optional,
+            dispatch_timeout=timeout,
+        )

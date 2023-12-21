@@ -4,12 +4,14 @@ from datetime import datetime
 from typing import Optional
 
 from dateutil import parser
-from gurupod.gurulog import logger
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, SQLModel
 
-MAYBE_ATTRS = ['name', 'notes', 'links', 'date']
+from gurupod.gurulog import get_logger
+
+logger = get_logger()
+MAYBE_ATTRS = ["name", "notes", "links", "date"]
 
 
 class Episode(SQLModel):
@@ -19,20 +21,22 @@ class Episode(SQLModel):
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
 
-    @field_validator('date', mode='before')
+    @field_validator("date", mode="before")
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
             try:
-                if len(v) ==10:
-                    v = v + 'T00:00:00'
-                    logger.debug(f'appending time')
-                logger.debug(f'Parsing date: {v}')
-                v = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S')
-                logger.debug(f'Parsed date: {v}')
+                if len(v) == 10:
+                    v = v + "T00:00:00"
+                    logger.debug("appending time")
+                logger.debug(f"Parsing date: {v}")
+                v = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S")
+                logger.debug(f"Parsed date: {v}")
             except Exception:
-                logger.warning(f'Could not parse date: {v} with standard format %Y-%m-%dT%H:%M:%S')
+                logger.warning(
+                    f"Could not parse date: {v} with standard format %Y-%m-%dT%H:%M:%S"
+                )
                 v = parser.parse(v)
-                logger.info(f'Auto-parsed date: {v}')
+                logger.info(f"Auto-parsed date: {v}")
         return v
 
     @property
@@ -40,15 +44,14 @@ class Episode(SQLModel):
         return any(getattr(self, _) is None for _ in MAYBE_ATTRS)
 
     def __str__(self):
-        return f'{self.__class__.__name__}: {self.name or self.url}'
+        return f"{self.__class__.__name__}: {self.name or self.url}"
 
     def __repr__(self):
-        return f'<{self.__class__.__name__}({self.url})>'
+        return f"<{self.__class__.__name__}({self.url})>"
 
 
 class EpisodeDB(Episode, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-
 
 
 class EpisodeOut(Episode):
@@ -58,7 +61,6 @@ class EpisodeOut(Episode):
     date: datetime
     notes: Optional[list[str]]
     links: Optional[dict[str, str]]
-
 
 
 #
@@ -72,6 +74,3 @@ class EpisodeOut(Episode):
 #     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
 #     value = re.sub(r'[^\w\s-]', '', value.lower())
 #     return re.sub(r'[-\s]+', '-', value).strip('-_')
-
-
-

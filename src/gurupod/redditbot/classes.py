@@ -5,8 +5,6 @@ from typing import Any, NamedTuple
 from asyncpraw.reddit import Submission
 
 
-
-
 class Taggable(NamedTuple):
     tagee: Any
     tags: list[str]
@@ -17,4 +15,3 @@ class Taggable(NamedTuple):
 
 class FlairTags(Taggable):
     tagee: Submission
-

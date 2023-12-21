@@ -1,13 +1,23 @@
 from __future__ import annotations
-from gurupod.gurulog import logger
 
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
 
 from asyncpraw.reddit import Reddit, Subreddit
 
-from data.consts import GURU_SUB, REDDIT_CLIENT_ID, REDDIT_CLIENT_SEC, \
-    REDDIT_REF_TOK, REDIRECT, TEST_SUB, TEST_WIKI, USER_AGENT
+from data.consts import (
+    GURU_SUB,
+    REDDIT_CLIENT_ID,
+    REDDIT_CLIENT_SEC,
+    REDDIT_REF_TOK,
+    REDIRECT,
+    TEST_SUB,
+    TEST_WIKI,
+    USER_AGENT,
+)
+from gurupod.gurulog import get_logger
+
+logger = get_logger()
 
 if TYPE_CHECKING:
     pass
@@ -16,13 +26,12 @@ if TYPE_CHECKING:
 @asynccontextmanager
 async def reddit_cm() -> Reddit:
     try:
-
         async with Reddit(
-                client_id=REDDIT_CLIENT_ID,
-                client_secret=REDDIT_CLIENT_SEC,
-                user_agent=USER_AGENT,
-                redirect_uri=REDIRECT,
-                refresh_token=REDDIT_REF_TOK
+            client_id=REDDIT_CLIENT_ID,
+            client_secret=REDDIT_CLIENT_SEC,
+            user_agent=USER_AGENT,
+            redirect_uri=REDIRECT,
+            refresh_token=REDDIT_REF_TOK,
         ) as reddit:
             yield reddit
     finally:
@@ -52,7 +61,7 @@ async def wiki_page_cm(sub_name: str | None = None, page_name: str | None = None
         try:
             yield wiki_page
         except Exception as e:
-            logger.error(f'error in wiki_page_cm: {e}')
+            logger.error(f"error in wiki_page_cm: {e}")
             raise e
         finally:
             ...

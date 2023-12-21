@@ -15,15 +15,15 @@ class EpisodeWriter(ABC):
     def write_many(self, eps=None) -> str:
         eps = eps or self.episodes
         text = self._post_head_text(eps)
-        text += ''.join([self.write_one(ep) for ep in eps])
+        text += "".join([self.write_one(ep) for ep in eps])
         text += self._post_tail_text()
         return text
 
     def write_one(self, episode: Episode) -> str:
         text = self._title_text(episode)
         text += self._date_text(episode.date.date().strftime("%A %B %d %Y"))
-        text += self._notes_text(episode.notes) or ''
-        text += self._links_text(episode.links) or ''
+        text += self._notes_text(episode.notes) or ""
+        text += self._links_text(episode.links) or ""
         return text
 
     @abstractmethod
@@ -56,7 +56,6 @@ class EpisodeWriter(ABC):
 
 
 class HtmlWriter(EpisodeWriter):
-
     def _contents(self, eps: list[Episode] = None) -> str:
         eps = eps or self.episodes
         toc = "<h2>Table of Contents</h2>\n"
@@ -78,15 +77,18 @@ class HtmlWriter(EpisodeWriter):
         text += self._contents(self.episodes)
         return text
 
-    def _title_text(self, episode: Episode, ep_id='') -> str:
+    def _title_text(self, episode: Episode, ep_id="") -> str:
         return f"<h1 id='ep-{str(ep_id)}'>{episode.name}</h1>\n<a href='{episode.url}'>Play on Captivate.fm</a>\n"
 
     def _date_text(self, date_pub) -> str:
         return f"<p>Date Published: {date_pub}</p>\n"
 
     def _notes_text(self, notes) -> str:
-        notes = "<h3>Show Notes:</h3>\n" + "\n".join(
-            [f"<p>{_}</p>" for _ in notes]) + "\n" if notes else ""
+        notes = (
+            "<h3>Show Notes:</h3>\n" + "\n".join([f"<p>{_}</p>" for _ in notes]) + "\n"
+            if notes
+            else ""
+        )
         return notes
 
     # def _links_text_old(self, links) -> str:
@@ -105,13 +107,11 @@ class HtmlWriter(EpisodeWriter):
 
     def _links_text(self, links) -> str:
         if links:
-            links_html = '\n'.join(
-                [f'<a href="{link}">{text}</a><br>' for text, link in links.episodes()])
+            links_html = "\n".join(
+                [f'<a href="{link}">{text}</a><br>' for text, link in links.episodes()]
+            )
             return f"<h3>Show Links:</h3>\n{links_html}"
         return ""
-
-
-
 
     def _ep_tail_text(self) -> str:
         return "<br> <br>"
@@ -131,12 +131,15 @@ class RPostWriter(EpisodeWriter):
         return f"***{date_pub}***\n \n"
 
     def _notes_text(self, notes: list[str]) -> str:
-        notes = "***Show Notes:***\n \n" + "\n \n".join(notes) + "\n \n" if notes else ""
+        notes = (
+            "***Show Notes:***\n \n" + "\n \n".join(notes) + "\n \n" if notes else ""
+        )
         return notes
 
     def _links_text(self, links: dict[str, str]) -> str:
         links = "***Show Links:***\n \n" + "\n \n".join(
-            [f"[{text}]({link})\n" for text, link in links.items()])
+            [f"[{text}]({link})\n" for text, link in links.items()]
+        )
         return links
 
     def _ep_tail_text(self) -> str:
@@ -161,8 +164,11 @@ class RWikiWriter(EpisodeWriter):
         return notes
 
     def _links_text(self, links: dict[str, str]) -> str:
-        links = "***Links:***\n \n" + "\n \n".join(
-            [f"[{text}]({link})" for text, link in links.items()]) + "\n \n"
+        links = (
+            "***Links:***\n \n"
+            + "\n \n".join([f"[{text}]({link})" for text, link in links.items()])
+            + "\n \n"
+        )
         return links
 
     def _ep_tail_text(self) -> str:

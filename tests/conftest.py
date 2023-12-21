@@ -5,16 +5,17 @@ from random import randint
 
 import pytest
 from asyncpraw import Reddit
+from loguru import logger as _logger
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
 from sqlmodel import Session
 from starlette.testclient import TestClient
 
 from gurupod.database import get_session
+from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeDB
 from gurupod.models.responses import EpisodeResponseNoDB
 from gurupod.redditbot.managers import reddit_cm
-from gurupod.routing.episode_routes import _scrape
 from main import app
 
 TEST_DB = "sqlite://"
@@ -28,7 +29,7 @@ ENGINE = create_engine(
 async def override_subreddit():
     try:
         reddit = Reddit()
-        subreddit = await reddit.subreddit('test')
+        subreddit = await reddit.subreddit("test")
         yield subreddit
     finally:
         await reddit.close()
@@ -42,10 +43,39 @@ def override_session():
         session.close()
 
 
+def override_logger():
+    logger = _logger
+    logger.remove()
+    return logger
+
+
 client = TestClient(app)
 
+
+app.dependency_overrides[get_logger] = override_logger
 app.dependency_overrides[get_session] = override_session
-app.dependency_overrides[reddit_cm()] = override_subreddit()
+app.dependency_overrides[reddit_cm()] = override_subreddit
+
+# @pytest.fixture(scope="function")
+# def test_logger(tmp_path):
+#     logger = get_logger().__next__()
+#     # with get_logger() as logger:
+#     logger.remove()
+#     test_loc = tmp_path / "test.log"
+#     logger.add(test_loc)
+#     logger.info("test")
+#     logged_line = 68
+#     with open(test_loc, "r") as f:
+#         LOG1 = f.readline()
+#     pat_xml = r"^(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\.\d{3}\s)\|(\s[A-Z]*\s*)\|(\s.+:.+:\d+\s-\s.*)$"
+#     match = re.match(pat_xml, LOG1)
+#
+#     assert match
+#     assert match.string.endswith(
+#         f" | INFO     | tests.test_log:test_log:{logged_line} - test\n"
+#     )
+#
+#     yield logger
 
 
 @pytest.mark.asyncio
@@ -56,15 +86,16 @@ async def cached_scrape():
     res = EpisodeResponseNoDB.model_validate(response.json())
     return res
 
+
 @pytest.fixture(scope="session")
 def all_episodes_json():
-    with open('episodes.json', 'r') as f:
+    with open("episodes.json", "r") as f:
         return json.load(f)
 
 
 @pytest.fixture(scope="function")
 def random_episode_json(all_episodes_json):
-    yield all_episodes_json[randint(0, len(all_episodes_json)-1)]
+    yield all_episodes_json[randint(0, len(all_episodes_json) - 1)]
 
 
 @pytest.fixture(scope="function")
@@ -74,25 +105,22 @@ def random_episode_validated(random_episode_json):
 
 @pytest.fixture(scope="function")
 def episode_josh():
-    name = 'Interview with Josh Szeps, The Rumble from Downunder'
-    with open('episodes.json', 'r') as f:
+    name = "Interview with Josh Szeps, The Rumble from Downunder"
+    with open("episodes.json", "r") as f:
         eps = json.load(f)
         for ep in eps:
-            if ep['name'] == name:
+            if ep["name"] == name:
                 return Episode.model_validate(ep)
-
 
 
 @pytest.fixture(scope="function")
 def episodes_weird(all_episodes_json):
-    names = ['Interview with Josh Szeps, The Rumble from Downunder',
-             'Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy',]
-    weird = [_ for _ in all_episodes_json if _['name'] in names]
+    names = [
+        "Interview with Josh Szeps, The Rumble from Downunder",
+        "Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy",
+    ]
+    weird = [_ for _ in all_episodes_json if _["name"] in names]
     return [Episode.model_validate(_) for _ in weird]
-
-
-
-
 
 
 @pytest.fixture(scope="session")
@@ -103,6 +131,7 @@ def test_db():
     Episode.metadata.drop_all(bind=ENGINE)
     EpisodeDB.metadata.drop_all(bind=ENGINE)
 
+
 @pytest.fixture(scope="function")
 def blank_test_db(test_db):
     Episode.metadata.drop_all(bind=ENGINE)
@@ -110,7 +139,6 @@ def blank_test_db(test_db):
     Episode.metadata.create_all(bind=ENGINE)
     EpisodeDB.metadata.create_all(bind=ENGINE)
     yield
-
 
 
 @pytest.fixture(scope="module")

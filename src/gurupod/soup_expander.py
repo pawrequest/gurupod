@@ -53,7 +53,7 @@ class EpisodeSoup(BeautifulSoup):
     @property
     def episode_links(self):
         show_links_html = self.select(".show-notes a")
-        show_links_dict = {aref.text: aref['href'] for aref in show_links_html}
+        show_links_dict = {aref.text: aref["href"] for aref in show_links_html}
         return show_links_dict
 
     @property
@@ -67,7 +67,7 @@ class EpisodeSoup(BeautifulSoup):
             url=self.episode_url,
             notes=self.episode_notes,
             links=self.episode_links,
-            date=self.episode_date
+            date=self.episode_date,
         )
         return episode
 
