@@ -70,6 +70,37 @@ class EpisodeResponse(BaseModel):
         return f'{self.__class__.__name__}: {self.meta.length} {self.episodes[0].__class__.__name__}s'
 
 
+class EpisodeResponseUnified(BaseModel):
+    meta: EpisodeMeta
+    episodes: list[EP_VAR]
+
+    class Config:
+        populate_by_name = True
+
+    @classmethod
+    def from_episodes(cls, episodes: EP_VAR | Sequence[EP_VAR], msg='') -> EpisodeResponseUnified:
+        repacked = _repack_episodes(episodes)
+        valid = [EP_VAR.model_validate(_) for _ in repacked]
+        meta_data = EpisodeMeta(
+            length=len(valid),
+            calling_func=inspect.stack()[1][3],
+            msg=msg
+        )
+        return cls.model_validate(dict(episodes=valid, meta=meta_data))
+
+    @classmethod
+    def empty(cls, msg: str = 'No Episodes Found'):
+        meta_data = EpisodeMeta(length=0, calling_func=inspect.stack()[1][3], msg=msg)
+        return cls.model_validate(dict(episodes=[], meta=meta_data))
+
+    @classmethod
+    def no_new(cls):
+        return cls.empty('No new episodes')
+
+    def __str__(self):
+        return f'{self.__class__.__name__}: {self.meta.length} {self.episodes[0].__class__.__name__}s'
+
+
 class EpisodeResponseNoDB(EpisodeResponse):
     episodes: list[Episode]
 
