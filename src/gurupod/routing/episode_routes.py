@@ -19,6 +19,7 @@ ep_router = APIRouter()
 @ep_router.post("/put", response_model=EpisodeResponse)
 async def put_ep(episodes: Episode | Sequence[Episode],
                  session: Session = Depends(get_session)) -> EpisodeResponse:
+    """ add episodes to db, minimally provide {url = <url>}"""
     if new_eps := remove_existing_episodes(episodes, session):
         repacked = repack_episodes(new_eps)
         sorted = await expand_and_sort(repacked)
@@ -67,3 +68,4 @@ def read_one(ep_id: int, session: Session = Depends(get_session)):
 def read_all(session: Session = Depends(get_session)):
     eps = session.exec(select(EpisodeDB)).all()
     return EpisodeResponse.from_episodes(list(eps))
+
