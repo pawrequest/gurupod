@@ -1,3 +1,39 @@
+2212
+
+"""
+add guru to models
+++ guru model
+    + name
+    + episodes ids
+    + subreddit thread ids
+    + relationship -> episodes
+    
+create relationships table
+++ guru / episodes link table
+    + guru id
+    + episode id
+
+
+update redditbot
+monitor.py:
+    ++ launch_monitor_jobs()
+        + flair submission_write_optional()
+        + assign post to gurus in db
+        + log
+
+++ add [gurus] to wiki and post writers
+
+listen for new episodes
+    + passive receive signal
+    ? email notifications
+        ? pocketcast?
+    ? convert email notificatoon to httprequest -> api
+"""
+
+"""
+
+########################
+
 Optional Dependencies¶
 
 Used by Pydantic:
