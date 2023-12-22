@@ -32,5 +32,6 @@ REDDIT_CLIENT_ID = os.environ['REDDIT_CLIENT_ID']
 REDDIT_CLIENT_SEC = os.environ['REDDIT_CLIENT_SEC']
 REDDIT_REF_TOK = os.environ['REDDIT_REF_TOK']
 REDDIT_SEND_KEY = os.environ['REDDIT_SEND_KEY']
+MON_SUB = os.environ['MON_SUB']
 
 GURU_FLAIR_ID = "f0c29d96-93e4-11ee-bdde-e666ed3aa602"

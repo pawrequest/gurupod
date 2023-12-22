@@ -7,30 +7,46 @@ from pydantic import BaseModel
 
 from gurupod.models.episode import Episode, EpisodeDB, EpisodeOut
 
-EP_FIN_TYP = Union[EpisodeOut, EpisodeDB]
-EP_TYP = Union[Episode, EP_FIN_TYP]
-EP_FIN_VAR = TypeVar('EP_FIN_VAR', bound=EP_FIN_TYP)
+EP_DB_TYP = Union[EpisodeOut, EpisodeDB]
+EP_TYP = Union[Episode, EP_DB_TYP]
+EP_DB_VAR = TypeVar('EP_DB_VAR', bound=EP_DB_TYP)
 EP_VAR = TypeVar('EP_VAR', bound=EP_TYP)
 
 
 def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
     if not isinstance(episodes, Sequence):
+
         if not isinstance(episodes, EP_TYP):
-            raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
+
+            try:
+                episodes = Episode.model_validate(episodes),
+            except Exception:
+                # todo better catch
+                raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
+
         episodes = (episodes,)
+
+    if not all(isinstance(_, EP_TYP) for _ in episodes):
+        try:
+            episodes = tuple(Episode.model_validate(_) for _ in episodes)
+        except Exception:
+            # todo better catch
+            raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
     return episodes
 
 
-def repack_episode_dbs(episodes: EpisodeDB | Sequence[EpisodeDB]) -> tuple[EpisodeDB]:
-    return _repack_episodes(episodes)
+## type-specific variants needed?
+
+# def repack_episode_dbs(episodes: EpisodeDB | Sequence[EpisodeDB]) -> tuple[EpisodeDB]:
+#     return _repack_episodes(episodes)
 
 
-def repack_episodes(episodes: Episode | Sequence[Episode]) -> tuple[Episode]:
-    return _repack_episodes(episodes)
+# def repack_episodes(episodes: Episode | Sequence[Episode]) -> tuple[Episode]:
+#     return _repack_episodes(episodes)
 
-
-def repack_episodes_out(episodes: EpisodeOut | Sequence[EpisodeOut]) -> tuple[EpisodeOut]:
-    return _repack_episodes(episodes)
+#
+# def repack_episodes_out(episodes: EpisodeOut | Sequence[EpisodeOut]) -> tuple[EpisodeOut]:
+#     return _repack_episodes(episodes)
 
 
 class EpisodeMeta(BaseModel):
@@ -47,7 +63,7 @@ class EpisodeResponse(BaseModel):
         populate_by_name = True
 
     @classmethod
-    def from_episodes(cls, episodes: EP_FIN_TYP | Sequence[EP_FIN_TYP], msg='') -> EpisodeResponse:
+    def from_episodes(cls, episodes: EP_DB_TYP | Sequence[EP_DB_TYP], msg='') -> EpisodeResponse:
         repacked = _repack_episodes(episodes)
         valid = [EpisodeOut.model_validate(_) for _ in repacked]
         meta_data = EpisodeMeta(
@@ -75,7 +91,7 @@ class EpisodeResponseNoDB(EpisodeResponse):
 
     @classmethod
     def from_episodes(cls, episodes: Sequence[Episode], msg='') -> EpisodeResponse:
-        episodes = repack_episodes(episodes)
+        episodes = _repack_episodes(episodes)
         valid = [Episode.model_validate(_) for _ in episodes]
         meta_data = EpisodeMeta(
             length=len(valid),

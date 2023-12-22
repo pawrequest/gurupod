@@ -1,4 +1,6 @@
-from typing import Optional, Sequence
+from __future__ import annotations
+
+from typing import Sequence
 
 from aiohttp import ClientSession
 from fastapi import APIRouter, Depends, HTTPException
@@ -7,7 +9,7 @@ from sqlmodel import Session, select
 from data.consts import MAIN_URL
 from gurupod.database import get_session
 from gurupod.models.episode import Episode, EpisodeDB
-from gurupod.models.responses import EpisodeResponse, EpisodeResponseNoDB, repack_episodes
+from gurupod.models.responses import EpisodeResponse, EpisodeResponseNoDB, _repack_episodes
 from gurupod.routing.episode_funcs import remove_existing_episodes, \
     remove_existing_urls, validate_add
 from gurupod.scrape import scrape_urls
@@ -19,9 +21,9 @@ ep_router = APIRouter()
 @ep_router.post("/put", response_model=EpisodeResponse)
 async def put_ep(episodes: Episode | Sequence[Episode],
                  session: Session = Depends(get_session)) -> EpisodeResponse:
-    if new_eps := remove_existing_episodes(episodes, session):
-        repacked = repack_episodes(new_eps)
-        sorted = await expand_and_sort(repacked)
+    repacked = _repack_episodes(episodes)
+    if new_eps := remove_existing_episodes(repacked, session):
+        sorted = await expand_and_sort(new_eps)
         res = validate_add(sorted, session, commit=True)
         resp = EpisodeResponse.from_episodes(res)
         return resp

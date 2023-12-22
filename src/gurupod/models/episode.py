@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Dict, List, Optional
 
 from dateutil import parser
-from gurupod.gurulog import logger
 from pydantic import field_validator
 from sqlalchemy import Column
-from sqlmodel import Field, JSON, SQLModel
+from sqlmodel import Field, JSON, Relationship, SQLModel
+
+from gurupod.gurulog import logger
+# from gurupod.models.links import GuruEpisodeLink
 
 MAYBE_ATTRS = ['name', 'notes', 'links', 'date']
 
@@ -15,17 +17,18 @@ MAYBE_ATTRS = ['name', 'notes', 'links', 'date']
 class Episode(SQLModel):
     url: str
     name: Optional[str] = Field(index=True, default=None, unique=True)
-    notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
-    links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
+    notes: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))
+    links: Optional[Dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
+    # gurus: List['GuruDB'] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
 
     @field_validator('date', mode='before')
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
             try:
-                if len(v) ==10:
+                if len(v) == 10:
                     v = v + 'T00:00:00'
-                    logger.debug(f'appending time')
+                    logger.debug('appending time')
                 logger.debug(f'Parsing date: {v}')
                 v = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S')
                 logger.debug(f'Parsed date: {v}')
@@ -50,7 +53,6 @@ class EpisodeDB(Episode, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 
-
 class EpisodeOut(Episode):
     id: int
     name: str
@@ -58,8 +60,6 @@ class EpisodeOut(Episode):
     date: datetime
     notes: Optional[list[str]]
     links: Optional[dict[str, str]]
-
-
 
 #
 # def slugify(value: str) -> str:
@@ -72,6 +72,3 @@ class EpisodeOut(Episode):
 #     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
 #     value = re.sub(r'[^\w\s-]', '', value.lower())
 #     return re.sub(r'[-\s]+', '-', value).strip('-_')
-
-
-
