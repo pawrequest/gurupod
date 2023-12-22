@@ -32,9 +32,7 @@ async def print_flair(sub_flairs: SubmissionFlairs) -> bool:
         return False
 
 
-async def _find_flairables(
-    subreddit: Subreddit, tags=GURUS
-) -> AsyncGenerator[Submission, list[str]]:
+async def _find_flairables(subreddit: Subreddit, tags=GURUS) -> AsyncGenerator[Submission, list[str]]:
     async for submission in subreddit.stream.submissions():
         found_tags = []
         for guru in tags:
@@ -66,9 +64,7 @@ async def doneworkerbee(queue: asyncio.Queue):
             queue.task_done()
 
 
-async def done__flair_dispatch(
-    subreddit: Subreddit, queue: asyncio.Queue, queue_timeout=None
-):
+async def done__flair_dispatch(subreddit: Subreddit, queue: asyncio.Queue, queue_timeout=None):
     async for sub_flairs in _flair_streamer(subreddit):
         task = create_task(print_flair(sub_flairs))
         await queue.put(task)

@@ -29,16 +29,12 @@ async def _find_jobs(job_source, tags=GURUS) -> AsyncGenerator[Submission, list[
 async def _prepare_jobs(subreddit: Subreddit) -> AsyncGenerator[FlairTags, None]:
     logger.debug(f"Starting stream: {subreddit.display_name}")
 
-    async for submission, flairs in _find_jobs(
-        subreddit.stream.submissions, tags=GURUS
-    ):
+    async for submission, flairs in _find_jobs(subreddit.stream.submissions, tags=GURUS):
         gf = FlairTags(submission, flairs)
         yield gf
 
 
-async def _dispatcher(
-    subreddit: Subreddit, queue: asyncio.Queue, job, queue_timeout=None
-):
+async def _dispatcher(subreddit: Subreddit, queue: asyncio.Queue, job, queue_timeout=None):
     async for sub_flairs in _prepare_jobs(subreddit):
         task = create_task(job(sub_flairs))
         await queue.put(task)

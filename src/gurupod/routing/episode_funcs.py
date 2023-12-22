@@ -26,9 +26,7 @@ def log_new_urls(urls: Sequence[str]):
     _log_urls(urls, msg=f"Found {len(urls)} new episode links:")
 
 
-def validate_add(
-    eps: Sequence[Episode], session: Session, commit=False
-) -> tuple[EpisodeDB, ...]:
+def validate_add(eps: Sequence[Episode], session: Session, commit=False) -> tuple[EpisodeDB, ...]:
     valid = [EpisodeDB.model_validate(_) for _ in eps]
     session.add_all(valid)
     if commit:
@@ -37,9 +35,7 @@ def validate_add(
     return tuple(valid)
 
 
-def remove_existing_episodes(
-    episodes: Sequence[Episode], session: Session
-) -> tuple[Episode, ...]:
+def remove_existing_episodes(episodes: Sequence[Episode], session: Session) -> tuple[Episode, ...]:
     new_urls = remove_existing_urls([_.url for _ in episodes], session)
     new_eps = tuple(_ for _ in episodes if _.url in new_urls)
     return new_eps

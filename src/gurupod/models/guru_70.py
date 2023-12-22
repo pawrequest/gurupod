@@ -1,10 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, List
 
-from sqlmodel import Field, Relationship, SQLModel
-
-from gurupod.models.episode import EpisodeDB
 # from gurupod.models.links import GuruEpisodeLink
 
 

@@ -84,11 +84,7 @@ class HtmlWriter(EpisodeWriter):
         return f"<p>Date Published: {date_pub}</p>\n"
 
     def _notes_text(self, notes) -> str:
-        notes = (
-            "<h3>Show Notes:</h3>\n" + "\n".join([f"<p>{_}</p>" for _ in notes]) + "\n"
-            if notes
-            else ""
-        )
+        notes = "<h3>Show Notes:</h3>\n" + "\n".join([f"<p>{_}</p>" for _ in notes]) + "\n" if notes else ""
         return notes
 
     # def _links_text_old(self, links) -> str:
@@ -107,9 +103,7 @@ class HtmlWriter(EpisodeWriter):
 
     def _links_text(self, links) -> str:
         if links:
-            links_html = "\n".join(
-                [f'<a href="{link}">{text}</a><br>' for text, link in links.episodes()]
-            )
+            links_html = "\n".join([f'<a href="{link}">{text}</a><br>' for text, link in links.episodes()])
             return f"<h3>Show Links:</h3>\n{links_html}"
         return ""
 
@@ -131,15 +125,11 @@ class RPostWriter(EpisodeWriter):
         return f"***{date_pub}***\n \n"
 
     def _notes_text(self, notes: list[str]) -> str:
-        notes = (
-            "***Show Notes:***\n \n" + "\n \n".join(notes) + "\n \n" if notes else ""
-        )
+        notes = "***Show Notes:***\n \n" + "\n \n".join(notes) + "\n \n" if notes else ""
         return notes
 
     def _links_text(self, links: dict[str, str]) -> str:
-        links = "***Show Links:***\n \n" + "\n \n".join(
-            [f"[{text}]({link})\n" for text, link in links.items()]
-        )
+        links = "***Show Links:***\n \n" + "\n \n".join([f"[{text}]({link})\n" for text, link in links.items()])
         return links
 
     def _ep_tail_text(self) -> str:
@@ -164,11 +154,7 @@ class RWikiWriter(EpisodeWriter):
         return notes
 
     def _links_text(self, links: dict[str, str]) -> str:
-        links = (
-            "***Links:***\n \n"
-            + "\n \n".join([f"[{text}]({link})" for text, link in links.items()])
-            + "\n \n"
-        )
+        links = "***Links:***\n \n" + "\n \n".join([f"[{text}]({link})" for text, link in links.items()]) + "\n \n"
         return links
 
     def _ep_tail_text(self) -> str:

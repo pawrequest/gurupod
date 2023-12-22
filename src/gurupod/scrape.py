@@ -14,10 +14,7 @@ logger = get_logger()
 
 async def scrape_urls(aiosession, main_url, max_rtn=None) -> list[str]:
     listing_pages = await _listing_pages(main_url, aiosession)
-    tasks = [
-        asyncio.create_task(_episode_urls_from_listing(_, aiosession))
-        for _ in listing_pages
-    ]
+    tasks = [asyncio.create_task(_episode_urls_from_listing(_, aiosession)) for _ in listing_pages]
     result = await asyncio.gather(*tasks)
     urls = [url for sublist in result for url in sublist]
     if max_rtn is None:
@@ -25,15 +22,11 @@ async def scrape_urls(aiosession, main_url, max_rtn=None) -> list[str]:
     return urls[:max_rtn]
 
 
-async def _episode_urls_from_listing(
-    listing_page: str, aio_session: ClientSession
-) -> list[str]:
+async def _episode_urls_from_listing(listing_page: str, aio_session: ClientSession) -> list[str]:
     text = await _response(listing_page, aio_session)
     listing_soup = BeautifulSoup(text, "html.parser")
     episodes_res = listing_soup.select(".episode")
-    urls = [
-        str(ep_soup.select_one(".episode-title a")["href"]) for ep_soup in episodes_res
-    ]
+    urls = [str(ep_soup.select_one(".episode-title a")["href"]) for ep_soup in episodes_res]
     return urls
 
 

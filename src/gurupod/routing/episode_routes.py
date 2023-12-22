@@ -12,7 +12,8 @@ from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeDB
 from gurupod.models.responses import (
     EpisodeResponse,
-    EpisodeResponseNoDB, _repack_episodes,
+    EpisodeResponseNoDB,
+    _repack_episodes,
 )
 from gurupod.routing.episode_funcs import (
     remove_existing_episodes,
@@ -27,9 +28,7 @@ ep_router = APIRouter()
 
 
 @ep_router.post("/put", response_model=EpisodeResponse)
-async def put_ep(
-    episodes: Episode | Sequence[Episode], session: Session = Depends(get_session)
-) -> EpisodeResponse:
+async def put_ep(episodes: Episode | Sequence[Episode], session: Session = Depends(get_session)) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
     # logger.info(f"Endpoint hit: put_ep: {episodes}")
     episodes = _repack_episodes(episodes)
@@ -52,9 +51,7 @@ async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
 async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
     """endpoint for dry-run / internal use"""
     async with ClientSession() as aio_session:
-        scraped_urls = await scrape_urls(
-            main_url=MAIN_URL, aiosession=aio_session, max_rtn=max_rtn
-        )
+        scraped_urls = await scrape_urls(main_url=MAIN_URL, aiosession=aio_session, max_rtn=max_rtn)
         new_urls = remove_existing_urls(scraped_urls, session)
         new_eps = [Episode(url=_) for _ in new_urls]
         expanded = await expand_and_sort(new_eps)

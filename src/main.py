@@ -8,14 +8,11 @@ from sqlmodel import Session
 from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB
 from gurupod.database import create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import Episode
 from gurupod.redditbot.monitor import launch_monitor
 from gurupod.routing.episode_routes import ep_router, put_ep
 from gurupod.routing.reddit_routes import red_router
 
 logger = get_logger()
-
-
 
 
 @asynccontextmanager
@@ -43,6 +40,6 @@ app.include_router(red_router, prefix="/red")
 async def populate_from_json(session: Session):
     with open(EPISODES_MOD, "r") as f:
         eps_j = json.load(f)
-        logger.info(f'\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n')
+        logger.info(f"\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n")
         added = await put_ep(eps_j, session)
         return added
