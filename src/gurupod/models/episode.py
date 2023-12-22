@@ -20,6 +20,7 @@ class Episode(SQLModel):
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
+    # gurus: List['GuruDB'] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
 
     @field_validator("date", mode="before")
     def parse_date(cls, v) -> datetime:

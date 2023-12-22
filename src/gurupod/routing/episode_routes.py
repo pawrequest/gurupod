@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Sequence
 
 from aiohttp import ClientSession
@@ -10,8 +12,7 @@ from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeDB
 from gurupod.models.responses import (
     EpisodeResponse,
-    EpisodeResponseNoDB,
-    repack_episodes,
+    EpisodeResponseNoDB, _repack_episodes,
 )
 from gurupod.routing.episode_funcs import (
     remove_existing_episodes,
@@ -31,11 +32,11 @@ async def put_ep(
 ) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
     # logger.info(f"Endpoint hit: put_ep: {episodes}")
-    new_eps = remove_existing_episodes(episodes, session)
-    repacked = repack_episodes(new_eps)
-    sorted = await expand_and_sort(repacked)
-    res = validate_add(sorted, session, commit=True)
-    resp = EpisodeResponse.from_episodes(res)
+    episodes = _repack_episodes(episodes)
+    episodes = remove_existing_episodes(episodes, session)
+    episodes = await expand_and_sort(episodes)
+    episodes = validate_add(episodes, session, commit=True)
+    resp = EpisodeResponse.from_episodes(episodes)
     return resp
 
 

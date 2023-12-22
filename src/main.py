@@ -16,6 +16,8 @@ from gurupod.routing.reddit_routes import red_router
 logger = get_logger()
 
 
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting lifespan")
@@ -41,7 +43,6 @@ app.include_router(red_router, prefix="/red")
 async def populate_from_json(session: Session):
     with open(EPISODES_MOD, "r") as f:
         eps_j = json.load(f)
-        logger.info(f"\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n")
-        valid = [Episode.model_validate(_) for _ in eps_j]
-        added = await put_ep(valid, session)
+        logger.info(f'\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n')
+        added = await put_ep(eps_j, session)
         return added

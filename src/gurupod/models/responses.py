@@ -14,24 +14,38 @@ EP_VAR = TypeVar("EP_VAR", bound=EP_TYP)
 
 def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
     if not isinstance(episodes, Sequence):
+
         if not isinstance(episodes, EP_TYP):
-            raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
+
+            try:
+                episodes = Episode.model_validate(episodes),
+            except Exception:
+                # todo better catch
+                raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
+
         episodes = (episodes,)
+
+    if not all(isinstance(_, EP_TYP) for _ in episodes):
+        try:
+            episodes = tuple(Episode.model_validate(_) for _ in episodes)
+        except Exception:
+            # todo better catch
+            raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
     return episodes
 
 
-def repack_episode_dbs(episodes: EpisodeDB | Sequence[EpisodeDB]) -> tuple[EpisodeDB]:
-    return _repack_episodes(episodes)
+## type-specific variants needed?
+
+# def repack_episode_dbs(episodes: EpisodeDB | Sequence[EpisodeDB]) -> tuple[EpisodeDB]:
+#     return _repack_episodes(episodes)
 
 
-def repack_episodes(episodes: Episode | Sequence[Episode]) -> tuple[Episode]:
-    return _repack_episodes(episodes)
+# def repack_episodes(episodes: Episode | Sequence[Episode]) -> tuple[Episode]:
+#     return _repack_episodes(episodes)
 
-
-def repack_episodes_out(
-    episodes: EpisodeOut | Sequence[EpisodeOut],
-) -> tuple[EpisodeOut]:
-    return _repack_episodes(episodes)
+#
+# def repack_episodes_out(episodes: EpisodeOut | Sequence[EpisodeOut]) -> tuple[EpisodeOut]:
+#     return _repack_episodes(episodes)
 
 
 class EpisodeMetaold(BaseModel):
