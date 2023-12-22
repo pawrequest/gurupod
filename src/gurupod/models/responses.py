@@ -14,14 +14,12 @@ EP_VAR = TypeVar("EP_VAR", bound=EP_TYP)
 
 def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
     if not isinstance(episodes, Sequence):
-
         if not isinstance(episodes, EP_TYP):
-
             try:
-                episodes = Episode.model_validate(episodes),
+                episodes = (Episode.model_validate(episodes),)
             except Exception:
                 # todo better catch
-                raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
+                raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
 
         episodes = (episodes,)
 
@@ -30,7 +28,7 @@ def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
             episodes = tuple(Episode.model_validate(_) for _ in episodes)
         except Exception:
             # todo better catch
-            raise ValueError(f'episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}')
+            raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
     return episodes
 
 
@@ -138,7 +136,7 @@ class EpisodeResponseNoDB(EpisodeResponse):
     def from_episodes(cls, episodes: Sequence[Episode], msg="") -> EpisodeResponse:
         if not any([msg, episodes]):
             msg = "No Episodes Found"
-        episodes = repack_episodes(episodes)
+        episodes = _repack_episodes(episodes)
         valid = [Episode.model_validate(_) for _ in episodes]
         meta_data = EpisodeMeta(
             length=len(valid),
@@ -146,3 +144,24 @@ class EpisodeResponseNoDB(EpisodeResponse):
             msg=msg,
         )
         return cls.model_validate(dict(episodes=valid, meta=meta_data))
+
+
+#############
+
+
+def resp_from_episodes(cls, episodes: EP_VAR | Sequence[EP_VAR], msg="") -> EpisodeResponse:
+    if isinstance(episodes, Sequence):
+        ep_typ = type(episodes[0])
+    else:
+        ep_typ = type(episodes)
+
+    if not any([msg, episodes]):
+        msg = "No Episodes Found"
+    repacked = _repack_episodes(episodes)
+    valid = [EpisodeOut.model_validate(_) for _ in repacked]
+    meta_data = EpisodeMeta(
+        length=len(valid),
+        # calling_func=inspect.stack()[1][3],
+        msg=msg,
+    )
+    return ep_typ.model_validate(dict(episodes=valid, meta=meta_data))
