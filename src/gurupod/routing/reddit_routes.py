@@ -1,5 +1,4 @@
 from asyncpraw.models import WikiPage
-from asyncpraw.reddit import Subreddit
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
@@ -13,14 +12,14 @@ from gurupod.writer import RWikiWriter
 red_router = APIRouter()
 
 
+# async def post_episode_subreddit(key: str, episode: EpisodeDB, subreddit: Subreddit = Depends(subreddit_cm)):
 @red_router.post("/post_sub")
-async def post_episode_subreddit(
-    key: str, episode: EpisodeDB, subreddit: Subreddit = Depends(subreddit_cm)
-):
-    if key != REDDIT_SEND_KEY:
-        return "wrong key"
-    subreddit = await subreddit
-    return await submit_episode_subreddit(episode, subreddit)
+async def post_episode_subreddit(key: str, sub_name: str, episode: EpisodeDB):
+    with subreddit_cm(sub_name) as subreddit:
+        if key != REDDIT_SEND_KEY:
+            return "wrong key"
+        subreddit = await subreddit
+        return await submit_episode_subreddit(episode, subreddit)
 
 
 @red_router.post("/update_wiki")

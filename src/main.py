@@ -1,12 +1,11 @@
 import asyncio
 import json
-import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from sqlmodel import Session
 
-from data.consts import EPISODES_MOD, GURU_SUB
+from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB
 from gurupod.database import create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
@@ -15,7 +14,6 @@ from gurupod.routing.episode_routes import ep_router, put_ep
 from gurupod.routing.reddit_routes import red_router
 
 logger = get_logger()
-monitior_sub = os.environ.get("MONITOR_SUB", False)
 
 
 @asynccontextmanager
@@ -27,11 +25,12 @@ async def lifespan(app: FastAPI):
         # await populate_from_json(session)
         # await fetch(session)
         # [reddit.post_episode(_) for _ in new]
-    monitor_task = asyncio.create_task(launch_monitor(subreddit_name=GURU_SUB, timeout=None))
-    logger.info("Started monitor")
-    yield
-    monitor_task.cancel()
-    await monitor_task
+    if MONITOR_SUB:
+        monitor_task = asyncio.create_task(launch_monitor(subreddit_name=GURU_SUB, timeout=None))
+        logger.info("Started monitor")
+        yield
+        monitor_task.cancel()
+        await monitor_task
 
 
 app = FastAPI(lifespan=lifespan)

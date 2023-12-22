@@ -27,11 +27,10 @@ EPISODES_WIKI = "episodes"
 TEST_WIKI = "gurus"
 EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
 
-
 # env vars
 REDDIT_CLIENT_ID = os.environ["REDDIT_CLIENT_ID"]
 REDDIT_CLIENT_SEC = os.environ["REDDIT_CLIENT_SEC"]
 REDDIT_REF_TOK = os.environ["REDDIT_REF_TOK"]
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
-
-GURU_FLAIR_ID = "f0c29d96-93e4-11ee-bdde-e666ed3aa602"
+GURU_FLAIR_ID = os.environ.get("CUSTOM_FLAIR_ID")
+MONITOR_SUB = os.environ.get("MONITOR_SUB", False)
