@@ -19,7 +19,7 @@ def test_import_new_episodes(random_episode_json, test_db):
     assert isinstance(episode, EpisodeWith)
     assert episode.notes == random_episode_json["notes"]
     assert episode.links == random_episode_json["links"]
-    assert episode.title == random_episode_json["name"]
+    assert episode.title == random_episode_json["title"]
     assert episode.url == random_episode_json["url"]
     assert episode.date == datetime.fromisoformat(random_episode_json["date"])
 
