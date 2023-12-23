@@ -10,7 +10,7 @@ from sqlmodel import Session, select
 from data.consts import EPISODES_MOD, MAIN_URL
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import Episode, EpisodeDB
+from gurupod.models.episode import EpisodeBase, Episode
 from gurupod.models.guru import Guru
 from gurupod.models.responses import (
     EpisodeResponse,
@@ -38,7 +38,9 @@ async def populate_eps(session: Session = Depends(get_session)):
 
 
 @ep_router.post("/put", response_model=EpisodeResponse)
-async def put_ep(episodes: Episode | Sequence[Episode], session: Session = Depends(get_session)) -> EpisodeResponse:
+async def put_ep(
+    episodes: EpisodeBase | Sequence[EpisodeBase], session: Session = Depends(get_session)
+) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
     # logger.info(f"Endpoint hit: put_ep: {episodes}")
     episodes = _repack_episodes(episodes)
@@ -64,18 +66,18 @@ async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
     async with ClientSession() as aio_session:
         scraped_urls = await scrape_urls(main_url=MAIN_URL, aiosession=aio_session, max_rtn=max_rtn)
         new_urls = remove_existing_urls(scraped_urls, session)
-        new_eps = [Episode(url=_) for _ in new_urls]
+        new_eps = [EpisodeBase(url=_) for _ in new_urls]
         expanded = await expand_and_sort(new_eps)
         return EpisodeResponseNoDB.from_episodes(expanded)
 
 
 @ep_router.get("/{ep_id}", response_model=EpisodeResponse)
 async def read_one(ep_id: int, session: Session = Depends(get_session)):
-    episode_db = session.get(EpisodeDB, ep_id)
+    episode_db = session.get(Episode, ep_id)
     if episode_db is None:
         raise HTTPException(status_code=404, detail="Episode not found")
-    elif isinstance(episode_db, EpisodeDB):
-        episode_: EpisodeDB = episode_db
+    elif isinstance(episode_db, Episode):
+        episode_: Episode = episode_db
         return EpisodeResponse.from_episodes(episode_)
     else:
         raise HTTPException(status_code=500, detail="returned data not EpisodeDB")
@@ -83,14 +85,15 @@ async def read_one(ep_id: int, session: Session = Depends(get_session)):
 
 @ep_router.get("/", response_model=EpisodeResponse)
 async def read_all(session: Session = Depends(get_session)):
-    eps = session.exec(select(EpisodeDB)).all()
+    eps = session.exec(select(Episode)).all()
     return EpisodeResponse.from_episodes(list(eps))
 
 
 async def assign_gurus(episodes: Sequence, session: Session):
     gurus = session.exec(select(Guru)).all()
     for episode in episodes:
-        episode.gurus = [_ for _ in gurus if _.name in episode.title]
+        title_gurus = [_ for _ in gurus if _.name in episode.title]
+        episode.gurus.extend(title_gurus)
         session.add(episode)
     session.commit()
     [session.refresh(_) for _ in episodes]

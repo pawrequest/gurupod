@@ -13,7 +13,7 @@ from starlette.testclient import TestClient
 
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import Episode, EpisodeDB
+from gurupod.models.episode import EpisodeBase, Episode
 from gurupod.models.responses import EpisodeResponseNoDB
 from gurupod.redditbot.managers import reddit_cm
 from main import app
@@ -100,7 +100,7 @@ def random_episode_json(all_episodes_json):
 
 @pytest.fixture(scope="function")
 def random_episode_validated(random_episode_json):
-    return Episode.model_validate(random_episode_json)
+    return EpisodeBase.model_validate(random_episode_json)
 
 
 @pytest.fixture(scope="function")
@@ -110,7 +110,7 @@ def episode_josh():
         eps = json.load(f)
         for ep in eps:
             if ep["name"] == name:
-                return Episode.model_validate(ep)
+                return EpisodeBase.model_validate(ep)
 
 
 @pytest.fixture(scope="function")
@@ -120,24 +120,24 @@ def episodes_weird(all_episodes_json):
         "Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy",
     ]
     weird = [_ for _ in all_episodes_json if _["name"] in names]
-    return [Episode.model_validate(_) for _ in weird]
+    return [EpisodeBase.model_validate(_) for _ in weird]
 
 
 @pytest.fixture(scope="session")
 def test_db():
+    EpisodeBase.metadata.create_all(bind=ENGINE)
     Episode.metadata.create_all(bind=ENGINE)
-    EpisodeDB.metadata.create_all(bind=ENGINE)
     yield
+    EpisodeBase.metadata.drop_all(bind=ENGINE)
     Episode.metadata.drop_all(bind=ENGINE)
-    EpisodeDB.metadata.drop_all(bind=ENGINE)
 
 
 @pytest.fixture(scope="function")
 def blank_test_db(test_db):
+    EpisodeBase.metadata.drop_all(bind=ENGINE)
     Episode.metadata.drop_all(bind=ENGINE)
-    EpisodeDB.metadata.drop_all(bind=ENGINE)
+    EpisodeBase.metadata.create_all(bind=ENGINE)
     Episode.metadata.create_all(bind=ENGINE)
-    EpisodeDB.metadata.create_all(bind=ENGINE)
     yield
 
 

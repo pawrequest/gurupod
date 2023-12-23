@@ -7,12 +7,12 @@ from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from dateutil import parser
 
-from gurupod.models.episode import Episode
+from gurupod.models.episode import EpisodeBase
 from gurupod.scrape import _response
 
 
-async def expand_and_sort(episodes: Sequence[Episode]) -> list[Episode]:
-    complete: list[Episode] = [_ for _ in episodes if not _.data_missing]
+async def expand_and_sort(episodes: Sequence[EpisodeBase]) -> list[EpisodeBase]:
+    complete: list[EpisodeBase] = [_ for _ in episodes if not _.data_missing]
 
     if missing := [_ for _ in episodes if _.data_missing]:
         coroutines = [expand_episode(_) for _ in missing]
@@ -22,14 +22,14 @@ async def expand_and_sort(episodes: Sequence[Episode]) -> list[Episode]:
     return sorted(complete, key=lambda x: x.date)
 
 
-async def expand_episode(url_or_ep: str | Episode) -> Episode:
-    if isinstance(url_or_ep, Episode):
+async def expand_episode(url_or_ep: str | EpisodeBase) -> EpisodeBase:
+    if isinstance(url_or_ep, EpisodeBase):
         url = url_or_ep.url
     else:
         url = url_or_ep
 
     soup = await EpisodeSoup.from_url(url)
-    res = Episode(**soup.get_ep_d())
+    res = EpisodeBase(**soup.get_ep_d())
     res.url = url
     return res
 

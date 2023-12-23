@@ -1,3 +1,4 @@
+# from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
@@ -16,7 +17,7 @@ logger = get_logger()
 MAYBE_ATTRS = ["title", "notes", "links", "date"]
 
 
-class Episode(SQLModel):
+class EpisodeBase(SQLModel):
     url: str
     title: Optional[str] = Field(index=True, default=None, unique=True)
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
@@ -46,18 +47,19 @@ class Episode(SQLModel):
         return f"<{self.__class__.__name__}({self.url})>"
 
 
-class EpisodeDB(Episode, table=True):
+class Episode(EpisodeBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
 
 
-class EpisodeOut(Episode):
+class EpisodeRead(EpisodeBase):
     id: int
     title: str
     url: str
     date: datetime
     notes: Optional[list[str]]
     links: Optional[dict[str, str]]
+    gurus: Optional[list[str]]
 
 
 #

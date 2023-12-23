@@ -9,7 +9,7 @@ from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB
 from data.gurunames import GURUS
 from gurupod.database import create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import EpisodeDB
+from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink
 from gurupod.redditbot.monitor import launch_monitor
@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting lifespan")
     create_db_and_tables()
     gb = Guru.model_rebuild()
-    eb = EpisodeDB.model_rebuild()
+    eb = Episode.model_rebuild()
     lb = GuruEpisodeLink.model_rebuild()
     logger.info("tables created")
     with Session(engine_()) as session:

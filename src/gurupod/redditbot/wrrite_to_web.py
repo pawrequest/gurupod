@@ -3,7 +3,7 @@ from __future__ import annotations
 from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Submission, Subreddit
 
-from gurupod.models.episode import Episode
+from gurupod.models.episode import EpisodeBase
 from gurupod.writer import RPostWriter
 
 
@@ -18,7 +18,7 @@ async def edit_reddit_wiki(markup, wiki: WikiPage):
     return res
 
 
-async def submit_episode_subreddit(episode: Episode, sub_reddit: Subreddit):
+async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit):
     title = f"NEW EPISODE: {episode.title}"
     writer = RPostWriter([episode])
     text = writer.write_many()

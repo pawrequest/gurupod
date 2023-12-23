@@ -3,11 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from data.consts import EPISODE_PAGE_TITLE
-from gurupod.models.episode import Episode
+from gurupod.models.episode import EpisodeBase
 
 
 class EpisodeWriter(ABC):
-    def __init__(self, episodes: Episode | list[Episode]):
+    def __init__(self, episodes: EpisodeBase | list[EpisodeBase]):
         if not isinstance(episodes, list):
             episodes = [episodes]
         self.episodes = episodes
@@ -19,7 +19,7 @@ class EpisodeWriter(ABC):
         text += self._post_tail_text()
         return text
 
-    def write_one(self, episode: Episode) -> str:
+    def write_one(self, episode: EpisodeBase) -> str:
         text = self._title_text(episode)
         text += self._date_text(episode.date.date().strftime("%A %B %d %Y"))
         text += self._notes_text(episode.notes) or ""
@@ -56,14 +56,14 @@ class EpisodeWriter(ABC):
 
 
 class HtmlWriter(EpisodeWriter):
-    def _contents(self, eps: list[Episode] = None) -> str:
+    def _contents(self, eps: list[EpisodeBase] = None) -> str:
         eps = eps or self.episodes
         toc = "<h2>Table of Contents</h2>\n"
         for i, ep in enumerate(eps):
             toc += f"<a href='#ep-{i}'>{ep.title}</a><br>\n"
         return toc
 
-    def _post_head_text(self, episode: Episode) -> str:
+    def _post_head_text(self, episode: EpisodeBase) -> str:
         text = f"""
             <!DOCTYPE html>
             <html lang="en">
@@ -77,7 +77,7 @@ class HtmlWriter(EpisodeWriter):
         text += self._contents(self.episodes)
         return text
 
-    def _title_text(self, episode: Episode, ep_id="") -> str:
+    def _title_text(self, episode: EpisodeBase, ep_id="") -> str:
         return f"<h1 id='ep-{str(ep_id)}'>{episode.title}</h1>\n<a href='{episode.url}'>Play on Captivate.fm</a>\n"
 
     def _date_text(self, date_pub) -> str:
@@ -115,10 +115,10 @@ class HtmlWriter(EpisodeWriter):
 
 
 class RPostWriter(EpisodeWriter):
-    def _post_head_text(self, episode: Episode) -> str:
+    def _post_head_text(self, episode: EpisodeBase) -> str:
         return ""
 
-    def _title_text(self, episode: Episode) -> str:
+    def _title_text(self, episode: EpisodeBase) -> str:
         return f"## [{episode.title}]({episode.url})\n \n"
 
     def _date_text(self, date_pub) -> str:
@@ -140,10 +140,10 @@ class RPostWriter(EpisodeWriter):
 
 
 class RWikiWriter(EpisodeWriter):
-    def _post_head_text(self, episode: Episode) -> str:
+    def _post_head_text(self, episode: EpisodeBase) -> str:
         return ""
 
-    def _title_text(self, episode: Episode) -> str:
+    def _title_text(self, episode: EpisodeBase) -> str:
         return f"### [{episode.title}]({episode.url})\n \n"
 
     def _date_text(self, date_pub) -> str:
