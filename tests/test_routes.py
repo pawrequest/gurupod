@@ -55,7 +55,7 @@ def test_read_one_episode(random_episode_json, test_db):
     response = client.get("/eps/1")
     assert response.status_code == 200
     res = EpisodeResponse.model_validate(response.json())
-    assert isinstance(res.episodes[0], EpisodeOut)
+    assert isinstance(res.episodes[0], EpisodeOut)`
 
 
 @pytest.mark.asyncio

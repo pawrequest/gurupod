@@ -149,19 +149,19 @@ class EpisodeResponseNoDB(EpisodeResponse):
 #############
 
 
-def resp_from_episodes(cls, episodes: EP_VAR | Sequence[EP_VAR], msg="") -> EpisodeResponse:
-    if isinstance(episodes, Sequence):
-        ep_typ = type(episodes[0])
-    else:
-        ep_typ = type(episodes)
-
-    if not any([msg, episodes]):
-        msg = "No Episodes Found"
-    repacked = _repack_episodes(episodes)
-    valid = [EpisodeOut.model_validate(_) for _ in repacked]
-    meta_data = EpisodeMeta(
-        length=len(valid),
-        # calling_func=inspect.stack()[1][3],
-        msg=msg,
-    )
-    return ep_typ.model_validate(dict(episodes=valid, meta=meta_data))
+# def resp_from_episodes(cls, episodes: EP_VAR | Sequence[EP_VAR], msg="") -> EpisodeResponse:
+#     if isinstance(episodes, Sequence):
+#         ep_typ = type(episodes[0])
+#     else:
+#         ep_typ = type(episodes)
+#
+#     if not any([msg, episodes]):
+#         msg = "No Episodes Found"
+#     repacked = _repack_episodes(episodes)
+#     valid = [ep_typ.model_validate(_) for _ in repacked]
+#     meta_data = EpisodeMeta(
+#         length=len(valid),
+#         # calling_func=inspect.stack()[1][3],
+#         msg=msg,
+#     )
+#     return cls.model_validate(dict(episodes=valid, meta=meta_data))

@@ -8,11 +8,21 @@ from sqlmodel import Session
 from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB
 from gurupod.database import create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
+from gurupod.models.guru import Guru
+from gurupod.models.links import GuruEpisodeLink
+
+gb = Guru.model_rebuild()
+from gurupod.models.episode import EpisodeDB
 from gurupod.redditbot.monitor import launch_monitor
 from gurupod.routing.episode_routes import ep_router, put_ep
 from gurupod.routing.reddit_routes import red_router
 
 logger = get_logger()
+
+
+eb = EpisodeDB.model_rebuild()
+lb = GuruEpisodeLink.model_rebuild()
+...
 
 
 @asynccontextmanager
@@ -30,6 +40,8 @@ async def lifespan(app: FastAPI):
         yield
         monitor_task.cancel()
         await monitor_task
+    else:
+        yield
 
 
 app = FastAPI(lifespan=lifespan)

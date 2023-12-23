@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from dateutil import parser
 from pydantic import field_validator
 from sqlalchemy import Column
-from sqlmodel import Field, JSON, SQLModel
+from sqlmodel import Field, JSON, Relationship, SQLModel
 
 from gurupod.gurulog import get_logger
+from gurupod.models.links import GuruEpisodeLink
+
+if TYPE_CHECKING:
+    from gurupod.models.guru import Guru
 
 logger = get_logger()
 MAYBE_ATTRS = ["name", "notes", "links", "date"]
@@ -20,8 +24,6 @@ class Episode(SQLModel):
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
-
-    # gurus: List['GuruDB'] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
 
     @field_validator("date", mode="before")
     def parse_date(cls, v) -> datetime:
@@ -47,7 +49,11 @@ class Episode(SQLModel):
 
 
 class EpisodeDB(Episode, table=True):
+    # class Config:
+    #     populate_by_name = True
+
     id: Optional[int] = Field(default=None, primary_key=True)
+    gurus: list[Guru] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
 
 
 class EpisodeOut(Episode):
