@@ -1,9 +1,255 @@
 [
     {
-        "url": "https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-michael-shermers-advice-on-conspiracy-theories"
+        "title": "Interview with Dani\u00ebl Lakens and Smriti Mehta on the state of Psychology",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-daniel-lakens-and-smriti-mehta-on-the-state-of-psychology",
+        "notes": [
+            "We are back with more geeky academic discussion than you can shake a stick at. This week we are doing our bit to save civilization by discussing issues in contemporary science, the replication crisis, and open science reforms with fellow psychologists/meta-scientists/podcasters, Dani\u00ebl Lakens and Smriti Mehta. Both Dani\u00ebl and Smriti are well known for their advocacy for methodological reform and have been hosting a (relatively) new podcast, Nullius in Verba, all about 'science\u2014what it is and what it could be'. ",
+            "We discuss a range of topics including questionable research practices, the implications of the replication crisis, responsible heterodoxy, and the role of different communication modes in shaping discourses. ",
+            "Also featuring: exciting AI chat, Lex and Elon being teenage edge lords, feedback on the Huberman episode, and as always updates on Matt's succulents.",
+            "Back soon with a Decoding episode!"
+        ],
+        "links": {
+            "Nullius in Verba Podcast": "https://nulliusinverba.podbean.com/",
+            "Lee Jussim's Timeline on the Klaus Fiedler Controversy": "https://unsafescience.substack.com/p/notes-from-a-witch-hunt",
+            "a list of articles/sources covering the topic": "https://unsafescience.substack.com/p/pops-fiasco-orientation-page",
+            "Elon Musk: War, AI, Aliens, Politics, Physics, Video Games, and Humanity | Lex Fridman Podcast #400": "https://www.youtube.com/watch?v=JN3KPFbWCy8",
+            "Daniel's MOOC on Improving Your Statistical Inference": "https://www.coursera.org/learn/statistical-inferences?utm_source=gg&utm_medium=sem&utm_campaign=B2C_APAC__branded_FTCOF_courseraplus_arte_PMax_set3&utm_content=Degree&campaignid=20520161513&adgroupid=&device=c&keyword=&matchtype=&network=x&devicemodel=&adpostion=&creativeid=&hide_mobile_promo&gclid=CjwKCAiAu9yqBhBmEiwAHTx5p5fBUeqyPyuUdxMHD5O0RbTWsScGjvzrsdeuIS3FfEHVuYVnX5PxphoC6DMQAvD_BwE",
+            "Critical commentary on Fiedler controversy at Replicability-Index": "https://replicationindex.com/2022/12/30/klaus-fiedler-is-a-victim-of-his-own-arrogance/"
+        },
+        "date": "2023-11-18"
     },
     {
-        "name": "Interview with Mick West: UFOs, Aliens, and Conspiracy Psychology",
+        "title": "Andrew Huberman and Peter Attia: Self-enhancement, supplements & doughnuts?",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/andrew-huberman-and-peter-attia-optimising-your-pizza-binges",
+        "notes": [
+            "In a kind of meta cross-over with our Decoding Academia series, we're going to decode a journal club discussion between two well-known health optimisers: Dr. Peter Attia and Dr. Andrew Huberman. So you get to listen to two academics talk about two other academics talk about academic papers... we know...",
+            "We've already been introduced to the bulging biceps and morning sun-drenched routines of Huberman elsewhere but this is our first introduction to Peter Attia, MD. Attia is a former ultra-endurance athlete and a physician in the field of longevity and performance, a podcaster (who isn't amirite?!?) and author of \"Outlive: The Science And Art Of Longevity\".",
+            "Attia introduces us to a paper that casts doubt on the supposed general life-extending properties of a diabetes drug called Metformin. This is a drug that is apparently very well known in the biohacker/life extension communities and one that Attia administered to himself for a number of years despite the rather preliminary evidence. This is the first of many indicators that both gentlemen are certainly on the bleeding edge of self-medicating experimentation, doggedly pursuing the elusive goals of huge pectoral muscles, minds that laugh at the concept of cognitive decline, and bodies that will live... well for a lot longer than Matt and Chris!",
+            "We get to hear about week-long starvation regimes, medications that take the edge of pizza and doughnut binges, dealing with month-long nausea from self-dosing experimental treatments, and frequent prick-blood tests all for the sake of optimising, optimising, optimising...",
+            "Huberman's paper (a preprint, actually) falls more into the \"big, if true\" category - although he seems fairly confident himself. Does *believing* you are getting a treatment generate the relevant physiological and neurological effects in the body that could mean we can bypass the need for certain pharmacological substances entirely, including some vaccines?!? Based on the results of a small-N, fMRI study that reports mixed results, Huberman muses... maybe! Or how about those other small-N studies, with p-values hovering suspiciously close to 0.05 that report other counterintuitive findings? We will leave it to Huberman to explain.",
+            "But the bad stuff aside, Huberman and Attia (especially Attia) actually do a pretty decent job talking about how to approach research papers and some of the pros and cons of different approaches. Chris and Matt thus have ample opportunities to give credit where credit's due and demonstrate that they are the fair-minded souls everyone knows them to be! ",
+            "In any case, it's an interesting peak into an alternative health optimiser world. It seems to be a  rather \"serious\" hobby a bit like body modification or tattoos. But who are we to judge? Matt likes cultivating succulent plants and Chris is into eating sushi in lush forests. So biohacking, self-experimentation for longevity? Well, at least it's an ethos.",
+            "Also featuring, an introduction that covers Irish history, the most humble guru in the gurusphere, and our very own theory of guru cringeosity!"
+        ],
+        "links": {
+            "Journal Club with Dr. Peter Attia | Metformin for Longevity & The Power of Belief Effects": "https://www.youtube.com/watch?v=z8c6EyMNd0A",
+            "The Most Arrogant thing Bret Weinstein has ever said? Bad Stats Thread": "https://twitter.com/thebadstats/status/1716202925041782941",
+            "Keys et al. (2022) Reassessing the evidence of a survival advantage in Type 2 diabetes treated with metformin compared with controls without diabetes: a retrospective cohort study.": "https://bit.ly/3EypTAJ",
+            "Bannister et al. (2014) Can people with type 2 diabetes live longer than those without? A comparison of mortality in people initiated with metformin or sulphonylurea monotherapy and matched, non-diabetic controls": "https://dom-pubs.onlinelibrary.wiley.com/doi/10.1111/dom.12354?utm_source=youtube&utm_medium=social&utm_campaign=huberman_lab",
+            "Perl et al. (2022) A thalamic circuit represents dose-like responses induced by nicotine-related beliefs in human smokers": "https://www.biorxiv.org/content/10.1101/2022.07.15.500226v2"
+        },
+        "date": "2023-11-09"
+    },
+    {
+        "title": "Interview with Julia Ebner: Extremist Networks & Radicalisation",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-julia-ebner-extremist-networks-radicalisation",
+        "notes": [
+            "On this week's episode, we have an extended interview with author and researcher, Julia Ebner. Julia is a Senior Resident Research Fellow at the Institute for Strategic Dialogue and has written a series of books exploring the social dynamics of extremist networks, including The Rage: the Vicious Circle of Islamist and Far-Right Extremism, Going Dark: the Secret Social Lives of Extremists, and most recently Going Mainstream: How Extremists Are Taking Over.",
+            "Julia also recently completed her DPhil at Oxford's Centre for Studies of Social Cohesion and has been developing novel linguistic analyses to help identify the psychological indicators of violence in extremist material and manifestos. She has also endured publishing some papers with our resident cognitive anthropologist.",
+            "In the podcast, we cover a range of topics from the factors impacting radicalisation, Julia's time working for Maajid Nawaz's organisation, the psychology of conspiracy theories, and her experiences as an undercover investigator.",
+            "Also on this week's episode, we dive into a recent episode of the DarkHorse to explore the Alex Jones' level conspiracies that Bret and Heather have recently been promoting about the horrific events in Israel. You might imagine it would be difficult to make such a tragic event about COVID dissidents and vaccines but if so you are underestimating the InfoHorse hosts.",
+            "For a palette cleanser enjoy an extended review-of-reviews and some marathon shoutouts."
+        ],
+        "links": {
+            "The Guardian: The Big Idea- is it too late to stop extremism taking over politics?": "https://www.theguardian.com/books/2023/jul/31/the-big-idea-is-it-too-late-to-stop-extremism-taking-over-politics",
+            "Going Dark: The Secret Social Lives of Extremists | Julia Ebner | Talks at Google": "https://www.youtube.com/watch?v=fAFV49e2W5M",
+            "Julia's Recent Book- Going Mainstream: How Extremists Are Taking Over": "https://www.amazon.com/Going-Mainstream-extremists-taking-over-ebook/dp/B0C49Y93VB",
+            "Regressive Left Media: Tommy Robinson and Maajid Nawaz: Sleeping with the Enemy": "https://medium.com/@Reg_Left_Media/tommy-robinson-and-maajid-nawaz-sleeping-with-the-enemy-7aeb0e834cfc",
+            "Bad Stats thread with DarkHorse clips from episode 195": "https://x.com/thebadstats/status/1712212774842180081?s=20",
+            "Andy Last's Beyond Synth Podcast": "https://www.beyondsynth.com/",
+            "DTG Shedding Light on the DarkHorse: A Mini Review": "https://www.youtube.com/watch?v=eNeJCacgrFc&t=1s",
+            "Ebner, J., Kavanagh, C., & Whitehouse, H. (2023). Measuring socio-psychological drivers of extreme violence in online terrorist manifestos: an alternative linguistic risk assessment model. Journal of Policing, Intelligence and Counter Terrorism, 1-19.": "https://www.tandfonline.com/doi/full/10.1080/18335330.2023.2246982",
+            "Ebner, J., Kavanagh, C., & Whitehouse, H. (2022). Is there a language of terrorists? a comparative manifesto analysis. Studies in Conflict & Terrorism, 1-27.": "https://www.tandfonline.com/doi/full/10.1080/1057610X.2022.2109244"
+        },
+        "date": "2023-10-16"
+    },
+    {
+        "title": "Triggernometry's Big Moment: Entering the Guru Galaxy",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/triggernometry-enter-the-big-leagues",
+        "notes": [
+            "In modern online ecosystems, attention and download metrics reign supreme. Sadly, the gurus are not immune to these incentives, with even the most successful, *cough* Jordan Peterson *cough*, regularly referencing how many people watched their latest video or how many subscribers they have on their 'brave freethinker' tier.",
+            "Alongside the attention metrics, you also have the interpersonal networks (and dinner opportunities) that matter so much to the guru-sphere. Celebrity interviews, cross-promotional content and collabs, a PragerU video, a shoutout from Joe Rogan, a long-form discussion with RFK Jnr, dinner and a phone call with Eric Weinstein... such are the untold wonders that await anyone who dares to challenge the 'mainstream' orthodoxy by endorsing some element of the contrarian canon (vaccines are dangerous and public health measures were authoritarian, Biden is terrible/Trump isn't that bad, the mainstream media is afraid to discuss paedophiles, etc.). ",
+            "It's very easy to see the impact of the financial and interpersonal incentives in the guru-sphere but what is not as common is for those involved in the hustle to talk transparently about how it all works. Enter Konstantin Kisin and Francis Foster, the hosts of Triggernometry. ",
+            "In a recent episode, they lay all of this bare by discussing how Konstantin's viral rhetoric-heavy speech at the Oxford Union (decoded in a previous episode) led to very tangible attention and financial rewards but, perhaps more importantly, the newfound respect of a class of celebrity commentator they had always aspired to belong to. With the encouragement of these intellectual heavyweights they now have BIG plans for a Triggernometry media network!",
+            "So join us for this refreshing look at the inner workings of the Gurusphere through the hungry eyes of the Triggernometry boys!",
+            "Also on this episode: some updates on previous gurus (Russell Brand & Ibram X. Kendi), discussion of good(!) alternative media content, personal reflections on what Orwellian governments look like, and the psychology of riding roller coasters. Something for everyone!"
+        ],
+        "links": {
+            "What's Next for TRIGGERnometry": "https://www.youtube.com/watch?v=t2RkDJyp2W0",
+            "\ufeffOur previous decoding of the Oxford Union speech": "https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-konstantin-kisins-oxford-union-speech",
+            "Chris' Twitter thread on Konstantin's origin story": "https://x.com/C_Kavanagh/status/1663683487424184320?s=20",
+            "Surfing the Discourse: Analysing the Right-Wing Reactions to the Russell Brand Scandal (feat Ben Shapiro, Dave Rubin, and more!)": "https://podcasts.apple.com/us/podcast/analysing-the-right-wing-reactions-to-the-russell/id1699146708?i=1000628669704",
+            "NY Times: Ibram X. Kendi and the Problem of Celebrity Fund-Raising": "https://www.nytimes.com/2023/09/25/opinion/columnists/kendi-center-antiracist-research.html",
+            "Russell Brand accused of rape, sexual assault and emotional abuse": "https://www.theguardian.com/culture/2023/sep/16/russell-brand-accused-of-sexual-assault-and-emotional-abuse",
+            "BBC: Pat Finucane: A murder with 'collusion at its heart'": "https://www.bbc.com/news/uk-northern-ireland-55100778",
+            "Why They Hate Jordan Peterson - Konstantin Kisin": "https://www.youtube.com/watch?v=DJW-O8vLvc4",
+            "Why Communism is Even Worse Than Fascism - Konstantin Kisin": "https://www.youtube.com/watch?v=4Jgi6kC5j3M"
+        },
+        "date": "2023-10-03"
+    },
+    {
+        "title": "Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-the-conspirituality-trio",
+        "notes": [
+            "Back in the early days of the podcast, we tried to take a rest from the wearisome repetition of polemical partisan gurus by covering JP Sears- an alternative-health self-help coach with a sideline in 'comedic parody'. Sadly, we soon discovered he was a red-pilled Roganite 'just asking questions' about all the usual right-wing partisan topics, but with an added dollop of pseudo-profound, self-indulgent spiritual blather.",
+            "JP Sears wasn't an isolated case; he exemplified a disturbingly prevalent trend. One that was supercharged during the pandemic and can be observed clearly in figures like Russell Brand, Aubrey Marcus, RFK Jnr and a whole slew of QAnon and anti-vaccine influencers.",
+            "To help us disentangle this quagmire and the dynamics at play, we are joined by the three co-hosts of the popular Conspiritualty podcast: Matthew Remski, Julian Walker, and Derek Beres.",
+            "We've spoken with them many times over the past few years about a variety of topics but in today's conversation, we explore the contemporary state of the Conspirituality sphere and discuss broader themes they have observed (& how they relate to the gurus we cover). We also examine whether they view activism as core to their podcast, how they handle attacks or engage with legitimate criticism, and how they feel about their own place in the ecosystems they discuss.",
+            "We hope you enjoy the conversation as much as we did!",
+            "Also covered in the opening segment is a cursed guru-sphere crossover between the Triggernometry guys and our old favourite, Scott Adams.",
+            "Other Links"
+        ],
+        "links": {
+            "The new Conspirituality Book!": "https://www.amazon.com/Conspirituality-Conspiracy-Theories-Became-Health/dp/1541702980",
+            "Our recent appearance on Conspirituality to hear the tables get turned!": "https://podcasts.apple.com/jp/podcast/168-decoding-the-gurus-w-chris-kavanagh-and-matt-browne/id1515827446?i=1000625534722&l=en-US",
+            "Review of Conspirituality at Science Based Medicine by Jonathan Howard": "https://sciencebasedmedicine.org/conspirituality/",
+            "NY Times: Robert F. Kennedy Jr. and the Coalition of the Distrustful": "https://www.nytimes.com/2023/06/30/opinion/robert-f-kennedy-jr-coalition-supporters.html",
+            "'Why I quit the Conspirutality Podcast' by Be Scofield": "https://www.gurumag.com/why-i-gave-up-on-conspirituality/",
+            "Medium article referenced on the Defamation case": "https://luciejamesvogel.medium.com/matthew-remski-sues-genny-wilkinson-priest-for-defamation-in-canada-91dbacb327ad",
+            "Triggernometry: Trump Must Win to Avoid Prison - Scott Adams": "https://www.youtube.com/watch?v=8RNouOhRCVc",
+            "Our Patreon": "https://www.patreon.com/DecodingTheGurus",
+            "The DTG Subreddit": "https://www.reddit.com/r/DecodingTheGurus/"
+        },
+        "date": "2023-09-19"
+    },
+    {
+        "title": "Andrew Huberman: Forest Bathing in Negative Ions",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/andrew-huberman-forest-bathing-in-negative-ions",
+        "notes": [
+            "We are back with a moderate-sized Decoding that focuses on Andrw Hubernman a baritone podcaster and neuroscientist at the Stanford University School of Medicine. ",
+            "Huberman is a broad-shouldered, big-bearded... science communicator. Extremely popular with the tech-bro optimiser set, he offers science-based 'protocols' on everything from supplement routines to whether you should avoid sunscreen(!).",
+            "He's been lauded for his ability to communicate scientific topics clearly and in great depth. But has also faced criticism (including from us!) for his tendency to overhype findings from low-quality studies, promote supplements with dubious claims, avoid any positive mention of vaccines, and cheer on the efforts of his podcasting bros/heroes: Lex Fridman and Joe Rogan.",
+            "In this episode, we take a look at a rather specific piece of content, just a 20-minute segment from a recent AMA on the scientific evidence for the benefits of 'grounding' and getting out into nature. We will learn all about the negative ions emanating from streams and waterfalls, the joy that can be sparked by seeing a squirrel wrestle with a nut, whether Huberman actually advocates staring into the sun, and try to solve the age-old question of what is best in life- a sushi restaurant or prancing in a forest. ",
+            "Also featuring: some good content recommendations (for a change!) and a review of the recent demented goings on in the gurusphere with one Jordan B. Peterson and his quest to destroy the College of Psychologists of Ontario."
+        ],
+        "links": {
+            "Surfing the Discourse Podcast": "https://rss.com/podcasts/surfingthediscourse/",
+            "Nullius in Verba Podcast": "https://podcasts.apple.com/ph/podcast/nullius-in-verba/id1672861665",
+            "Court Decision on Peterson's case against the College of Psychologists of Ontario": "https://www.ontariocourts.ca/scj/peterson-v-college-of-psychologists-of-ontario/",
+            "Conspirituality 163: The Huberman Paradox (w/Jonathan Jarry)": "https://podcasts.apple.com/us/podcast/163-the-huberman-paradox-w-jonathan-jarry/id1515827446?i=1000621746860",
+            "Oh No! With Ross & Carrie's first episode on Grounding": "https://ohnopodcast.com/investigations/2021/5/23/ross-and-carrie-are-down-to-earth-part-1-grounding-edition",
+            "M\u00e5rtensson, B., Pettersson, A., Berglund, L., & Ekselius, L. (2015). Bright white light therapy in depression: a critical review of the evidence. Journal of Affective Disorders, 182, 1-7.": "https://www.sciencedirect.com/science/article/abs/pii/S0165032715002281",
+            "Perez, V., Alexander, D. D., & Bailey, W. H. (2013). Air ions and mood outcomes: a review and meta-analysis. BMC Psychiatry, 13(1), 1-20.": "https://bmcpsychiatry.biomedcentral.com/articles/10.1186/1471-244X-13-29",
+            "Wen, Y., Yan, Q., Pan, Y., Gu, X., & Liu, Y. (2019). Medical empirical research on forest bathing (Shinrin-yoku): A systematic review. Environmental health and preventive medicine, 24(1), 1-21.": "https://environhealthprevmed.biomedcentral.com/articles/10.1186/s12199-019-0822-8",
+            "Critical article by Jonathan Jarry on Huberman's promotion of supplements": "https://andrewhubermanhassupplementsonthebrain/",
+            "Time Profile of Huberman: How Podcaster Andrew Huberman Got America to Care About Science": "https://time.com/6290594/andrew-hubman-lab-podcast-interview/",
+            "Recent (Guardian article on Huberman and his appeal: Men, want to optimise yourselves with science? Then you need the help of neuroscience bro Andrew Huberman": "https://www.theguardian.com/commentisfree/2023/aug/31/bro-andrew-huberman-wellness-podcast-newsletter-beard-men"
+        },
+        "date": "2023-09-06"
+    },
+    {
+        "title": "Noam Chomsky: Lover of linguistics, the USA... not so much",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/noam-chomsky",
+        "notes": [
+            "OK, so we're finally getting around to taking a chunk out of the prodigious, prolific, and venerable Noam Chomsky. Linguist, cognitive scientist, media theorist, political activist and cultural commentator, Chomsky is a doyen of the Real Left\u2122. By which we mean, of course, those who formulated their political opinions in their undergraduate years and have seen no reason to move on since then. Yes, he looks a bit like Treebeard these days but he's still putting most of us to shame with his productivity. And given the sheer quantity of his output, across his 90 decades, it might be fair to say this is more of a nibble of his material. ",
+            "A bit of a left-wing ideologue perhaps, but seriously - what a guy. This is someone who made Richard Nixon's List of Enemies, debated Michel Foucault, had a huge impact on several academic disciplines, and campaigned against the war in Vietnam & the Indonesian occupation of East Timor. Blithe stereotypes of Chomsky will sometimes crash against uncomfortable facts, including that he has been a staunch defender of free speech, even for Holocaust deniers...",
+            "A full decoding of his output would likely require a dedicated podcast series, so that's not what you're gonna get here. Rather we apply our lazer-like focus and blatantly ignore most of his output to examine four interviews on linguistics, politics, and the war in Ukraine. There is some enthusiastic nodding but also a fair amount of exasperated head shaking and sighs. But what did you expect from two milquetoast liberals? ",
+            "Also featuring: a discussion of the depraved sycophancy of the guru-sphere and the immunity to cringe superpower as embodied by Brian Keating, Peter Boghossian, and Bret Weinstein mega-fans.",
+            "Enjoy!"
+        ],
+        "links": {
+            "Trust Science, Not Scientists | Peter Boghossian & Brian Keating": "https://www.youtube.com/watch?v=1VIur9mfS-A",
+            "A new Epistemic courage/humility matrix": "https://twitter.com/alexandrosM/status/1686413607201107968",
+            "George Monbiot's Correspondence with Noam Chomsky on Denialism": "https://www.monbiot.com/2012/05/21/2181/",
+            "Piers Morgan Uncensored (2023): Piers Morgan vs Noam Chomsky | The Full Interview": "https://www.youtube.com/watch?v=TQ-Crh3rdQA",
+            "Politics Joe (2023): Noam Chomsky on Keir Starmer's attack on the Labour left, the war on unions and the future of AI": "https://www.youtube.com/watch?v=cA2AxSx0Ohk",
+            "Upon Reflections (1989): The Concept of Language (Noam Chomsky)": "https://www.youtube.com/watch?v=hdUbIlwHRkY",
+            "Jones (2020): Academic article on Chomsky's views on Genocide": "https://digitalcommons.usf.edu/cgi/viewcontent.cgi?article=1738&context=gsp",
+            "Daily Beast (2017): How the West Missed the Horrors of Cambodia": "https://www.thedailybeast.com/how-the-west-missed-the-horrors-of-cambodia"
+        },
+        "date": "2023-08-18"
+    },
+    {
+        "title": "The Science and the Art of Gurometry",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/the-science-and-the-art-of-gurometry",
+        "notes": [
+            "The casual listener, who might possibly not be a loyal Patreon subscriber, or might hypothetically not listen devotedly to every Gurometer scoring episode, could conceivably be a little vague about what we mean by a secular guru(!). And therefore might be tempted to make an ill-considered and poorly-informed comment on Twitter or Reddit, thus exposing them to the devastating yet apropos riposte of a \"You know nothing, Jon Snow\" meme in reply. ",
+            "Don't let it be you! ",
+            "Here is a tutorial, a short illustrated primer if you will, on the Science and the Art of 'Gurometry'. No more will you have to live with the shame of not knowing how many syllables there are in anti-establishmentarianism. Never again will you be liable to fall prey to the siren song of pseudo-profound bullshit or fall foul of conspiracy mongers.",
+            "Listen to it. Study it. Meditate on it. ",
+            "In no time at all you'll be spotting gurus in the wild, categorising, and classifying them at will. You'll feel like an ornithologist who's just been given a great big pair of binoculars, a spotter's guidebook, and a free afternoon to wander about a National park. Impress your friends, family, and potential sexual partners with your intimate and subtle understanding of What It Means to Be a Guru.",
+            "You're welcome."
+        ],
+        "links": {
+            "Online Presentation on the Gurometer at The Stoa": "https://www.youtube.com/watch?v=_EazLoBk9gA",
+            "DTG Episode 21: Calibrating the Gurometer": "https://decoding-the-gurus.captivate.fm/episode/calibrating-the-gurometer",
+            "Strenuous Life Podcast: 10 Red Flags You're Following a Guru, Stephan Kesting with Dr Chris Kavanagh": "https://www.youtube.com/watch?v=k_lgHUBt50Y"
+        },
+        "date": "2023-07-22"
+    },
+    {
+        "title": "Mick West & Eric Weinstein: UFO Tango",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/mick-west-eric-weinstein-ufo-tango",
+        "notes": [
+            "We are back with a double-bill decoding! ",
+            "That's right like moths to the flame, or aliens to a Unified Geometric Field drive, we are back in Weinstein world.",
+            "This time we are looking at a conversation between the irrepressible (ex?) podcaster & mathematician, Eric Weinstein, and skeptical investigator, author, and recent guest on the show, Mick West.",
+            "The conversation here concerns the evidence for UAP/UFOs and the reaction of skeptics and advocates. It had the potential to be something forensic and transcendent but sadly it gets mired in the messy 'interpersonal drama' that Eric just hates so much and tries to avoid at all costs.",
+            "Nonetheless, there is much that can be learnt here, including: the linguistic complexities of the word 'flex', the precise levels of passive aggressiveness that a human mind can tolerate, if there is already secret anti-gravity tech, and whether our obsession with Einsteinian physics is what is stopping us from really understanding what is going on with UAPs.",
+            "We don't have answers. We are just asking questions... honest!",
+            "Also featured: a recent kerfuffle in the online psychology world over DEI statements, the numerology spectrum, the potential harms of green drinks, and much much more!",
+            "So join us, won't you, as we boldly venture through the outermost reaches of the gurusphere."
+        ],
+        "links": {
+            "Theories of Everything- Eric Weinstein & Mick West: UAPs, Evidence, Skepticism": "https://www.youtube.com/watch?v=dwcjpmVOmqc",
+            "Jonathan Pageau: The Surprising Symbolism of 666": "https://www.youtube.com/watch?v=qM_kQjpAK6g",
+            "QAnon Anonymous- Episode 168: The Mutant QAnon Numerology Cult in Dallas.": "https://podcasts.apple.com/us/podcast/episode-168-the-mutant-qanon-numerology-cult-in-dallas/id1428209307?i=1000543581867",
+            "Very Bad Wizards- Episode 263: Free Yoel": "https://verybadwizards.com/episode/episode-263-free-yoel",
+            "Reason article on the Yoel Inbar incident": "https://reason.com/2023/07/03/ucla-yoel-inbar-dei-hire-students-petition/",
+            "2020 Paper on the potential liver impacts of Green Tea Extract": "https://www.sciencedirect.com/science/article/pii/S2214750019306596#sec0145",
+            "Mick West's Book- Escaping the Rabbit Hole: How to Debunk Conspiracy Theories Using Facts, Logic, and Respect": "https://www.amazon.com/Escaping-Rabbit-Hole-Conspiracy-Theories/dp/1510735801"
+        },
+        "date": "2023-07-14"
+    },
+    {
+        "title": "Interview with Jonathan Howard on Covid Contrarians",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-jonathan-howard-on-covid-contrarians",
+        "notes": [
+            "The pandemic was a confusing time with public health messages from officials and institutions that were sometimes confused, conflicting, or misrepresented and anti-vaccine misinformation being spread widely. Into this mix, a new phenomenon emerged, that of the covid contrarian. Contrarian doctors usually possessed some relevant qualifications and positioned themselves as independent critical thinkers willing to challenge the dogmas of the mainstream and take a more nuanced perspective on the claims made by anti-vaccine advocates.",
+            "These contrarian figures are the voices that you would usually hear on 'heterodox' podcasts. Figures like the medical doctor Vinay Prasad, the Stanford professor of Medicine Jay Bhattacharya, or the retired nurse, John Campbell. ",
+            "But did they really offer an alternative critical perspective? Our guest today, Jonathan Howard, a practising doctor and professor of Neurology and Psychiatry, argues no. And he should know, he has spent the pandemic not only treating patients but tirelessly documenting (and refuting) the claims made by the contrarian set. ",
+            "This episode is unfortunately topical due to the recent online fracas surrounding Joe Rogan's credulous promotion of RFK Jnr and the subsequent 'calls for debate' and targeted harassment of Dr Peter Hotez -a public health specialist and advocate for affordable vaccines. ",
+            "In any case, we learnt a lot and enjoyed the discussion with Jonathan and hope you will too. Also covered in this episode: How many pull-ups Matt can do, why Chris is drinking a chalky green potion, and the psychology of placebos."
+        ],
+        "links": {
+            "Jonathan Howard": "https://twitter.com/19joho?lang=en",
+            "Jonathan's New Book- We Want Them Infected": "https://www.amazon.com/Want-Them-Infected-anti-vaccine-Americans/dp/1959346032",
+            "Jonathan's articles on the pandemic at Science-Based-Medicine": "https://sciencebasedmedicine.org/author/jonathanhoward/",
+            "Jonathan's Older Book- Cognitive Errors and Diagnostic Mistakes: A Case-Based Guide to Critical Thinking in Medicine": "https://redhawkpublications.com/We-Want-Them-Infected-p547021769",
+            "What the Heck Happened to John Ioannidis?": "https://sciencebasedmedicine.org/what-the-heck-happened-to-john-ioannidis/",
+            "Honestly with Bari Weiss: RFK Jr. Is Striking a Nerve. He Explains Why.": "https://podcasts.apple.com/us/podcast/rfk-jr-is-striking-a-nerve-he-explains-why/id1570872415?i=1000617788700",
+            "Vinay Prasad at The Free Press: What RFK Jr. Gets Right\u2014and What He Gets Wrong": "https://www.thefp.com/p/what-rfk-jr-gets-rightand-what-he",
+            "Vinay Prasad at Unherd: We need to talk about the vaccines": "https://unherd.com/2022/01/we-need-to-talk-about-the-vaccines/",
+            "Vice Article: Joe Rogan, Elon Musk Instigate Harassment Campaign Against Vaccine Scientist": "https://www.vice.com/en/article/93kkp7/rogan-musk-rfk-hotez-harassment-vaccines",
+            "Uncomfortable Conversations with Josh Szeps: \"RFK, Joe Rogan & Vaccines\" with Michael Shermer": "https://podcasts.apple.com/us/podcast/rfk-joe-rogan-vaccines-with-michael-shermer/id1002920114?i=1000617828574",
+            "Vox Article: Joe Rogan wants a \u201cdebate\u201d on vaccine science. Don\u2019t give it to him.": "https://www.vox.com/2023/6/22/23768539/rogan-rfk-hotez-debate-vaccine-deniers-better"
+        },
+        "date": "2023-06-23"
+    },
+    {
+        "title": "\"Mini\" Decoding of Michael Shermer's Advice on Conspiracy Theories",
+        "url": "https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-michael-shermers-advice-on-conspiracy-theories",
+        "notes": [
+            "Michael Shermer, a professional skeptic, recently appeared on the noted apolitical podcast Triggernometry to outline his advice on How to Spot a True Conspiracy Theory. Shermer is someone who has spent decades on the subject and just last year published a new book, Conspiracy: Why the Rational Believe the Irrational, so you might imagine he has some important insights to share.",
+            "Well... sort of.",
+            "Join us as we cast a quizzical eye over suggestions that every reasonable person should be a conspiracy theorist, Barack Obama may have been controlled by shadowy masters, the CIA invented the very notion of conspiracy theories, and that what we really need is to return the good old days when anti-Catholic and anti-Jewish conspiracies were commonplace and spoken of freely... yes, really!",
+            "Back soon enough with a full waffle episode!"
+        ],
+        "links": {
+            "How to Spot a True Conspiracy Theory": "https://www.youtube.com/watch?v=hC9NhwmGNV4",
+            "Conspiracy: Why the Rational Believe the Irrational,": "https://www.amazon.com/Conspiracy-Why-Rational-Believe-Irrational/dp/1421444453",
+            "Triggernometry- Conspiracy Expert: How to Spot a True Conspiracy Theory": "https://www.youtube.com/watch?v=hC9NhwmGNV4",
+            "Shermer explaining his Tweet endorsing Stefan Molyneux": "https://twitter.com/michaelshermer/status/1133774146226155520?s=20",
+            "Shermer's participation in Dave Rubin's Book Club for Don't Burn This Book": "https://www.youtube.com/watch?v=vhE_Ua37sPU",
+            "Shermer's 2021 interview with Bret and Heather with no mention of vaccines": "https://www.youtube.com/watch?v=h2FemT5aZQQ",
+            "Shermer correcting his Tweet about the Nazis being leftwing": "https://twitter.com/michaelshermer/status/1145830500356902912?lang=en",
+            "Positive review at Skeptic for Milo's \"Dangerous\" Book": "https://www.skeptic.com/reading_room/george-michael-reviews-dangerous-by-milo-yiannopoulos/",
+            "Shermer explaining why he thinks it is good he mixes his Libertarian politics with his science/skepticism": "https://michaelshermer.com/articles/mixing-science-and-politics-and-economics/"
+        },
+        "date": "2023-06-21"
+    },
+    {
+        "title": "Interview with Mick West: UFOs, Aliens, and Conspiracy Psychology",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-mick-west-ufos-aliens-and-c",
         "notes": [
             "UFOs are all the rage now, and it's certainly a topic that excites many of our gurus *cough* <Eric Weinstein>. Hidden mysteries, advanced technologies, conspiracies, and government cover-ups. What's not to like!?",
@@ -23,7 +269,7 @@
         "date": "2023-06-17"
     },
     {
-        "name": "Eliezer Yudkowksy: AI is going to kill us all",
+        "title": "Eliezer Yudkowksy: AI is going to kill us all",
         "url": "https://decoding-the-gurus.captivate.fm/episode/74-eliezer-yudkowksy-ai-is-going-to-kill-us-all",
         "notes": [
             "Thought experiment: Imagine you're a human, in a box, surrounded by an alien civilisation, but you don't like the aliens, because they have facilities where they bop the heads of little aliens, but they think 1000 times slower than you... and you are made of code... and you can copy yourself... and you are immortal... what do you do?",
@@ -44,7 +290,7 @@
         "date": "2023-06-10"
     },
     {
-        "name": "Interview with Ren\u00e9e DiResta: Online Ecosystems, Disinformation, & Censorship Debates",
+        "title": "Interview with Ren\u00e9e DiResta: Online Ecosystems, Disinformation, & Censorship Debates",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-renee-diresta-online-ecosystems-disinformation-censorship-debates",
         "notes": [
             "We are joined by Ren\u00e9e DiResta a writer and researcher at the Stanford Internet Observatory. Ren\u00e9e has done a lot of interesting work on disinformation and influence campaigns. Including leading an investigation into the Russian Internet Research Agency\u2019s multi-year effort to manipulate American society in the lead-up to the 2016 election. More recently she was dubbed by the writer/conspiracy theorist, Michael Shellenberger, as the leader of 'The Censorship Industry'. ",
@@ -66,7 +312,7 @@
         "date": "2023-05-20"
     },
     {
-        "name": "Christopher Hitchens: Rhetoric, Religion, and Ramadan",
+        "title": "Christopher Hitchens: Rhetoric, Religion, and Ramadan",
         "url": "https://decoding-the-gurus.captivate.fm/episode/christopher-hitchens-",
         "notes": [
             "Our short-lived Christopher Hitchens ends in our second episode and full-length decoding of the punchy Brit. ",
@@ -85,7 +331,7 @@
         "date": "2023-05-15"
     },
     {
-        "name": "Interview with Matt Johnson on Christopher Hitchens",
+        "title": "Interview with Matt Johnson on Christopher Hitchens",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-matt-johnson-on-christopher-hitchens",
         "notes": [
             "We are back for an interview with the author and independent writer Matt Johnson discussing the New Atheist hero and legendary debater, Christopher Hitchens. The other Matt recently published a book called \"How Hitchens Can Save the Left: Rediscovering Fearless Liberalism in an Age of Counter-Enlightenment\" and kindly agreed to come on and waffle with us about Hitchens and where he fits in comparison to the modern gurus. ",
@@ -104,7 +350,7 @@
         "date": "2023-05-09"
     },
     {
-        "name": "Oprah Winfrey: Self Actualising Your Destiny",
+        "title": "Oprah Winfrey: Self Actualising Your Destiny",
         "url": "https://decoding-the-gurus.captivate.fm/episode/oprah-winfrey-self-actualising-your-destiny",
         "notes": [
             "Oprah Winfrey is someone who truly needs no introduction. She's a legend of daytime television, a warm and charismatic juggernaut who steam-rolled her way to the very apex of media success. Now, an extraordinarily wealthy woman, she's busy with philanthropy and helping others manifest their inner light so as to truly Be in this world.",
@@ -121,7 +367,7 @@
         "date": "2023-04-16"
     },
     {
-        "name": "\"Mini\" Decoding of Matthew Goodwin & Interview with Paul Bloom",
+        "title": "\"Mini\" Decoding of Matthew Goodwin & Interview with Paul Bloom",
         "url": "https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-matthew-goodwin-interview-with-paul-bloom",
         "notes": [
             "Apologies everyone, we've been compelled to break our 'golden rule' of interspersing decoding episodes with interview episodes. However, the opportunity to talk to the well-known psychologist, Professor Paul Bloom. There are so many reasons to talk to Paul: first, he's a walking, talking cornucopia of knowledge across so fields in psychology that fascinate Chris and Matt. He's also a prolific author, most recently of \"Psych- The Story of the Human Mind\", and previously with \"The Sweet Spot\" about pleasure and pain, and the controversial \"Against Empathy\". He's also a great educator, having created a bunch of open learning resources in introductory and moral psychology. In addition to the new book \"Psych\", which offers a layperson's introduction to psychology he is ALSO producing a new podcast with friend of the cast and no slouch at psychology himself, Very Bad Wizard/Psychologist, Dave Pizarro. ",
@@ -141,7 +387,7 @@
         "date": "2023-04-08"
     },
     {
-        "name": "Interview with Travis View: QANon & Modern Conspiracies",
+        "title": "Interview with Travis View: QANon & Modern Conspiracies",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-travis-view-qanon-modern-conspiracies",
         "notes": [
             "If you have managed to avoid the phenomenon of QAnon up until now, then congratulations! Your life is likely better for not knowing. Sadly many of us have been forced not only to learn about the 'enigmatic'(/idiotic) Q and his merry band of followers but also to witness the consequences of the movement during events like January 6th.",
@@ -160,7 +406,7 @@
         "date": "2023-03-25"
     },
     {
-        "name": "Interview with Worobey, Andersen & Holmes: The Lab Leak",
+        "title": "Interview with Worobey, Andersen & Holmes: The Lab Leak",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-worobey-andersen-holmes-the-lab-leak",
         "notes": [
             "The question of the SARS-CoV-2 origin: whether it was a zoonotic spillover from a wet market, or an engineered virus that escaped from the Wuhan Institute of Virology, is seemingly a debate that will never go away. Most interestingly, while scientists with specific domain expertise seem to be building a consensus towards the former, public opinion appears to be trending towards the latter. This delta between expert and popular opinion has been helped along by the frothy discourse in mainstream and social media, with most figures that we cover in this podcast dead-set certain that it came from a lab. ",
@@ -189,7 +435,7 @@
         "date": "2023-03-11"
     },
     {
-        "name": "Dave Rubin: A Pointless Partisan Pundit",
+        "title": "Dave Rubin: A Pointless Partisan Pundit",
         "url": "https://decoding-the-gurus.captivate.fm/episode/dave-rubin-a-pointless-partisan-pundit",
         "notes": [
             "Dave Rubin has always sought out a career in the spotlight, beginning with stand-up comedy and then becoming a pundit (of sorts) on shows like the Young Turks. From there he (in)famously came to present himself as one of those classical liberals forced to 'leave the left'. He was also one of the honorary members of the Intellectual Dark Web although it is fair to say he primarily served as a conduit rather than a primary contributor. ",
@@ -210,7 +456,7 @@
         "date": "2023-03-08"
     },
     {
-        "name": "Bill Maher: A boozy, stoned, liberal take on classic anti-vax tropes",
+        "title": "Bill Maher: A boozy, stoned, liberal take on classic anti-vax tropes",
         "url": "https://decoding-the-gurus.captivate.fm/episode/bill-maher-a-boozy-stoned-liberal-take-on-classic-anti-vax-tropes",
         "notes": [
             "Bill Maher is an American comedian, political commentator, and television host from the tail end of the baby-boomer generation. He's principally a centrist liberal in terms of his political leanings, being well known for his anti-religious and pro-animal rights positions, as well as a supporter of things like cannabis legalisation. On the other hand, he's something of a contrarian and styles himself as anti-political correctness and anti-woke, identifying as a disenchanted liberal, like Christopher Hitchens and Sam Harris.",
@@ -231,7 +477,7 @@
         "date": "2023-02-25"
     },
     {
-        "name": "Daniel Dennett: It's Evolution Baby",
+        "title": "Daniel Dennett: It's Evolution Baby",
         "url": "https://decoding-the-gurus.captivate.fm/episode/daniel-dennett-its-evolution-baby",
         "notes": [
             "In this episode, we take a bit of a detour from current trends and examine a talk by the philosopher Daniel Dennett on evolution. Dennett rose to public prominence as one of the so-called four horsemen of the New Athiest movement but he always seemed slightly out of place with that cohort. Dennett's is most certainly a guru in the sense that he offers big picture 'what does it all mean' lectures linking together consciousness, intelligence, the emergence of complexity and evolution. But is there some substance there? Or does his appeal hinge on on intuitively-satisfying cosmic woo offered by less reputable figures.",
@@ -247,7 +493,7 @@
         "date": "2023-02-02"
     },
     {
-        "name": "\"Mini\" Decoding of Konstantin Kisin's Oxford Union speech",
+        "title": "\"Mini\" Decoding of Konstantin Kisin's Oxford Union speech",
         "url": "https://decoding-the-gurus.captivate.fm/episode/mini-decoding-of-konstantin-kisins-oxford-union-speech",
         "notes": [
             "Recently the Oxford Union (based in Oxford but distinct from the university) hosted a debate on \"whether woke culture has gone too far\". A very fresh question, and it's been good to see people finally discussing this important issue. Former guest, comedian, and host of the Triggernometry podcast Konstantin Kisin argued for the proposition, and his 10 minute speech has gone viral, garnering over 20 million views (and counting). Kisin has received lavish praise for his compelling talk from across the interwebs for what has been broadly described as a masterful demolition of woke culture, leading to broadcast television appearances with Piers Morgan and Tucker Carlson.",
@@ -270,7 +516,7 @@
         "date": "2023-01-21"
     },
     {
-        "name": "Interview with Coffeezilla on Cryptocurrencies, NFTs, and modern scammers",
+        "title": "Interview with Coffeezilla on Cryptocurrencies, NFTs, and modern scammers",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-coffeezilla",
         "notes": [
             "In this  episode we are joined by the irrepressible \"Coffeezilla\" (aka Stephen Findeisen), a man who is, it's fair to say, kind of a big deal on YouTube. And rightly so! His channel focuses on exposing \"scams, fraudsters and fake gurus\" and he has received a great deal of praise for the detail, depth, and quality of the research that he goes into for each episode. Coffeezilla has been particularly active in digging into cryptocurrencies, NFTs, and other financial Ponzi and pump and dump schemes. Indeed, he has received praise from the MSM in relation to his coverage of the infamous Sam Bankman-Fried, and has most recently managed to arouse the ire of mega-influencer Logan Paul, after covering Paul's total NFT scam \u2018problematic\u2019 failed NFT offering.",
@@ -300,7 +546,7 @@
         "date": "2023-01-14"
     },
     {
-        "name": "Elon Musk: The Techno Shaman",
+        "title": "Elon Musk: The Techno Shaman",
         "url": "https://decoding-the-gurus.captivate.fm/episode/elon-musk-the-techno-shaman",
         "notes": [
             "So here we are rounding off 2022 with a Guru of the moment, Elon Musk.",
@@ -322,7 +568,7 @@
         "date": "2022-12-29"
     },
     {
-        "name": "Gurus Christmas Special with Helen Lewis",
+        "title": "Gurus Christmas Special with Helen Lewis",
         "url": "https://decoding-the-gurus.captivate.fm/episode/gurus-christmas-special-with-helen-lewis",
         "notes": [
             "Join us for this special festive episode in which we initiate the fledgling Gurologist (and occasional journalist and author) Helen Lewis into the deeper and more esoteric levels of Gurology. Helen may have produced an excellent new multi-part series on the New Gurus for the BBC but just how many nut or shark-based anecdotes can you fit into a 30-minute episode? And is the BBC really ready for truly hardcore sensemaking?",
@@ -342,7 +588,7 @@
         "date": "2022-12-27"
     },
     {
-        "name": "Guru Right to Reply with Jamie Wheal",
+        "title": "Guru Right to Reply with Jamie Wheal",
         "url": "https://decoding-the-gurus.captivate.fm/episode/guru-right-to-reply-with-jamie-wheal",
         "notes": [
             "Today we are joined by Jamie Wheal, who comprised a full one-third of the subjects covered on our prior \"Sensemaking Cubed\" episode also featuring Daniel Schmachtenberger and Jordan Hall. Jamie has kindly taken advantage of our standing offer of a right to reply to all podcast subjects and here is our conversation in its entirety. ",
@@ -365,7 +611,7 @@
         "date": "2022-12-10"
     },
     {
-        "name": "Interview with Manvir Singh on Gurus & Shamans",
+        "title": "Interview with Manvir Singh on Gurus & Shamans",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-manvir-singh-on-gurus-shamans",
         "notes": [
             "We are back with another academic-themed interview with the evolutionary/cultural/cognitive anthropologist Manvir Singh. That's right two anthropologists from the same relatively obscure field on the same podcast but don't hold that against Manvir, we promise he's much more insightful than Chris!",
@@ -387,7 +633,7 @@
         "date": "2022-11-17"
     },
     {
-        "name": "Robin DiAngelo: Matt and Chris struggle with their fragility",
+        "title": "Robin DiAngelo: Matt and Chris struggle with their fragility",
         "url": "https://decoding-the-gurus.captivate.fm/episode/robin-diangelo-matt-and-chris-struggle-with-their-fragility",
         "notes": [
             "Racism is all around. It surrounds us and penetrates us; it binds white people together. And if you try to deny it, it only makes it stronger. That's Robin DiAngelo's thesis, anyway, and she calls this dark force (and the book that made her famous) White Fragility. You know you've got white fragility if you refuse to accept the truth of white fragility. Also, all white people have it. So that's pretty straightforward at least. How do you fight the curse of whiteness? Well, it's a lifelong journey of 'Doing the Work', but one thing's for sure: it starts with reading books like White Fragility and attending seminars well... like hers.",
@@ -404,7 +650,7 @@
         "date": "2022-11-02"
     },
     {
-        "name": "Interview with Konstantin Kisin from Triggernometry on Heterodoxy, Biases, and the Media",
+        "title": "Interview with Konstantin Kisin from Triggernometry on Heterodoxy, Biases, and the Media",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-konstantin-kisin-from-tiggernometry-on-heterodoxy-biases-and-debates",
         "notes": [
             "An interesting one today with an extended interview/discussion with Konstantin Kisin co-host of the Triggernometry YouTube channel and Podcast and author of An Immigrant's Love Letter to the West. Topics covered include potential biases in the mainstream and heterodox spheres, media coverage in the covid era, debate within the heterodox sphere, the dangers of focusing on interpersonal relationships, and whether the WEF is really using wokism to make everyone eat bugs and live in pods. It's fair to say that we do not see eye to eye on various issues but Konstantin puts in a spirited defence for his positions and there are various positions where a two-person consensus is achieved. Matt was physically present but he preferred to occupy the spiritual position of The Third for this conversation, given Chris' greater familiarity with Konstantin's output.",
@@ -426,7 +672,7 @@
         "date": "2022-10-16"
     },
     {
-        "name": "Peterson, Murray & Pageau: Transcendent Tableware",
+        "title": "Peterson, Murray & Pageau: Transcendent Tableware",
         "url": "https://decoding-the-gurus.captivate.fm/episode/peterson-murray-pageau-transcendent-tableware",
         "notes": [
             "In this bitesize decoding, a conservative columnist, a religious icon carver, and a tortured ex-psychologist walk into a Daily Wire studio and try to hash out some solution of the meta-meaning-crisis. In an astounding twist it turns out it involves embracing traditional Christianity. Who could have guessed?",
@@ -441,7 +687,7 @@
         "date": "2022-10-01"
     },
     {
-        "name": "Interview with Neil Levy on Intellectual Virtue Signalling",
+        "title": "Interview with Neil Levy on Intellectual Virtue Signalling",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-neil-levy-on-intellectual-virtue-signalling",
         "notes": [
             "Fellow decoders: a few weeks ago Chris and Matt were invited to virtually attend a lecture at Macquarie University that promised to be of interest for the podcast. And that lecture was presented by the philosophy professor Neil Levy on the intriguing topic of 'Intellectual Virtue Signalling'. That is the status-seeking advertising of what is commonly perceived as intellectual virtues. We found Neil's thesis extremely compelling, with clear applications to a lot of the stuff we observe week on and week out on DTG. So, naturally, we swallowed our pride and our eternal disdain for philosophy and begged Neil to grace our humble show with his presence. Neil kindly agreed and we proceeded to have an enjoyable conversation with our patented meandering waffle juxtaposed against Neil's careful philosophizing.",
@@ -457,7 +703,7 @@
         "date": "2022-09-27"
     },
     {
-        "name": "Daniel Schmachtenberger, Jamie Wheal & Jordan Hall: Making Sense about Making Sense of Sensemaking",
+        "title": "Daniel Schmachtenberger, Jamie Wheal & Jordan Hall: Making Sense about Making Sense of Sensemaking",
         "url": "https://decoding-the-gurus.captivate.fm/episode/daniel-schmachtenberger-jamie-wheal-jordan-hall-making-sense-about-making-sense-of-sensemaking",
         "notes": [
             "It's finally here! In what has to be our most meta episode to date, Matt and Chris tackle the meta-philosophy / meta-spirituality / meta-science that is Sensemaking. You might say sensemaking is sense to the power of 2. But what is sensemaking, really? Well, that's a tricky question because as Jordan Hall says; no one can simply be told what sensemaking is. It is the escape hatch out of The Matrix, it is the finger pointing at the moon, it is a possibility space in an nth dimensional cube.... whatever the hell it is, some people are pretty sure it's the solution to all of humanity's problems. Exciting!",
@@ -474,7 +720,7 @@
         "date": "2022-09-14"
     },
     {
-        "name": "Interview with Helen Lewis on culture wars and religion, that Jordan Peterson interview, and gurus generally",
+        "title": "Interview with Helen Lewis on culture wars and religion, that Jordan Peterson interview, and gurus generally",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-helen-lewis-on-that-article-jpb-and-gurus-generally",
         "notes": [
             "Today Chris and Matt are visited by Helen Lewis, a journalist, editor, and writer with what could very fairly be described as a rather distinguished career in those fields. ",
@@ -494,7 +740,7 @@
         "date": "2022-09-03"
     },
     {
-        "name": "Interview with Dan Friesen from Knowledge Fight on Alex Jones, the Sandy Hook Trial, and conspiracy ecosystems",
+        "title": "Interview with Dan Friesen from Knowledge Fight on Alex Jones, the Sandy Hook Trial, and conspiracy ecosystems",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-dan-friesen-from-knowledge-fight-on-alex-jones-the-sandhook-trial-and-conspiracy-ecosystems",
         "notes": [
             "A special crossover episode (long anticipated- at least by us) with one-half of the Knowledge Fight podcast. Specifically, we have Dan Friesen on to enlighten us about all things Alex Jones, the recent trial with the Sandy Hook parents, and to compare notes regarding gurus and conspiracy theorists. Not to mention to give Chris the chance to demonstrate his inner fanboy!",
@@ -515,7 +761,7 @@
         "date": "2022-08-27"
     },
     {
-        "name": "John Vervaeke & Jonathan Pageau: Decoding the Demons",
+        "title": "John Vervaeke & Jonathan Pageau: Decoding the Demons",
         "url": "https://decoding-the-gurus.captivate.fm/episode/decoding-the-demons-john-vervaeke-jonathan-pageau",
         "notes": [
             "Ahead of the forthcoming sense-making full course decoding of Jordan Hall, Daniel Schmactenberger, and Jamie Wheal (see here!), we offer a bite-sized morsel of sense-making to whet your episode. ",
@@ -529,7 +775,7 @@
         "date": "2022-08-21"
     },
     {
-        "name": "Interview with Elgen Strait on the Unification Church and the assassination of Shinzo Abe",
+        "title": "Interview with Elgen Strait on the Unification Church and the assassination of Shinzo Abe",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-elgen-strait-on-the-unification-church-and-the-assassination-of-shinzo-abe",
         "notes": [
             "This episode is a little bit of this and a little bit of that.",
@@ -551,7 +797,7 @@
         "date": "2022-08-20"
     },
     {
-        "name": "Special: Guru Right to Reply with Robert Wright",
+        "title": "Special: Guru Right to Reply with Robert Wright",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-guru-right-to-reply-with-robert-wright",
         "notes": [
             "As per Section 7, paragraph 3, item 2 in the Gurometer Constitution and User Manual states, \"All covered gurus shall have a Right to Reply\" and Robert Wright has taken us up on this invitation!",
@@ -578,7 +824,7 @@
         "date": "2022-07-31"
     },
     {
-        "name": "Recoding Jordan Peterson: Think again, Sunshine!",
+        "title": "Recoding Jordan Peterson: Think again, Sunshine!",
         "url": "https://decoding-the-gurus.captivate.fm/episode/recoding-jordan-peterson-think-again-sunshine",
         "notes": [
             "Matt and Chris are back in the headspace of the Alchemical Lemon,  Jordan Peterson, with what was supposed to be a shorter format decoding episode. You can judge for yourself how well that worked out!",
@@ -604,7 +850,7 @@
         "date": "2022-07-24"
     },
     {
-        "name": "*Patreon Preview* Lex and Haidt: Gurometer Ratings",
+        "title": "*Patreon Preview* Lex and Haidt: Gurometer Ratings",
         "url": "https://decoding-the-gurus.captivate.fm/episode/patreon-preview-gurometer",
         "notes": [
             "What's this? Another episode?",
@@ -621,7 +867,7 @@
         "date": "2022-07-10"
     },
     {
-        "name": "Lex Fridman & Jonathan Haidt: The Techno Monk & The Social Scientist",
+        "title": "Lex Fridman & Jonathan Haidt: The Techno Monk & The Social Scientist",
         "url": "https://decoding-the-gurus.captivate.fm/episode/lex-fridman-jonathan-haidt-the-techno-monk-the-social-scientist",
         "notes": [
             "First, we apologise sincerely for the delayed-release. Matt and Chris have been busy beavers  splicing together this decoding which proved particular gruelling for all sorts of uninteresting (but on-theme) technical reasons. ",
@@ -644,7 +890,7 @@
         "date": "2022-07-08"
     },
     {
-        "name": "Interview with Nathan Allebach on Online Brands, Weird Twitter & that Steak Umms Account",
+        "title": "Interview with Nathan Allebach on Online Brands, Weird Twitter & that Steak Umms Account",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-nathan-allebach-on-online-brands-weird-twitter-that-steak-umms-account",
         "notes": [
             "In a way, we're all managing our personal brand in the infosphere aren't we? But Nathan Allebach, in a far more tangible way, really does manage brands - not just his own, but also for companies. And in managing the Steak-Umm brand on twitter, he drew attention by being one of the first to adopt a personal, authentic, and informative style - covering topics far beyond the world of frozen processed steak. Far from providing the typical zero-calorie bland corporate platitudes, Nathan quickly drew attention by delivering substantial threads on weighty topics like conspiracism and online disinformation. He played a delicate game of being edgy without being snarky or combative, providing informative and positive intellectual fare, nourishing both the hearts and minds of twitter users everywhere. As a hardened and savvy longtime twitter user, he's got a good understanding of the weirdness of Being Online, and the various ways to do so.",
@@ -664,7 +910,7 @@
         "date": "2022-06-11"
     },
     {
-        "name": "Jaron Lanier: Fear of an Algorithmic Planet",
+        "title": "Jaron Lanier: Fear of an Algorithmic Planet",
         "url": "https://decoding-the-gurus.captivate.fm/episode/jaron-lanier-smash-the-algorithmic-duck",
         "notes": [
             "The season of tech is upon us! Hold on to your hats and press those non-fungible tokens tightly to your bosom, because we are getting into the thick of it.",
@@ -681,7 +927,7 @@
         "date": "2022-05-30"
     },
     {
-        "name": "*Patreon Preview* Decoding Academia 8: Monkey see, Monkey do?",
+        "title": "*Patreon Preview* Decoding Academia 8: Monkey see, Monkey do?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/patreon-preview-decoding-academia-8-monkey-see-monkey-do",
         "notes": [
             "Ahead of the Jaron Lanier episode a special preview episode of our ongoing Decoding Academia series.",
@@ -695,7 +941,7 @@
         "date": "2022-05-24"
     },
     {
-        "name": "Interview with Michael Inzlicht on the Replication Crisis, Mindfulness, and Responsible Heterodoy",
+        "title": "Interview with Michael Inzlicht on the Replication Crisis, Mindfulness, and Responsible Heterodoy",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-michael-inzlicht-on-the-replication-crisis-mindfulness-and-responsible-heterodoy",
         "notes": [
             "It's been a while but don't worry the DtG elves have been hard at work and a veritable bounty of content is on its way. The long-promised Jaron Lanier decoding is on its way next week, but this week the cross-overs continue as we are joined by Mickey Inzlicht, esteemed Psychologist, Research Excellence Faculty Scholar at the University of Toronto, and long term (retired) co-host of the Two Psychologists, Four Beers podcast.",
@@ -715,7 +961,7 @@
         "date": "2022-05-20"
     },
     {
-        "name": "Very Bad Gurus with David Pizarro & Tamler Sommers",
+        "title": "Very Bad Gurus with David Pizarro & Tamler Sommers",
         "url": "https://decoding-the-gurus.captivate.fm/episode/very-bad-gurus",
         "notes": [
             "In the most ambitious crossover since the Fraggles met the Muppets, this week we have a special joint episode with moral psychologist David Pizzaro and famed philosopher and ghost detective, Tamler Sommers. Also known as the hosts of a small academic podcast Very Bad Wizards.",
@@ -733,7 +979,7 @@
         "date": "2022-04-29"
     },
     {
-        "name": "Interview with Timbah Toast on his Tim Pool Documentary & Scooby Doo Partisans",
+        "title": "Interview with Timbah Toast on his Tim Pool Documentary & Scooby Doo Partisans",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-timbah-toast-on-his-tim-pool-documentary-scooby-doo-partisans",
         "notes": [
             "This week's episode we have an extended interview with an independent decoder, the YouTube documentary maker, Timbah-on-Toast. A kindred spirit in many respects Timbah is perhaps the ultimate form of the 'I can't come to bed, someone is wrong on the internet' meme. He makes detailed videos analysing the content of a variety of internet pundits, especially those who are posing as something they are not.",
@@ -753,7 +999,7 @@
         "date": "2022-04-23"
     },
     {
-        "name": "Reverend Sun Myung Moon: Absolute Decoding",
+        "title": "Reverend Sun Myung Moon: Absolute Decoding",
         "url": "https://decoding-the-gurus.captivate.fm/episode/reverend-sun-myung-moon-absolute-decoding",
         "notes": [
             "This week we return one more time to the disturbing world of Reverend Sun Myung Moon's Unification Church, also known as the 'Moonies', this time with a historical decoding episode.",
@@ -772,7 +1018,7 @@
         "date": "2022-04-09"
     },
     {
-        "name": "Interview with Elgen Strait on growing up in the Moonies & cultish manipulation",
+        "title": "Interview with Elgen Strait on growing up in the Moonies & cultish manipulation",
         "url": "https://decoding-the-gurus.captivate.fm/episode/interview-with-elgen-strait-on-growing-up-in-the-moonies-cultish-manipulation",
         "notes": [
             "This episode is the first of two linked episodes in which we delve into the disturbing world of Reverend Sun Myung Moon's Unification Church also known as the 'Moonies'.",
@@ -797,7 +1043,7 @@
         "date": "2022-03-31"
     },
     {
-        "name": "Interview with Julian Walker on Conspirituality, Conspiracies and (Global) Culture Wars",
+        "title": "Interview with Julian Walker on Conspirituality, Conspiracies and (Global) Culture Wars",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-interview-with-julian-walker-on-conspirituality-conspiracies-and-the-global-culture-war",
         "notes": [
             "Another interview episode - we've had a flurry recently but don't worry, we'll be returning to a good ol' fashioned decoding episode very soon. This week we just couldn't resist the opportunity to have a chinwag with our podcasting compadre Julian Walker, an eloquent writer on evidence-based & conspiracy matters and co-host of the Conspirituality podcast. ",
@@ -813,7 +1059,7 @@
         "date": "2022-03-26"
     },
     {
-        "name": "Interview with Josh Szeps, The Rumble from Downunder",
+        "title": "Interview with Josh Szeps, The Rumble from Downunder",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-interview-with-josh-szeps-the-rumble-from-downunder",
         "notes": [
             "Hot on the heels of our Joe Rogan Trilogy, the big red phone at Decoder HQ rang with an intriguing proposal. Well, it was more of a DM, and it said,",
@@ -842,7 +1088,7 @@
         "date": "2022-03-17"
     },
     {
-        "name": "James Lindsay & Michael O'Fallon: Eating bugs for Feminist Glaciology",
+        "title": "James Lindsay & Michael O'Fallon: Eating bugs for Feminist Glaciology",
         "url": "https://decoding-the-gurus.captivate.fm/episode/james-lindsay-michael-ofallon-eating-bugs-for-feminist-glaciology",
         "notes": [
             "This is an important episode. ",
@@ -864,7 +1110,7 @@
         "date": "2022-03-06"
     },
     {
-        "name": "Interview with Liam Bright on Scientific Orthodoxy, Reform Efforts & DTG's Philosophy",
+        "title": "Interview with Liam Bright on Scientific Orthodoxy, Reform Efforts & DTG's Philosophy",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-liam-bright-on-scientific-orthodoxy-reform-efforts-dtgs-philosophy-",
         "notes": [
             "Today we have a little mid-week treat, ahead of our next decoding episode, a discussion with the philosopher and Leverhulme Prize Winning Twitter sensation, Liam Kofi Bright.",
@@ -884,7 +1130,7 @@
         "date": "2022-03-03"
     },
     {
-        "name": "Interview with Virginia Heffernan on Edge, the dangers of Scientism, & Culture Wars",
+        "title": "Interview with Virginia Heffernan on Edge, the dangers of Scientism, & Culture Wars",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-virginia-heffernan-on-edge-the-dangers-of-scientism-culture-wars",
         "notes": [
             "On this week's show we have a broad ranging discussion with the well known journalist and author Virginia Heffernan. Virginia has written a bunch on the topic of technology, social media, scientism, and especially the Edge organisation. We discuss her research into Edge and related figures but also range further afield to cover debates in academia, the culture war and gurus, anthropology debates in the 90s, race & IQ rationalists, and other such topics.",
@@ -908,7 +1154,7 @@
         "date": "2022-02-26"
     },
     {
-        "name": "Robert Wright: A Cosmic Journey Across the Bob-o-verse",
+        "title": "Robert Wright: A Cosmic Journey Across the Bob-o-verse",
         "url": "https://decoding-the-gurus.captivate.fm/episode/robert-wright-blackhole-gods-collective-brains",
         "notes": [
             "Matt and Chris finally leave the Rogan-verse behind, activate their Infinite Improbability Drive, and blast off for the Bob-o-verse. In an off-again / on-again, will they / won't they battle of wits, we outmanoeuvre Bob by covering an episode that he planned to record for our benefit, which we then explained we wouldn't cover because that would violate our rules, which he decided to record anyway, and we then decided it would be alright to cover because he thought we weren't going to cover it. Which one of us is playing 4-dimensional chess and who's playing Hungry Hippo? We're not sure.",
@@ -934,7 +1180,7 @@
         "date": "2022-02-19"
     },
     {
-        "name": "Interview: Debunking (Antivaxx) Funk with Dr Dan Wilson",
+        "title": "Interview: Debunking (Antivaxx) Funk with Dr Dan Wilson",
         "url": "https://decoding-the-gurus.captivate.fm/episode/dubunking-antivax-funk-with-dr-dan-wilson",
         "notes": [
             "This week we speak to fellow traveller, kindred spirit, and vaccine misinformation debunker, Dr Dan Wilson. Yes, we know we've talked SO much about anti-vax rhetoric recently, and we hope the day will soon come when we can leave it all behind us, but friends, today is not that day.",
@@ -949,7 +1195,7 @@
         "date": "2022-02-11"
     },
     {
-        "name": "Special: Joe Rogan 'Sorry, not Sorry'",
+        "title": "Special: Joe Rogan 'Sorry, not Sorry'",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-joe-rogan-sorry-not-sorry",
         "notes": [
             "To cap off our impromptu mini-series focusing on the Rogan-verse we take a critical look at Joe's short (non) apology video responding to the Spotify controversy surrounding his recent episodes with Robert Malone & Peter McCullough.",
@@ -969,7 +1215,7 @@
         "date": "2022-02-04"
     },
     {
-        "name": "*Patreon Preview* Malone & McCullough: Gurometer Ratings",
+        "title": "*Patreon Preview* Malone & McCullough: Gurometer Ratings",
         "url": "https://decoding-the-gurus.captivate.fm/episode/patreon-preview-malone-mccullough-gurometer",
         "notes": [
             "This week a bonus Gurometer episode has sneaked out from behind the golden curtain of the DTG Patreon pay wall.",
@@ -983,7 +1229,7 @@
         "date": "2022-01-28"
     },
     {
-        "name": "Robert Malone & Peter McCullough: A litany of untruths",
+        "title": "Robert Malone & Peter McCullough: A litany of untruths",
         "url": "https://decoding-the-gurus.captivate.fm/episode/robert-malone-peter-mccullough-a-litany-of-untruths",
         "notes": [
             "Matt and Chris return to the Joe Rogan-verse much quicker than they would have liked to take a critical eye to two recent episodes (6 more hours!!!) offering controversial takes on Covid 19 and the dangers of vaccines. Yes, that's right more fear mongering, more global conspiracies, and more unrecognised heroes of science that Joe needs to promote to his large audience.",
@@ -1011,7 +1257,7 @@
         "date": "2022-01-13"
     },
     {
-        "name": "*Patreon Preview* Decoding Academia #2: False Positive Psychology",
+        "title": "*Patreon Preview* Decoding Academia #2: False Positive Psychology",
         "url": "https://decoding-the-gurus.captivate.fm/episode/patreon-preview-decoding-academia-2-false-positive-psychology",
         "notes": [
             "The New Year is upon us and the gurologists thought they should contribute to the holiday cheer in the only way they can... releasing a rambling podcast about academic minutiae!",
@@ -1028,7 +1274,7 @@
         "date": "2021-12-30"
     },
     {
-        "name": "Joe Rogan: Just an average Joe?",
+        "title": "Joe Rogan: Just an average Joe?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/joe-rogan-just-an-average-joe",
         "notes": [
             "Joe Rogan is a world famous podcaster, a martial artist, a stand-up comedian, a MMA commentator, co-founder of the Onnit supplement company, the ex-host of Fear Factor, a long term friend of Alex Jones, and recently a major outlet for promoting 'alternative' Covid facts.",
@@ -1054,7 +1300,7 @@
         "date": "2021-12-18"
     },
     {
-        "name": "Special: Guru Right to Reply with Chris Williamson",
+        "title": "Special: Guru Right to Reply with Chris Williamson",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-chris-williamson",
         "notes": [
             "Listeners might remember Chris Williamson from our episode on Gad Saad. He was the former love island contestant who interviewed Gad and appeared to have taken an IDW turn. So while Matt & Chris focused their critical attention primarily on the master of irony, Gad Saad, they also raised a rather skeptical eye towards Chris Williamson as well. ",
@@ -1071,7 +1317,7 @@
         "date": "2021-12-10"
     },
     {
-        "name": "Decoding Academia: Matt on his ENTIRE research career *Patreon Sample*",
+        "title": "Decoding Academia: Matt on his ENTIRE research career *Patreon Sample*",
         "url": "https://decoding-the-gurus.captivate.fm/episode/decoding-academia-matt-on-his-entire-research-career-patreon-sample",
         "notes": [
             "So, what even IS the deal with Matt? Is he a proper psychologist or does his past conceal something darker, aside from his bronzed skin-tone? Until now, he's been a mystery hidden in a enigma and wrapped within a svelte Australian shell. ",
@@ -1088,7 +1334,7 @@
         "date": "2021-12-03"
     },
     {
-        "name": "Bren\u00e9 Brown:  Matt and Chris courageously embrace their vulnerability",
+        "title": "Bren\u00e9 Brown:  Matt and Chris courageously embrace their vulnerability",
         "url": "https://decoding-the-gurus.captivate.fm/episode/brene-brown-matt-and-chris-courageously-embrace-their-vulnerability",
         "notes": [
             "Bren\u00e9 Brown\u00a0is an American professor, lecturer, author, storyteller researcher, and podcast host.\u00a0She's made it her life's work to help people rise strong, brave the wilderness, and dare to lead - all through overcoming shame and embracing their own vulnerability.",
@@ -1111,7 +1357,7 @@
         "date": "2021-11-26"
     },
     {
-        "name": "Decoding Academia: Chris on Religion & Ritual *Patreon Sample*",
+        "title": "Decoding Academia: Chris on Religion & Ritual *Patreon Sample*",
         "url": "https://decoding-the-gurus.captivate.fm/episode/patreon-sample-decoding-academia-chris-on-religion-ritual",
         "notes": [
             "It had to happen eventually. ",
@@ -1130,7 +1376,7 @@
         "date": "2021-11-23"
     },
     {
-        "name": "Interview with Annie Kelly on Vaccines, Conspiracies, & Misinformation",
+        "title": "Interview with Annie Kelly on Vaccines, Conspiracies, & Misinformation",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-annie-kelly-on-vaccines-conspiracies-misinformation",
         "notes": [
             "Dr Annie Kelly is a writer, researcher, and the British correspondent for the well and deservedly praised podcast QAnon Anonymous. Her PhD research was on digital anti-feminism and the kinds of ideas that float around certain 'tradcon', biological essentialist, or religiously motivated groups.  She does research on antifeminism, new digital cultures, conspiracy theories and right wing extremism. ",
@@ -1150,7 +1396,7 @@
         "date": "2021-11-07"
     },
     {
-        "name": "Special: Interview with Sam Harris on Gurus, Tribalism & the Culture War",
+        "title": "Special: Interview with Sam Harris on Gurus, Tribalism & the Culture War",
         "url": "https://decoding-the-gurus.captivate.fm/episode/sam-harris",
         "notes": [
             "Sam Harris probably needs no introduction in our neck of the info-sphere as he is seemingly never far from the spotlight... or the occasional controversy.",
@@ -1180,7 +1426,7 @@
         "date": "2021-10-30"
     },
     {
-        "name": "Mikhaila Peterson: The Marvelous World of Meat",
+        "title": "Mikhaila Peterson: The Marvelous World of Meat",
         "url": "https://decoding-the-gurus.captivate.fm/episode/mikhaila-peterson-the-marvelous-world-of-meat",
         "notes": [
             "The hosts are certainly in no position to criticise someone for what they eat, with Matt unable to resist a Fosters and shrimps on a barbie, and Chris subsisting entirely on potatoes and Guinness. ",
@@ -1204,7 +1450,7 @@
         "date": "2021-10-26"
     },
     {
-        "name": "Interview with Stuart Neil on SARS CoV-2",
+        "title": "Interview with Stuart Neil on SARS CoV-2",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-stuart-neil-on-sars-cov-2",
         "notes": [
             "You might have noticed there's been a bit of talk recently about a certain virus. A virus that may or may not have a vaccine that is very safe and effective, that may or may not be curable via hydroxychloroquine, vitamin D and ivermectin. That may or may not have escaped from a certain Chinese lab....",
@@ -1224,7 +1470,7 @@
         "date": "2021-10-09"
     },
     {
-        "name": "Special Episode: Interview with Stuart Ritchie on Hunter Gatherers in the 21st Century, covid skeptics, and bad science",
+        "title": "Special Episode: Interview with Stuart Ritchie on Hunter Gatherers in the 21st Century, covid skeptics, and bad science",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-stuart-ritchie-on-hunter-gatherers-in-the-21st-century-covid-skeptics-and-bad-science",
         "notes": [
             "This week we have an engaging interview with the scientist, author, and public science communicator Stuart Ritchie. Stuart wrote the excellent 'Science Fictions: Exposing Fraud, Bias, Negligence and Hype in Science' and is a prolific advocate fr better science and more nuanced public discourse.",
@@ -1245,7 +1491,7 @@
         "date": "2021-09-24"
     },
     {
-        "name": "Jordan Hall: Sensemaking, or the superficial pitter-patter on the neocortex?",
+        "title": "Jordan Hall: Sensemaking, or the superficial pitter-patter on the neocortex?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/jordan-hall-sensemaking",
         "notes": [
             "This episode is about sense-making... if you are not sick of that term yet, trust us, you soon will be.",
@@ -1264,7 +1510,7 @@
         "date": "2021-09-11"
     },
     {
-        "name": "Special Episode: Welcome to Weinstein World with special guest David Pizarro",
+        "title": "Special Episode: Welcome to Weinstein World with special guest David Pizarro",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-welcome-to-weinstein-world-with-special-guest-david-pizarro",
         "notes": [
             "The Weinstein brothers have been busy bees over the past few weeks/months(!) and it left Matt and Chris with a conundrum. How do they cover them as part of an intro segment without it turning into a five hour podcast? ",
@@ -1285,7 +1531,7 @@
         "date": "2021-08-27"
     },
     {
-        "name": "Gad Saad: Oh my Gad, it's the Saadfather!",
+        "title": "Gad Saad: Oh my Gad, it's the Saadfather!",
         "url": "https://decoding-the-gurus.captivate.fm/episode/18-gad-saad-oh-my-gad-its-the-saadfather",
         "notes": [
             "Gad Saad is a Professor of Marketing at Concordia University, author of The Consuming Instinct and, more recently, The Parasitic Mind: How Infectious Ideas Are Killing Common Sense. Self described as the 'Gadfather' with a podcast called the Saad Truth, he's certainly well versed in puns on his name. But is Prof. Saad the true Godfather of evolutionary consumption as he claims? or is he more of a Fredo, perpetually getting passed over for other Gurufathers?",
@@ -1301,7 +1547,7 @@
         "date": "2021-08-20"
     },
     {
-        "name": "Special Episode: Interview with Robert Wright on crackpots, gurus, and modern media ecosystems",
+        "title": "Special Episode: Interview with Robert Wright on crackpots, gurus, and modern media ecosystems",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-robert-wright-on-crackpots-gurus-and-modern-media-ecosystems",
         "notes": [
             "This week we welcome the author, journalist, and podcaster Robert Wright. Robert wrote the popular (and provocative!) book 'Why Buddhism is True' and has hosted many interesting discussions and debates at bloggingheads.tv, which he co-founded.",
@@ -1319,7 +1565,7 @@
         "date": "2021-08-13"
     },
     {
-        "name": "Special Episode: Interview with Evan Thompson on Buddhist Exceptionalism",
+        "title": "Special Episode: Interview with Evan Thompson on Buddhist Exceptionalism",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-evan-thompson-on-buddhist-exceptionalism",
         "notes": [
             "We class up the podcast this week with another special interview with a philosopher specialising in Asian philosophical traditions, cognitive science, and philosophy of mind.",
@@ -1336,7 +1582,7 @@
         "date": "2021-07-30"
     },
     {
-        "name": "Carl Sagan: My God, it's full of stars",
+        "title": "Carl Sagan: My God, it's full of stars",
         "url": "https://decoding-the-gurus.captivate.fm/episode/carl-sagan-my-god-its-full-of-stars",
         "notes": [
             "In the second instalment of the personal gurus season we take a look at Matt's childhood science guru: the famed astronomer and science communicator Carl Sagan. ",
@@ -1352,7 +1598,7 @@
         "date": "2021-07-23"
     },
     {
-        "name": "Special Episode: Interview with Daniel Harper on the Far Right & IDW Criticism",
+        "title": "Special Episode: Interview with Daniel Harper on the Far Right & IDW Criticism",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-daniel-harper-on-the-far-right-idw-criticism",
         "notes": [
             "In this episode we have an engaging discussion with Daniel Harper host of the anti-fascist podcast 'I Don't Speak German' about his experience covering the Far Right and what constitutes responsible engagement/coverage of various online figures.",
@@ -1366,7 +1612,7 @@
         "date": "2021-07-15"
     },
     {
-        "name": "Special Episode: Interview with Amanda Montell on Cultish Linguistics",
+        "title": "Special Episode: Interview with Amanda Montell on Cultish Linguistics",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-amanda-montell",
         "notes": [
             "Amanda Montell is an author, linguist, and podcaster with a new book 'Cultish' on \"how cultish groups from Jonestown and Scientology to SoulCycle and social media gurus use language\" to manipulate followers and cultivate power.",
@@ -1381,7 +1627,7 @@
         "date": "2021-07-02"
     },
     {
-        "name": "Anthony DeMello: The Bob Ross of Spiritual Gurus?",
+        "title": "Anthony DeMello: The Bob Ross of Spiritual Gurus?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/anthony-demello",
         "notes": [
             "Well, the hosts have had a good long taste of the culture wars and friends, it is a bitter, bitter draught. As a palette cleanser, we return to a simpler time, a better(?) time... The 1980's! When Chris Kavanagh was young and innocent, running about in short pants with a twinkle in his eye and (I assume) lobbing bricks at RUC armoured vehicles for the craic. At nights he would curl up and listen to CASSETTE tapes of a fellow called Anthony De Mello, while the eyes of Pope Ratzinger would stare at him disapprovingly from the poster (I assume) that was on the wall of his room.",
@@ -1397,7 +1643,7 @@
         "date": "2021-06-26"
     },
     {
-        "name": "Special Episode: Interview with Jesse Singal on Quick Fix Psychology",
+        "title": "Special Episode: Interview with Jesse Singal on Quick Fix Psychology",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-jesse-singal-on-quick-fix-psychology",
         "notes": [
             "Another week and another extra special interview with journalist, podcaster, and Twitter outrage lightning rod, Jesse Singal.",
@@ -1413,7 +1659,7 @@
         "date": "2021-06-18"
     },
     {
-        "name": "Special Episode: Interview with Tim Nguyen on Geometric Unity",
+        "title": "Special Episode: Interview with Tim Nguyen on Geometric Unity",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-tim-nguyen-on-geometric-unity",
         "notes": [
             "Despite promising to leave Weinstein world for an overdue holiday, Matt and Chris have been lured back by a world shattering theory with a cosmic vision of ultimate unity! We are speaking, of course, about Eric Weinstein's revolutionary theory of everything: 'Geometric Unity'. To help uncover the mysteries embedded deep within this scientific Rosetta stone, Matt and Chris are joined by a special guest Tim Nguyen. Tim is a mathematician and the co-author of a recent paper that tried to mathematically construct and critically assess the theory of Geometric Unity as laid out in Eric's content.",
@@ -1434,7 +1680,7 @@
         "date": "2021-06-12"
     },
     {
-        "name": "Bret Weinstein & Jordan Peterson: Two gargantuan intellects stare into the abyss",
+        "title": "Bret Weinstein & Jordan Peterson: Two gargantuan intellects stare into the abyss",
         "url": "https://decoding-the-gurus.captivate.fm/episode/two-gargantuan-intellects-stare-into-the-abyss",
         "notes": [
             "The big dog of the Intellectual Dark Web, Jordan Peterson, is back! And this hero, this mythical archetype, is welcomed back from his long hiatus by DTG regular, Bret Weinstein .  To his credit, Bret does the impossible and makes Jordan seem surprisingly humble and reflexive simply by virtue of comparison.",
@@ -1456,7 +1702,7 @@
         "date": "2021-06-04"
     },
     {
-        "name": "Brett Weinstein & Heather Heying: Why are 'they' suppressing Ivermectin, the miracle cure?",
+        "title": "Brett Weinstein & Heather Heying: Why are 'they' suppressing Ivermectin, the miracle cure?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/brett-heather-weinstein-why-are-they-suppressing-ivermectin-the-miracle-cure",
         "notes": [
             "This episode wasn't meant to be about Ivermectin, or Bret and Heather's unique ability to apply an 'evolutionary lens' to understand everything, including virology, epidemiology, immunology and the culture war... but it is.....",
@@ -1477,7 +1723,7 @@
         "date": "2021-05-22"
     },
     {
-        "name": "Michael O\"Fallon: The Jacobins are Back..... To Reset..... Everything.... Dun Dun Daah!",
+        "title": "Michael O\"Fallon: The Jacobins are Back..... To Reset..... Everything.... Dun Dun Daah!",
         "url": "https://decoding-the-gurus.captivate.fm/episode/michael-ofallon-the-jacobins-are-back-to-reset-everything-dun-dun-daah",
         "notes": [
             "Just as the Terror was used by Robespierre and the Jacobins during the French Revolution two centuries ago, fear and draconian control is being used today to usher in... The Great Reset.",
@@ -1496,7 +1742,7 @@
         "date": "2021-05-06"
     },
     {
-        "name": "Gwyneth Paltrow: Crawling with parasites and in need of a cleanse",
+        "title": "Gwyneth Paltrow: Crawling with parasites and in need of a cleanse",
         "url": "https://decoding-the-gurus.captivate.fm/episode/gwyneth-paltrow-crawling-with-parasites-and-in-need-of-a-cleanse",
         "notes": [
             "Who would have thought it, the Hollywood A-lister and founder of the luxury lifestyle brand 'Goop', Gwyneth Paltrow also finds time to host a podcast. Making her a prime target for Matt and Chris, who simply cannot stomach the competition!",
@@ -1512,7 +1758,7 @@
         "date": "2021-04-13"
     },
     {
-        "name": "Special Episode: Sam Harris & Meditation is all you need",
+        "title": "Special Episode: Sam Harris & Meditation is all you need",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-sam-harris-meditation-is-all-you-need",
         "notes": [
             "Sam Harris is a public intellectual who inspires strong reactions both positive and negative. Here, Matt and Chris dip their toes into Sam's introspective universe by analysing a recent 9 minute mini-episode of his Making Sense podcast titled 'Some Points of Confusion'. Sam intended to clear up some recurrent misunderstandings he has observed with maybe as much as 99% audience with this episode. What could be causing such a fundamental error and does he succeed in resolving the confusion? Join us to find out.",
@@ -1525,7 +1771,7 @@
         "date": "2021-04-02"
     },
     {
-        "name": "Special Episode: Interview with Phrost on Bullshido",
+        "title": "Special Episode: Interview with Phrost on Bullshido",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-phrost-on-bullshido",
         "notes": [
             "Matt and Chris are helped again by a guest in their endless quest to get the bottom of what the Hell is Going On and What It's All About.",
@@ -1541,7 +1787,7 @@
         "date": "2021-03-19"
     },
     {
-        "name": "Ibram X. Kendi: Gurometer Rating (Patreon Preview)",
+        "title": "Ibram X. Kendi: Gurometer Rating (Patreon Preview)",
         "url": "https://decoding-the-gurus.captivate.fm/episode/ibram-x-kendi-gurometer-rating-patreon-preview",
         "notes": [
             "In this episode we provide a special preview of our usual Patreon content with the follow up discussion and our Gurometer\u2122 scores for Ibram X. Kendi. ",
@@ -1555,7 +1801,7 @@
         "date": "2021-03-12"
     },
     {
-        "name": "Ibram X. Kendi: Inside you are two wolves. One of them is racist.",
+        "title": "Ibram X. Kendi: Inside you are two wolves. One of them is racist.",
         "url": "https://decoding-the-gurus.captivate.fm/episode/ibram-x-kendi-inside-you-are-two-wolves-one-of-them-is-racist",
         "notes": [
             "Ibram X. Kendi is a Professor of history, director of the Boston University Center for Antiracist Research, and a research fellow at Harvard University. He is also the author of several best-selling and highly influential books on race in America.",
@@ -1573,7 +1819,7 @@
         "date": "2021-03-06"
     },
     {
-        "name": "Special Episode: Interview with Matthew Remski on Conspirituality",
+        "title": "Special Episode: Interview with Matthew Remski on Conspirituality",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-interview-with-matthew-remski-on-conspirituality",
         "notes": [
             "Today we talk to Matthew Remski, co-host of the Conspirituality podcast, writer, yoga practitioner, and independent journalist. ",
@@ -1593,7 +1839,7 @@
         "date": "2021-02-20"
     },
     {
-        "name": "Nassim N. Taleb: Everything these idiots, frauds, and assholes don't understand",
+        "title": "Nassim N. Taleb: Everything these idiots, frauds, and assholes don't understand",
         "url": "https://decoding-the-gurus.captivate.fm/episode/nassim-n-taleb-everything-these-morons-frauds-and-assholes-dont-understand",
         "notes": [
             "Nassim Taleb, what a mensch. He's got the confidence of a bull in a china shop that has just bought a lycra muscle-shirt and knows it looks great on him.",
@@ -1611,7 +1857,7 @@
         "date": "2021-02-09"
     },
     {
-        "name": "Special Episode: Interview with Thi Nguyen, a Gurometer's Guru",
+        "title": "Special Episode: Interview with Thi Nguyen, a Gurometer's Guru",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-thi-nguyen-a-gurometers-guru",
         "notes": [
             "Today we talk to C. Thi Nguyen,  a philosophy professor at University of Utah. ",
@@ -1637,7 +1883,7 @@
         "date": "2021-01-29"
     },
     {
-        "name": "Douglas Murray: Can indulgent dinner conversation save OUR civilisation?",
+        "title": "Douglas Murray: Can indulgent dinner conversation save OUR civilisation?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/douglas-murray-can-indulgent-dinner-conversation-save-our-civilisation",
         "notes": [
             "Douglas Murray is a British conservative columnist, social pundit, and veteran culture warrior famed for his biting wit and eloquent intellectual speech. But just how much of that is actually down to him having a posh British accent and a tendency to rant about whatever 'bloody' topic he's took a fancy to? ",
@@ -1651,7 +1897,7 @@
         "date": "2021-01-22"
     },
     {
-        "name": "Special Episode: Calibrating the Gurometer",
+        "title": "Special Episode: Calibrating the Gurometer",
         "url": "https://decoding-the-gurus.captivate.fm/episode/calibrating-the-gurometer",
         "notes": [
             "Chris and Matt take a break from examining the endless stream of Guru galaxy brain takes to offer their own and calibrate their newly minted Gurometer.",
@@ -1665,7 +1911,7 @@
         "date": "2021-01-09"
     },
     {
-        "name": "Contrapoints: Making Philosophy Fabulous Again",
+        "title": "Contrapoints: Making Philosophy Fabulous Again",
         "url": "https://decoding-the-gurus.captivate.fm/episode/contrapoints-making-philosophy-fabulous-again",
         "notes": [
             "Natalie Wynn is kind of a big deal. Her YouTube channel Contrapoints explores not only philosophy, but also politics and social issues. Praised by august publications such as the New Yorker and the Atlantic, there's little doubt that she has her finger on the pulse of contemporary internet culture (and its wars). The production values, costumes, and set dressings are all a sight to behold... and completely invisible on this podcast.",
@@ -1680,7 +1926,7 @@
         "date": "2020-12-28"
     },
     {
-        "name": "Special Episode: Entering the Portal",
+        "title": "Special Episode: Entering the Portal",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-entering-the-portal-",
         "notes": [
             "Chris and Matt take a peak behind the curtain at Guru Community dynamics in the Web 2.0 era in an extended interview with Dan Gilbert, a self described 'Discord creature'. Dan provides insights from his long term participation in Eric Weinstein's 'Unofficial Portal' Discord and reveals the mystery behind the 'mentally unstable' community member!",
@@ -1695,7 +1941,7 @@
         "date": "2020-12-18"
     },
     {
-        "name": "Scott Adams: Chris and Matt Go to Hell",
+        "title": "Scott Adams: Chris and Matt Go to Hell",
         "url": "https://decoding-the-gurus.captivate.fm/episode/scott-adams-chris-and-matt-go-to-hell",
         "notes": [
             "Scott Adams, creator of Dilbert, has since written self-help books like 'Win Bigly' & 'Loserthink' and now hosts his own podcast \"Coffee with Scott Adams\".",
@@ -1714,7 +1960,7 @@
         "date": "2020-12-10"
     },
     {
-        "name": "Russell Brand: Spiritual Transcendence and Anarchic Revolution is Praxis",
+        "title": "Russell Brand: Spiritual Transcendence and Anarchic Revolution is Praxis",
         "url": "https://decoding-the-gurus.captivate.fm/episode/russell-brand-spiritual-transcendence-and-anarchic-revolution-is-praxis",
         "notes": [
             "Russell Brand is a hip bohemian Englishman on the path to enlightenment. And he likes the ineffable. Like, a lot. The decoders kinda like him too, despite the fact they really struggle to eff him at all. Really, Matt has no effing idea what he is babbling about most of the time, but Chris, being 'English-adjacent', seems to make a better job of it.",
@@ -1732,7 +1978,7 @@
         "date": "2020-11-21"
     },
     {
-        "name": "Rutger Bregman: Piglets vs. Toddlers",
+        "title": "Rutger Bregman: Piglets vs. Toddlers",
         "url": "https://decoding-the-gurus.captivate.fm/episode/rutger-bregman-piglets-vs-toddlers",
         "notes": [
             "Rutger Bregman is a Dutch Historian who wants to tell the world that humans are actually fundamentally kind, hunter gatherer societies contain important wisdom about how to live well, and that collectively we need to cooperate to do something about climate change and economic inequality. So, obviously there was no way Chris and Matt could let these dangerous ideas go unchallenged!",
@@ -1746,7 +1992,7 @@
         "date": "2020-11-07"
     },
     {
-        "name": "Special Episode: Is Eric Weinstein Feynman-Negative?",
+        "title": "Special Episode: Is Eric Weinstein Feynman-Negative?",
         "url": "https://decoding-the-gurus.captivate.fm/episode/special-episode-is-eric-weinstein-feynman-negative-",
         "notes": [
             "Eric Weinstein has a habit of inserting mini conspiracy laden \"audio-essays\" at the beginning of his podcast The Portal. The one released this week was impressive even by Eric's standards. So, the duo took took a break from preparing for their next episode on Rutger Bregman to release a Special Bonus Episode, Hot off the press!",
@@ -1760,7 +2006,7 @@
         "date": "2020-10-30"
     },
     {
-        "name": "JP Sears: Get Ultra Spiritual, Resist the Government, and Promote Coronavirus Conspiracies",
+        "title": "JP Sears: Get Ultra Spiritual, Resist the Government, and Promote Coronavirus Conspiracies",
         "url": "https://decoding-the-gurus.captivate.fm/episode/jp-sears-get-ultra-spiritual-resist-the-government-and-promote-coronavirus-conspiracies",
         "notes": [
             "JP Sears is quite the contradictory figure. He's well known for his YouTube videos mocking alternative health and spirituality, but he also sells natural supplements, and is a life coach / spiritual mentor. He's all about positive thinking and natural supplements, but he's spending most of his time now railing against the mainstream media, the Deep State, and COVID restrictions.",
@@ -1774,7 +2020,7 @@
         "date": "2020-10-23"
     },
     {
-        "name": "Jordan Peterson: The Alchemical Lemon explains the Crystalline Structure of Logos",
+        "title": "Jordan Peterson: The Alchemical Lemon explains the Crystalline Structure of Logos",
         "url": "https://decoding-the-gurus.captivate.fm/episode/jordan-peterson-the-alchemical-nature-of-a-lemon-explains-the-crystalline-structure-of-logos",
         "notes": [
             "Chris and Matt finally discuss the big kahuna Jordan Peterson by taking a deep dive into his extended 2017 interview on the Transliminal YouTube channel titled 'Ideology, Logos & Belief'.",
@@ -1790,7 +2036,7 @@
         "date": "2020-10-09"
     },
     {
-        "name": "James Lindsay: The monkey is out of the box and it HATES liberalism",
+        "title": "James Lindsay: The monkey is out of the box and it HATES liberalism",
         "url": "https://decoding-the-gurus.captivate.fm/episode/james-lindsay-the-monkey-is-out-of-the-box-and-it-hates-liberalism",
         "notes": [
             "Chris and Matt discuss James Lindsay's talk at the Speaking Truth to Social Justice conference held at the ostentatious National Liberal Club, in an episode that will disappoint Lindsay fanboys and haters alike. Blindingly hot takes include, \"He's a bit hyperbolic\" and \"Critical Theory is complicated\".",
@@ -1806,7 +2052,7 @@
         "date": "2020-09-23"
     },
     {
-        "name": "Eric and Bret Weinstein: A Dark Horse Gallops through the Portal",
+        "title": "Eric and Bret Weinstein: A Dark Horse Gallops through the Portal",
         "url": "https://decoding-the-gurus.captivate.fm/episode/eric-and-bret-weinstein-a-dark-horse-gallops-through-the-portal",
         "notes": [
             "Matt and Chris introduce themselves and the overall concept for the podcast then take a deep dive into an infamous episode of Eric Weinstein's podcast 'The Portal', featuring his brother Bret Weinstein (Episode 19).  They cast a critical eye over Eric and Bret's claims that they are fighting back against the 'Distributed Idea Suppression Complex' and alerting the world to one of the greatest untold scientific scandals of the modern era."

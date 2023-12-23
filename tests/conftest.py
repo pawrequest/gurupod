@@ -11,9 +11,10 @@ from sqlalchemy.pool import StaticPool
 from sqlmodel import Session
 from starlette.testclient import TestClient
 
+from data.consts import EPISODES_MOD
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import EpisodeBase, Episode
+from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.responses import EpisodeResponseNoDB
 from gurupod.redditbot.managers import reddit_cm
 from main import app
@@ -51,10 +52,10 @@ def override_logger():
 
 client = TestClient(app)
 
-
 app.dependency_overrides[get_logger] = override_logger
 app.dependency_overrides[get_session] = override_session
 app.dependency_overrides[reddit_cm()] = override_subreddit
+
 
 # @pytest.fixture(scope="function")
 # def test_logger(tmp_path):
@@ -89,7 +90,7 @@ async def cached_scrape():
 
 @pytest.fixture(scope="session")
 def all_episodes_json():
-    with open("episodes.json", "r") as f:
+    with open(EPISODES_MOD, "r") as f:
         return json.load(f)
 
 
@@ -99,18 +100,8 @@ def random_episode_json(all_episodes_json):
 
 
 @pytest.fixture(scope="function")
-def random_episode_validated(random_episode_json):
+def random_episode_validated(random_episode_json) -> EpisodeBase:
     return EpisodeBase.model_validate(random_episode_json)
-
-
-@pytest.fixture(scope="function")
-def episode_josh():
-    name = "Interview with Josh Szeps, The Rumble from Downunder"
-    with open("episodes.json", "r") as f:
-        eps = json.load(f)
-        for ep in eps:
-            if ep["name"] == name:
-                return EpisodeBase.model_validate(ep)
 
 
 @pytest.fixture(scope="function")
