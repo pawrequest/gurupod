@@ -60,7 +60,7 @@ class HtmlWriter(EpisodeWriter):
         eps = eps or self.episodes
         toc = "<h2>Table of Contents</h2>\n"
         for i, ep in enumerate(eps):
-            toc += f"<a href='#ep-{i}'>{ep.name}</a><br>\n"
+            toc += f"<a href='#ep-{i}'>{ep.title}</a><br>\n"
         return toc
 
     def _post_head_text(self, episode: Episode) -> str:
@@ -78,7 +78,7 @@ class HtmlWriter(EpisodeWriter):
         return text
 
     def _title_text(self, episode: Episode, ep_id="") -> str:
-        return f"<h1 id='ep-{str(ep_id)}'>{episode.name}</h1>\n<a href='{episode.url}'>Play on Captivate.fm</a>\n"
+        return f"<h1 id='ep-{str(ep_id)}'>{episode.title}</h1>\n<a href='{episode.url}'>Play on Captivate.fm</a>\n"
 
     def _date_text(self, date_pub) -> str:
         return f"<p>Date Published: {date_pub}</p>\n"
@@ -119,7 +119,7 @@ class RPostWriter(EpisodeWriter):
         return ""
 
     def _title_text(self, episode: Episode) -> str:
-        return f"## [{episode.name}]({episode.url})\n \n"
+        return f"## [{episode.title}]({episode.url})\n \n"
 
     def _date_text(self, date_pub) -> str:
         return f"***{date_pub}***\n \n"
@@ -144,7 +144,7 @@ class RWikiWriter(EpisodeWriter):
         return ""
 
     def _title_text(self, episode: Episode) -> str:
-        return f"### [{episode.name}]({episode.url})\n \n"
+        return f"### [{episode.title}]({episode.url})\n \n"
 
     def _date_text(self, date_pub) -> str:
         return f"***{date_pub}***\n \n"

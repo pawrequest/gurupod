@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import json
 from typing import Sequence
 
 from aiohttp import ClientSession
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
-from data.consts import MAIN_URL
+from data.consts import EPISODES_MOD, MAIN_URL
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeDB
+from gurupod.models.guru import Guru
 from gurupod.models.responses import (
     EpisodeResponse,
     EpisodeResponseNoDB,
@@ -27,6 +29,14 @@ logger = get_logger()
 ep_router = APIRouter()
 
 
+@ep_router.get("/populate")
+async def populate_eps(session: Session = Depends(get_session)):
+    with open(EPISODES_MOD, "r") as f:
+        eps_j = json.load(f)
+        logger.info(f"\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n")
+        added_eps = await put_ep(eps_j, session)
+
+
 @ep_router.post("/put", response_model=EpisodeResponse)
 async def put_ep(episodes: Episode | Sequence[Episode], session: Session = Depends(get_session)) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
@@ -35,6 +45,7 @@ async def put_ep(episodes: Episode | Sequence[Episode], session: Session = Depen
     episodes = remove_existing_episodes(episodes, session)
     episodes = await expand_and_sort(episodes)
     episodes = validate_add(episodes, session, commit=True)
+    asigned = await assign_gurus(episodes, session)
     resp = EpisodeResponse.from_episodes(episodes)
     return resp
 
@@ -74,3 +85,13 @@ async def read_one(ep_id: int, session: Session = Depends(get_session)):
 async def read_all(session: Session = Depends(get_session)):
     eps = session.exec(select(EpisodeDB)).all()
     return EpisodeResponse.from_episodes(list(eps))
+
+
+async def assign_gurus(episodes: Sequence, session: Session):
+    gurus = session.exec(select(Guru)).all()
+    for episode in episodes:
+        episode.gurus = [_ for _ in gurus if _.name in episode.title]
+        session.add(episode)
+    session.commit()
+    [session.refresh(_) for _ in episodes]
+    return episodes

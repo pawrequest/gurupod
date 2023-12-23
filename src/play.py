@@ -6,9 +6,9 @@ from typing import List, Optional
 
 from fastapi import FastAPI
 from sqlalchemy import Column
-from sqlmodel import Field, JSON, Relationship, SQLModel
+from sqlmodel import Field, JSON, Relationship, SQLModel, Session
 
-from gurupod.database import create_db_and_tables
+from gurupod.database import create_db_and_tables, engine_
 
 
 class GuruEpisodeLink(SQLModel, table=True):
@@ -35,7 +35,18 @@ class Episode(SQLModel, table=True):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
+
+    with Session(engine_()) as session:
+        ...
+        # await eps_from_json(session)
     yield
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+# async def eps_from_json(session: Session):
+#     with open(EPISODES_MOD, "r") as f:
+#         eps_j = json.load(f)
+#         added_eps = await put_ep(eps_j, session)
+#     return added_eps

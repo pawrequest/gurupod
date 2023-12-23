@@ -40,7 +40,7 @@ class EpisodeSoup(BeautifulSoup):
         self.episode_url = url
 
     @property
-    def episode_name(self):
+    def episode_title(self):
         return self.select_one(".episode-title").text
 
     @property
@@ -63,7 +63,7 @@ class EpisodeSoup(BeautifulSoup):
 
     def get_ep_d(self):
         episode = dict(
-            name=self.episode_name,
+            title=self.episode_title,
             url=self.episode_url,
             notes=self.episode_notes,
             links=self.episode_links,

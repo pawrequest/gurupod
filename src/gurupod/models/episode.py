@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 from datetime import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from dateutil import parser
 from pydantic import field_validator
@@ -15,12 +13,12 @@ if TYPE_CHECKING:
     from gurupod.models.guru import Guru
 
 logger = get_logger()
-MAYBE_ATTRS = ["name", "notes", "links", "date"]
+MAYBE_ATTRS = ["title", "notes", "links", "date"]
 
 
 class Episode(SQLModel):
     url: str
-    name: Optional[str] = Field(index=True, default=None, unique=True)
+    title: Optional[str] = Field(index=True, default=None, unique=True)
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
@@ -42,23 +40,20 @@ class Episode(SQLModel):
         return any(getattr(self, _) is None for _ in MAYBE_ATTRS)
 
     def __str__(self):
-        return f"{self.__class__.__name__}: {self.name or self.url}"
+        return f"{self.__class__.__name__}: {self.title or self.url}"
 
     def __repr__(self):
         return f"<{self.__class__.__name__}({self.url})>"
 
 
 class EpisodeDB(Episode, table=True):
-    # class Config:
-    #     populate_by_name = True
-
     id: Optional[int] = Field(default=None, primary_key=True)
-    gurus: list[Guru] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
+    gurus: Optional[List["Guru"]] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
 
 
 class EpisodeOut(Episode):
     id: int
-    name: str
+    title: str
     url: str
     date: datetime
     notes: Optional[list[str]]

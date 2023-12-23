@@ -5,9 +5,9 @@ from typing import Sequence
 from sqlmodel import Session, select
 
 from gurupod.gurulog import get_logger
+from gurupod.models.episode import Episode, EpisodeDB
 
 logger = get_logger()
-from gurupod.models.episode import Episode, EpisodeDB
 
 
 def _log_urls(urls: Sequence[str], msg: str = None):
@@ -46,3 +46,9 @@ def remove_existing_urls(urls: Sequence[str], session: Session) -> tuple[str, ..
     new_urls = tuple(_ for _ in urls if _ not in urls_in_db)
     log_new_urls(new_urls)
     return new_urls
+
+
+def remove_existing_smth(to_filter: Sequence[str], db_field, session: Session) -> tuple[str, ...]:
+    db_entries = session.exec(select(db_field)).all()
+    new_entries = tuple(_ for _ in to_filter if _ not in db_entries)
+    return new_entries
