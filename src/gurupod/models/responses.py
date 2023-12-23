@@ -5,7 +5,8 @@ from typing import List, Optional, Sequence, TypeVar, Union
 from pydantic import BaseModel
 
 from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
-from gurupod.models.guru import GuruRead
+from gurupod.models.guru import GuruBase, GuruRead
+from gurupod.models.reddit_model import RedditThreadBase, RedditThreadRead
 
 EP_FIN_TYP = Union[EpisodeRead, Episode]
 EP_TYP = Union[EpisodeBase, EP_FIN_TYP]
@@ -17,8 +18,23 @@ class GuruWithEpisodes(GuruRead):
     episodes: Optional[List["EpisodeRead"]]
 
 
+class GuruWith(GuruBase):
+    episodes: Optional[List["EpisodeRead"]]
+    reddit_threads: Optional[List["RedditThreadRead"]]
+
+
 class EpisodeWithGurus(EpisodeBase):
-    gurus: Optional[list["GuruRead"]]
+    gurus: Optional[List["GuruRead"]]
+
+
+class EpisodeWith(EpisodeBase):
+    gurus: Optional[List["GuruRead"]]
+    reddit_threads: Optional[List["RedditThreadRead"]]
+
+
+class RedditThreadWith(RedditThreadBase):
+    episodes: Optional[List["EpisodeRead"]]
+    gurus: Optional[List["GuruRead"]]
 
 
 def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
@@ -62,7 +78,7 @@ class EpisodeMeta(BaseModel):
 
 class EpisodeResponse(BaseModel):
     meta: EpisodeMeta
-    episodes: list[EpisodeWithGurus]
+    episodes: list[EpisodeWith]
 
     class Config:
         populate_by_name = True
@@ -72,7 +88,7 @@ class EpisodeResponse(BaseModel):
         if not any([msg, episodes]):
             msg = "No Episodes Found"
         repacked = _repack_episodes(episodes)
-        valid = [EpisodeWithGurus.model_validate(_) for _ in repacked]
+        valid = [EpisodeWith.model_validate(_) for _ in repacked]
         meta_data = EpisodeMeta(
             length=len(valid),
             # calling_func=inspect.stack()[1][3],

@@ -4,7 +4,7 @@ from typing import List, Optional, TYPE_CHECKING
 from pydantic import ConfigDict
 from sqlmodel import Field, Relationship, SQLModel
 
-from gurupod.models.links import GuruEpisodeLink
+from gurupod.models.links import GuruEpisodeLink, RedditThreadGuruLink
 
 if TYPE_CHECKING:
     from gurupod.models.episode import Episode
@@ -21,6 +21,7 @@ class Guru(GuruBase, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     episodes: List["Episode"] = Relationship(back_populates="gurus", link_model=GuruEpisodeLink)
+    reddit_threads: List["RedditThread"] = Relationship(back_populates="gurus", link_model=RedditThreadGuruLink)
 
 
 class GuruRead(GuruBase):

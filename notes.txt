@@ -1,18 +1,6 @@
 2212
 
 """
-add guru to models
-++ guru model
-    + name
-    + episodes ids
-    + subreddit thread ids
-    + relationship -> episodes
-    
-create relationships table
-++ guru / episodes link table
-    + guru id
-    + episode id
-
 
 update redditbot
 monitor.py:

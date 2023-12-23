@@ -8,7 +8,7 @@ from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
 from gurupod.gurulog import get_logger
-from gurupod.models.links import GuruEpisodeLink
+from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -50,6 +50,9 @@ class EpisodeBase(SQLModel):
 class Episode(EpisodeBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
+    reddit_threads: Optional[List["RedditThread"]] = Relationship(
+        back_populates="episodes", link_model=RedditThreadEpisodeLink
+    )
 
 
 class EpisodeRead(EpisodeBase):
@@ -60,6 +63,7 @@ class EpisodeRead(EpisodeBase):
     notes: Optional[list[str]]
     links: Optional[dict[str, str]]
     gurus: Optional[list[str]]
+    reddit_threads: Optional[list[str]]
 
 
 #

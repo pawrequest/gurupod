@@ -12,7 +12,7 @@ from sqlmodel import Session
 from starlette.testclient import TestClient
 
 from data.consts import EPISODES_MOD
-from gurupod.database import get_session
+from gurupod.database import SQLModel, get_session
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.responses import EpisodeResponseNoDB
@@ -110,17 +110,19 @@ def episodes_weird(all_episodes_json):
         "Interview with Josh Szeps, The Rumble from Downunder",
         "Interview with the Conspirituality Trio: Navigating the Chakras of Conspiracy",
     ]
-    weird = [_ for _ in all_episodes_json if _["name"] in names]
+    weird = [_ for _ in all_episodes_json if _["title"] in names]
     return [EpisodeBase.model_validate(_) for _ in weird]
 
 
 @pytest.fixture(scope="session")
 def test_db():
-    EpisodeBase.metadata.create_all(bind=ENGINE)
-    Episode.metadata.create_all(bind=ENGINE)
+    SQLModel.metadata.create_all(ENGINE)
+
+    # EpisodeBase.metadata.create_all(bind=ENGINE)
+    # Episode.metadata.create_all(bind=ENGINE)
     yield
-    EpisodeBase.metadata.drop_all(bind=ENGINE)
-    Episode.metadata.drop_all(bind=ENGINE)
+    SQLModel.metadata.drop_all(bind=ENGINE)
+    # Episode.metadata.drop_all(bind=ENGINE)
 
 
 @pytest.fixture(scope="function")
