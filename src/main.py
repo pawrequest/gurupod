@@ -30,7 +30,6 @@ async def lifespan(app: FastAPI):
     gb = Guru.model_rebuild()
     eb = Episode.model_rebuild()
 
-
     lb = GuruEpisodeLink.model_rebuild()
     rb = RedditThread.model_rebuild()
     rlb = RedditThreadGuruLink.model_rebuild()
