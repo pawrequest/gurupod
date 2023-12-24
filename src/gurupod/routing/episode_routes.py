@@ -15,7 +15,7 @@ from gurupod.models.guru import Guru
 from gurupod.models.responses import (
     EpisodeResponse,
     EpisodeResponseNoDB,
-    _repack_episodes,
+    repack_validate,
 )
 from gurupod.routing.episode_funcs import (
     remove_existing_episodes,
@@ -43,7 +43,7 @@ async def put_ep(
 ) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
     # logger.info(f"Endpoint hit: put_ep: {episodes}")
-    episodes = _repack_episodes(episodes)
+    episodes = repack_validate(episodes)
     episodes = remove_existing_episodes(episodes, session)
     episodes = await expand_and_sort(episodes)
     episodes = validate_add(episodes, session, commit=True)

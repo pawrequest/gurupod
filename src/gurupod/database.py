@@ -11,7 +11,7 @@ def engine_(config=None):
     else:
         db_url = config["db_url"]
         connect_args = config.get("connect_args", {})
-    return create_engine(db_url, echo=True, connect_args=connect_args)
+    return create_engine(db_url, echo=False, connect_args=connect_args)
 
 
 def get_session(engine=None) -> Session:

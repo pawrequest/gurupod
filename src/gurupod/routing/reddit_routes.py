@@ -8,7 +8,7 @@ from data.consts import REDDIT_SEND_KEY
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
-from gurupod.models.reddit_model import RedditThread, RedditThreadBase
+from gurupod.models.reddit_model import RedditThread, RedditThreadExpanded
 from gurupod.models.responses import RedditThreadWith
 from gurupod.redditbot.managers import subreddit_cm, wiki_page_cm
 from gurupod.redditbot.write_to_web import edit_reddit_wiki, submit_episode_subreddit
@@ -65,14 +65,17 @@ async def save_submission(session: Session, submission: Submission):
             return
 
         logger.info(f"Saving new submission: {submission.title}")
-        cr_date = datetime.fromtimestamp(submission.created_utc)
-        submission_data = RedditThreadBase(
-            reddit_id=submission.id,
-            title=submission.title,
-            shortlink=submission.shortlink,
-            created_datetime=cr_date,
-        )
-        thread_ = RedditThread.model_validate(submission_data)
+        # cr_date = datetime.fromtimestamp(submission.created_utc)
+        # submission_data = RedditThreadExpanded(
+        #     reddit_id=submission.id,
+        #     title=submission.title,
+        #     shortlink=submission.shortlink,
+        #     created_datetime=cr_date,
+        #     _submission=submission,
+        # )
+        # thread_ = RedditThread.model_validate(submission_data)
+        exp = RedditThreadExpanded.from_submission(submission)
+        thread_ = RedditThread.model_validate(exp)
         assigned = await assign_gurus([thread_], session)
         session.add(thread_)
         session.commit()

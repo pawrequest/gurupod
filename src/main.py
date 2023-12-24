@@ -13,7 +13,7 @@ from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
 from gurupod.models.reddit_model import RedditThread
 from gurupod.redditbot.monitor import submission_monitor
-from gurupod.routing.episode_funcs import remove_existing_smth
+from gurupod.routing.episode_funcs import remove_existing_smth, log_episodes
 from gurupod.routing.episode_routes import ep_router, put_ep
 from gurupod.routing.reddit_routes import red_router, save_submission
 import random
@@ -26,23 +26,14 @@ logger = get_logger()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Starting lifespan")
-    rt = SQLModel.model_rebuild()
-    gb = Guru.model_rebuild()
-    eb = Episode.model_rebuild()
-
-    lb = GuruEpisodeLink.model_rebuild()
-    rb = RedditThread.model_rebuild()
-    rlb = RedditThreadGuruLink.model_rebuild()
-    relb = RedditThreadEpisodeLink.model_rebuild()
+    logger.debug("Starting lifespan")
     create_db_and_tables()
-    logger.info("tables created")
+    logger.debug("tables created")
     with Session(engine_()) as session:
-        gurus_added = await import_gurus_from_file(session)
+        await import_gurus_from_file(session)
+
         await eps_from_json(session)
-        logger.info("json returned")
-        # await gurus_from_file(session)
-        # await fetch(session)
+
         # [reddit.post_episode(_) for _ in new]
     if not MONITOR_SUB:
         logger.info("No monitor")
@@ -76,24 +67,28 @@ app.include_router(red_router, prefix="/red")
 async def eps_from_json(session: Session):
     with open(EPISODES_MOD, "r") as f:
         eps_j = json.load(f)
-        logger.info(f"\nLoading {len(eps_j)} episodes from {EPISODES_MOD}\n")
-        added_eps = await put_ep(eps_j, session)
-    return added_eps
+        logger.debug(f"Loading {len(eps_j)} episodes from {EPISODES_MOD}")
+        ep_resp = await put_ep(eps_j, session)
+        if new := ep_resp.episodes:
+            log_episodes(new)
+            # logger.info(f"Added {len(new)} new episodes: {[_.url for _ in new]}")
+            return new
 
 
 async def threads_from_json(session: Session):
     with open(THREADS_JSON, "r") as f:
         threads_j = json.load(f)
-        logger.info(f"\nLoading {len(threads_j)} episodes from {THREADS_JSON}\n")
+        logger.info(f"Loading {len(threads_j)} episodes from {THREADS_JSON}")
         # added_eps = await put_ep(threads_j, session)
     # return added_eps
 
 
 #
 async def import_gurus_from_file(session: Session):
-    guru_names = remove_existing_smth(GURUS, Guru.name, session)
-    if new_gurus := [Guru(name=_) for _ in guru_names]:
+    if guru_names := remove_existing_smth(GURUS, Guru.name, session):
+        logger.info(f"Adding {len(guru_names)} new gurus: {guru_names}")
+        new_gurus = [Guru(name=_) for _ in guru_names]
         session.add_all(new_gurus)
         session.commit()
         [session.refresh(_) for _ in new_gurus]
-    return new_gurus or None
+        return new_gurus

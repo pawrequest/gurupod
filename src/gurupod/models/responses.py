@@ -8,11 +8,6 @@ from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
 from gurupod.models.guru import GuruBase, GuruRead
 from gurupod.models.reddit_model import RedditThreadBase, RedditThreadRead
 
-EP_FIN_TYP = Union[EpisodeRead, Episode]
-EP_TYP = Union[EpisodeBase, EP_FIN_TYP]
-EP_FIN_VAR = TypeVar("EP_FIN_VAR", bound=EP_FIN_TYP)
-EP_VAR = TypeVar("EP_VAR", bound=EP_TYP)
-
 
 # keep 'with' views here for load order
 class GuruWith(GuruBase):
@@ -31,24 +26,53 @@ class RedditThreadWith(RedditThreadBase):
     # _submission: Optional["Submission"]
 
 
-def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
-    if not isinstance(episodes, Sequence):
-        if not isinstance(episodes, EP_TYP):
-            try:
-                episodes = (EpisodeBase.model_validate(episodes),)
-            except Exception:
-                # todo better catch
-                raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
+EP_FIN_TYP = Union[EpisodeRead, Episode, EpisodeWith]
+EP_TYP = Union[EpisodeBase, EP_FIN_TYP]
+EP_FIN_VAR = TypeVar("EP_FIN_VAR", bound=EP_FIN_TYP)
+EP_VAR = TypeVar("EP_VAR", bound=EP_TYP)
 
+
+def validate_episode(episode):
+    try:
+        return EpisodeRead.model_validate(episode)
+    except Exception as e:
+        try:
+            return Episode.model_validate(episode)
+        except Exception:
+            raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episode)}")
+
+
+def repack_validate(episodes: EP_VAR) -> tuple[EP_VAR, ...]:
+    """Takes episode or sequence, checks type, returns tuple of episodes."""
+
+    if not isinstance(episodes, Sequence):
         episodes = (episodes,)
 
-    if not all(isinstance(_, EP_TYP) for _ in episodes):
-        try:
-            episodes = tuple(EpisodeBase.model_validate(_) for _ in episodes)
-        except Exception:
-            # todo better catch
-            raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
-    return episodes
+    validated_episodes = tuple(validate_episode(ep) for ep in episodes)
+    return validated_episodes
+
+
+#
+# def _repack_episodesold(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
+#     """takes eoisode or sequence, checks type, returns tuple of episodes"""
+#
+#     if not isinstance(episodes, Sequence):
+#         if not isinstance(episodes, EP_TYP):
+#             try:
+#                 episodes = (EpisodeBase.model_validate(episodes),)
+#             except Exception:
+#                 # todo better catch
+#                 raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
+#
+#         episodes = (episodes,)
+#
+#     if not all(isinstance(_, EP_TYP) for _ in episodes):
+#         try:
+#             episodes = tuple(EpisodeBase.model_validate(_) for _ in episodes)
+#         except Exception:
+#             # todo better catch
+#             raise ValueError(f"episodes must be {EP_TYP} or Sequence-of, not {type(episodes)}")
+#     return episodes
 
 
 ## type-specific variants needed?
@@ -81,8 +105,7 @@ class EpisodeResponse(BaseModel):
     def from_episodes(cls, episodes: EP_FIN_TYP | Sequence[EP_FIN_TYP], msg="") -> EpisodeResponse:
         if not any([msg, episodes]):
             msg = "No Episodes Found"
-        repacked = _repack_episodes(episodes)
-        valid = [EpisodeWith.model_validate(_) for _ in repacked]
+        valid = [EpisodeWith.model_validate(_) for _ in episodes]
         meta_data = EpisodeMeta(
             length=len(valid),
             # calling_func=inspect.stack()[1][3],
@@ -110,7 +133,7 @@ class EpisodeResponseNoDB(EpisodeResponse):
     def from_episodes(cls, episodes: Sequence[EpisodeBase], msg="") -> EpisodeResponse:
         if not any([msg, episodes]):
             msg = "No Episodes Found"
-        episodes = _repack_episodes(episodes)
+        episodes = repack_validate(episodes)
         valid = [EpisodeBase.model_validate(_) for _ in episodes]
         meta_data = EpisodeMeta(
             length=len(valid),
