@@ -7,9 +7,9 @@ from asyncpraw.reddit import Submission, Subreddit
 from data.consts import GURU_SUB
 from data.gurunames import GURUS
 from gurupod.gurulog import get_logger
+from gurupod.redditbot.managers import subreddit_cm
 
 logger = get_logger()
-from gurupod.redditbot.managers import subreddit_cm
 
 
 class SubmissionFlairs(NamedTuple):
