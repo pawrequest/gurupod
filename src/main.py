@@ -6,7 +6,7 @@ from sqlmodel import Session
 
 from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB, THREADS_JSON
 from data.gurunames import GURUS
-from gurupod.database import create_db_and_tables, engine_, SQLModel
+from gurupod.database import SQLModel, create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
