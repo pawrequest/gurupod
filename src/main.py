@@ -16,6 +16,7 @@ from gurupod.redditbot.monitor import submission_monitor
 from gurupod.routing.episode_funcs import remove_existing_smth
 from gurupod.routing.episode_routes import ep_router, put_ep
 from gurupod.routing.reddit_routes import red_router, save_submission
+import random
 
 logger = get_logger()
 
