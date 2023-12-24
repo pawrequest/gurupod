@@ -14,17 +14,10 @@ EP_FIN_VAR = TypeVar("EP_FIN_VAR", bound=EP_FIN_TYP)
 EP_VAR = TypeVar("EP_VAR", bound=EP_TYP)
 
 
-class GuruWithEpisodes(GuruRead):
-    episodes: Optional[List["EpisodeRead"]]
-
-
+# keep 'with' views here for load order
 class GuruWith(GuruBase):
     episodes: Optional[List["EpisodeRead"]]
     reddit_threads: Optional[List["RedditThreadRead"]]
-
-
-class EpisodeWithGurus(EpisodeBase):
-    gurus: Optional[List["GuruRead"]]
 
 
 class EpisodeWith(EpisodeBase):

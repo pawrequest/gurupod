@@ -59,7 +59,7 @@ def main():
         user_agent="praw_refresh_token_example",
     )
     state = str(random.randint(0, 65000))
-    url = reddit.auth.url(scopes, state, "permanent")
+    url = reddit.auth.reddit_id(scopes, state, "permanent")
     print(f"Now open this url in your browser: {url}")
     sys.stdout.flush()
 

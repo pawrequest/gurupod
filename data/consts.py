@@ -19,6 +19,7 @@ EPISODES_JSON = DATA_DIR / "episodes.json"
 EPISODES_MOD = DATA_DIR / "episodes_mod.json"
 EPISODES_HTML = DATA_DIR / "episodes.html"
 GURU_DB = DATA_DIR / "guru.db"
+THREADS_JSON = DATA_DIR / "threads.json"
 
 # strings
 GURU_SUB = "DecodingTheGurus"

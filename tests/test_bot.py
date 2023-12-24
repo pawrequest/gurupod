@@ -1,21 +1,22 @@
 import asyncio
+from asyncio import Queue
 
 import pytest
 
 from data.consts import TEST_SUB
 from gurupod.redditbot.managers import subreddit_cm
-from gurupod.redditbot.monitor import flair_submission_write_optional, run_jobs
-from gurupod.redditbot.wrrite_to_web import submit_episode_subreddit
+from gurupod.redditbot.monitor import submission_monitor
+from gurupod.redditbot.write_to_web import submit_episode_subreddit
 
 
 @pytest.mark.asyncio
 async def test_monitor_detects_new_posts(random_episode_validated):
     async with subreddit_cm(TEST_SUB) as subreddit:
         # Start the monitor in a background task
+        subqueue = Queue()
         monitor_task = asyncio.create_task(
-            run_jobs(subreddit, job=flair_submission_write_optional)
+            submission_monitor(subreddit_name=TEST_SUB, serialised_sub_q=subqueue, timeout=None)
         )
-
         # Post a new submission
         posted = await submit_episode_subreddit(random_episode_validated, subreddit)
 

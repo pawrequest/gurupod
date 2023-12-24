@@ -89,12 +89,12 @@ async def read_all(session: Session = Depends(get_session)):
     return EpisodeResponse.from_episodes(list(eps))
 
 
-async def assign_gurus(episodes: Sequence, session: Session):
+async def assign_gurus(to_assign: Sequence, session: Session):
     gurus = session.exec(select(Guru)).all()
-    for episode in episodes:
-        title_gurus = [_ for _ in gurus if _.name in episode.title]
-        episode.gurus.extend(title_gurus)
-        session.add(episode)
+    for target in to_assign:
+        title_gurus = [_ for _ in gurus if _.name in target.title]
+        target.gurus.extend(title_gurus)
+        session.add(target)
     session.commit()
-    [session.refresh(_) for _ in episodes]
-    return episodes
+    [session.refresh(_) for _ in to_assign]
+    return to_assign
