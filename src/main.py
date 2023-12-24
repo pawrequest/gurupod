@@ -29,6 +29,8 @@ async def lifespan(app: FastAPI):
     rt = SQLModel.model_rebuild()
     gb = Guru.model_rebuild()
     eb = Episode.model_rebuild()
+
+
     lb = GuruEpisodeLink.model_rebuild()
     rb = RedditThread.model_rebuild()
     rlb = RedditThreadGuruLink.model_rebuild()
