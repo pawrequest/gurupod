@@ -78,7 +78,7 @@ async def read_one(ep_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Episode not found")
     elif isinstance(episode_db, Episode):
         episode_: Episode = episode_db
-        return EpisodeResponse.from_episodes(episode_)
+        return EpisodeResponse.from_episodes([episode_])
     else:
         raise HTTPException(status_code=500, detail="returned data not EpisodeDB")
 

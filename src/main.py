@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlmodel import Session
 
-from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB, THREADS_JSON
+from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB, THREADS_JSON, TEST_SUB
 from data.gurunames import GURUS
 from gurupod.database import SQLModel, create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
@@ -39,7 +39,7 @@ async def lifespan(app: FastAPI):
         logger.info("No monitor")
         yield
     else:
-        async for sub in submission_monitor(subreddit_name=GURU_SUB):
+        async for sub in submission_monitor(subreddit_name=TEST_SUB):
             logger.info(f"Got submission: {sub}")
             await save_submission(session, sub)
             yield

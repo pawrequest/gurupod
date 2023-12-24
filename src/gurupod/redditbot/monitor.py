@@ -28,5 +28,6 @@ async def submission_monitor(subreddit_name: str, timeout: int = None) -> AsyncG
         logger.info(f"Monitoring subreddit: {subreddit_name}")
 
         async for submission in subreddit.stream.submissions():
+            logger.debug(f"New unfiltered submission: {submission.title}")
             if filtered := await filter_submission(submission):
                 yield filtered
