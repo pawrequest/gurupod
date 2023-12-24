@@ -71,7 +71,6 @@ line-length = 120
 indent-width = 4
 
 ignore = [
-    "F841",
-
-    "F401",
+    "F841", # local variable assigned but never used
+    "F401", # imported but unused
 ]
