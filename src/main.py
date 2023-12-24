@@ -15,6 +15,7 @@ from gurupod.models.reddit_model import RedditThread
 from gurupod.redditbot.monitor import submission_monitor
 from gurupod.routing.episode_funcs import remove_existing_smth, log_episodes
 from gurupod.routing.episode_routes import ep_router, put_ep
+from gurupod.routing.go import SubmissionMonitor
 from gurupod.routing.reddit_routes import red_router, save_submission
 import random
 
@@ -39,11 +40,26 @@ async def lifespan(app: FastAPI):
         logger.info("No monitor")
         yield
     else:
-        async for sub in submission_monitor(subreddit_name=TEST_SUB):
-            logger.info(f"Got submission: {sub}")
-            await save_submission(session, sub)
-            yield
+        sub_bot = SubmissionMonitor(GURU_SUB, GURUS)
+
+        async for submission in sub_bot.stream_filtered_submissions():
+            logger.info(f"Got submission: {submission}")
+            await save_submission(session, submission)
+
+        yield
         #
+        # async for sub in submission_monitor(subreddit_name=TEST_SUB):
+        #     logger.info(f"Got submission: {sub}")
+        #     await save_submission(session, sub)
+        #     yield
+        #
+        # monitor_task = asyncio.create_task(
+        #     launch_monitor(subreddit_name=GURU_SUB, timeout=None))
+        # logger.info('Started monitor')
+        # yield
+        # monitor_task.cancel()
+        # await monitor_task
+        # #
         # monitor_task = asyncio.create_task(
         #     launch_monitor(subreddit_name=TEST_SUB, serialised_sub_q=submission_queue, timeout=None)
         # )
