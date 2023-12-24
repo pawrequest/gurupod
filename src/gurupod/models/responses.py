@@ -28,6 +28,7 @@ class EpisodeWith(EpisodeBase):
 class RedditThreadWith(RedditThreadBase):
     episodes: Optional[List["EpisodeRead"]]
     gurus: Optional[List["GuruRead"]]
+    # _submission: Optional["Submission"]
 
 
 def _repack_episodes(episodes: EP_VAR | Sequence[EP_VAR]) -> tuple[EP_VAR]:
