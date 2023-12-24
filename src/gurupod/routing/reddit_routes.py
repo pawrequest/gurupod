@@ -59,7 +59,12 @@ async def put_thread(
 
 async def save_submission(session: Session, submission: Submission):
     try:
-        logger.info(f"Saving submission: {submission.title}")
+        existing_threads = session.exec(select(RedditThread.reddit_id)).all()
+        if submission.id in existing_threads:
+            logger.debug(f"Skipping existing submission: {submission.title}")
+            return
+
+        logger.info(f"Saving new submission: {submission.title}")
         cr_date = datetime.fromtimestamp(submission.created_utc)
         submission_data = RedditThreadBase(
             reddit_id=submission.id,

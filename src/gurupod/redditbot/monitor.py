@@ -23,23 +23,6 @@ async def filter_submission(submission: Submission, filter_sequence=GURUS) -> Su
         return None
 
 
-# def serialize_submission(submission: Submission) -> dict:
-#     logger.info(f"Serializing submission: {submission.title}")
-#     return {
-#         "title": submission.title,
-#         "url": submission.url,
-#     }
-
-#
-# async def launch_monitor(serialised_sub_q: asyncio.Queue, subreddit_name: str = GURU_SUB, timeout: int = None):
-#     async with subreddit_cm(subreddit_name) as subreddit:
-#         async for submission in subreddit.stream.submissions():
-#             if filtered := await filter_submission(submission):
-#                 logger.info(f"Submission '{filtered.title}' passed filter")
-#                 serialized_submission = serialize_submission(filtered)  # Serialize the submission
-#                 await serialised_sub_q.put(serialized_submission)
-
-
 async def submission_monitor(subreddit_name: str, timeout: int = None) -> AsyncGenerator[Submission, None]:
     async with subreddit_cm(subreddit_name) as subreddit:
         logger.info(f"Monitoring subreddit: {subreddit_name}")

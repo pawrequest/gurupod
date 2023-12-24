@@ -1,4 +1,5 @@
-# from __future__ import annotations
+# no dont do this!! from __future__ import annotations
+
 from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import ConfigDict
@@ -7,7 +8,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from gurupod.models.links import GuruEpisodeLink, RedditThreadGuruLink
 
 if TYPE_CHECKING:
-    from gurupod.models.episode import Episode
+    from gurupod.models.episode import Episode, RedditThread
 
 
 class GuruBase(SQLModel):

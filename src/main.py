@@ -6,9 +6,12 @@ from sqlmodel import Session
 
 from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB, THREADS_JSON
 from data.gurunames import GURUS
-from gurupod.database import create_db_and_tables, engine_
+from gurupod.database import create_db_and_tables, engine_, SQLModel
 from gurupod.gurulog import get_logger
+from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
+from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
+from gurupod.models.reddit_model import RedditThread
 from gurupod.redditbot.monitor import submission_monitor
 from gurupod.routing.episode_funcs import remove_existing_smth
 from gurupod.routing.episode_routes import ep_router, put_ep
@@ -23,6 +26,13 @@ logger = get_logger()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting lifespan")
+    rt = SQLModel.model_rebuild()
+    gb = Guru.model_rebuild()
+    eb = Episode.model_rebuild()
+    lb = GuruEpisodeLink.model_rebuild()
+    rb = RedditThread.model_rebuild()
+    rlb = RedditThreadGuruLink.model_rebuild()
+    relb = RedditThreadEpisodeLink.model_rebuild()
     create_db_and_tables()
     logger.info("tables created")
     with Session(engine_()) as session:

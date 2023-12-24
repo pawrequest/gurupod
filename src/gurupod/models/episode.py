@@ -1,4 +1,4 @@
-# from __future__ import annotations
+# no dont do this!! from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
@@ -11,7 +11,7 @@ from gurupod.gurulog import get_logger
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:
-    from gurupod.models.guru import Guru
+    from gurupod.models.guru import Guru, RedditThread
 
 logger = get_logger()
 MAYBE_ATTRS = ["title", "notes", "links", "date"]
