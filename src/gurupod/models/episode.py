@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
 from dateutil import parser
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
@@ -18,8 +18,8 @@ MAYBE_ATTRS = ["title", "notes", "links", "date"]
 
 
 class EpisodeBase(SQLModel):
-    url: str
-    title: Optional[str] = Field(index=True, default=None, unique=True)
+    url: str = Field(index=True)
+    title: str = Field(index=True)
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)

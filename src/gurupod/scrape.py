@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import AsyncGenerator
 
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup
@@ -12,32 +13,52 @@ from gurupod.gurulog import get_logger
 logger = get_logger()
 
 
-async def scrape_urls(aiosession, main_url, max_rtn=None, existing=None) -> list[str]:
-    existing = set(existing) or {}
+async def scrape_titles_urls(aiosession, main_url) -> AsyncGenerator[tuple[str, str], None]:
     listing_pages = await _listing_pages(main_url, aiosession)
     new = []
     for i, _ in enumerate(listing_pages):
-        urls = await _episode_urls_from_listing(_, aiosession)
-        if newep := [_ for _ in urls if _ not in existing]:
-            new.extend(newep)
-        else:
-            logger.info(f"Page {i + 1} - all episodes already in db")
-            break
-        if max_rtn and len(new) >= max_rtn:
-            return new[:max_rtn]
+        logger.debug(f"Scraping page {i + 1} of {len(listing_pages)}")
+        async for title, url in _episode_titles_and_urls_from_listing(_, aiosession):
+            yield title, url
 
-    logger.info(f"Scraped {len(new)} new episodes")
-    return new
+    #         ...
+    #     # urls = await _episode_urls_from_listing(_, aiosession)
+    #     # titles_urls = await _episode_titles_and_urls_from_listing(_, aiosession)
+    #     # logger.debug(f"Page {i + 1} - found {urls=}")
+    #     if newep := [_ for _ in urls if _ not in existing]:
+    #         new.extend(newep)
+    #     else:
+    #         logger.debug(f"Page {i + 1} - all episodes already in db")
+    #         break
+    #
+    # log_urls(new, msg="Scraped episodes:")
+    # return new
 
 
-async def scrape_urlsold(aiosession, main_url, max_rtn=None) -> list[str]:
-    listing_pages = await _listing_pages(main_url, aiosession)
-    tasks = [asyncio.create_task(_episode_urls_from_listing(_, aiosession)) for _ in listing_pages]
-    result = await asyncio.gather(*tasks)
-    urls = [url for sublist in result for url in sublist]
-    if max_rtn is None:
-        max_rtn = len(urls)
-    return urls[:max_rtn]
+async def _episode_titles_and_urls_from_listing(
+    listing_page: str, aio_session: ClientSession
+) -> AsyncGenerator[tuple[str, str], None]:
+    text = await _response(listing_page, aio_session)
+    listing_soup = BeautifulSoup(text, "html.parser")
+    episodes_res = listing_soup.select(".episode")
+    for soup_section in episodes_res:
+        title = soup_section.select_one(".episode-title").text.strip()
+        url = soup_section.select_one(".episode-title a")["href"]
+        yield title, url
+
+
+async def _episode_titles_and_urls_from_listingold(
+    listing_page: str, aio_session: ClientSession
+) -> tuple[tuple[str, str], ...]:
+    text = await _response(listing_page, aio_session)
+    listing_soup = BeautifulSoup(text, "html.parser")
+    episodes_res = listing_soup.select(".episode")
+    output = []
+    for soup_section in episodes_res:
+        title = soup_section.select_one(".episode-title").text
+        url = soup_section.select_one(".episode-title a")["href"]
+        output.append((title, url))
+    return tuple(output)
 
 
 async def _episode_urls_from_listing(listing_page: str, aio_session: ClientSession) -> list[str]:

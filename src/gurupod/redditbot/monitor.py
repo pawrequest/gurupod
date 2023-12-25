@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import AsyncGenerator
 
-from asyncpraw.models import Submission, Subreddit
+from asyncpraw.models import Redditor, Submission, Subreddit
 from sqlmodel import Session, select
 
+from data.consts import WRITE_TO_WEB
 from gurupod.gurulog import get_logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_model import RedditThread
@@ -25,7 +26,10 @@ class SubredditMonitor:
                 await assign_gurus([thread], self.session)
 
                 gurus = [_.name for _ in thread.gurus]
-                await flair_submission(submission, gurus)
+                if WRITE_TO_WEB:
+                    await flair_submission(submission, gurus)
+                else:
+                    logger.warning("WRITE TO WEB DISABLED")
                 self.session.add(thread)
                 self.session.commit()
 
@@ -44,7 +48,7 @@ class SubredditMonitor:
     async def stream_filtered_submissions(self) -> AsyncGenerator[Submission, None]:
         logger.info(f"Monitoring subreddit: {self.subreddit.display_name}")
 
-        async for submission in self.subreddit.stream.submissions():
+        async for submission in self.subreddit.stream.submissions(skip_existing=True):
             if filtered := await self.filter_submission(submission):
                 yield filtered
 
@@ -53,7 +57,7 @@ async def flair_submission(submission: Submission, flairs: list) -> bool:
     try:
         # todo reenable
         # [await submission.flair.select(flair_text) for flair_text in flairs]
-        logger.info(f"Flaired {submission.title} with {','.join(flairs)}")
+        logger.info(f"\n\tFlaired {submission.title} with {','.join(flairs)}")
         return True
     except Exception as e:
         logger.error(f"Error applying flair: {e}")
@@ -74,11 +78,10 @@ async def submission_to_thread(session: Session, submission: Submission) -> Redd
         logger.error(f"Error processing submission for DB: {e}")
 
 
-async def message_home(reddit, msg):
+async def message_home(recipient: Redditor | Subreddit, msg):
+    recip_name = recipient.name if isinstance(recipient, Redditor) else recipient.display_name
     try:
-        redditor = await reddit.redditor("ProsodySpeaks", fetch=False)
-        # redditor = await reddit.redditor("decodethebot", fetch=False)
-        await redditor.message(subject="testmsg", message="testmsg")
-        logger.info("Sent test message to ProsodySpeaks")
+        await recipient.message(subject="testmsg", message=msg)
+        logger.info(f"\n\tSent test message to {recip_name}")
     except Exception as e:
         logger.error(f"Error sending test message: {e}")
