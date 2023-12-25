@@ -40,11 +40,10 @@ def log_episodes(eps: Sequence[EP_VAR], calling_func=None, msg: str = ""):
     if not eps:
         return
     msg += episode_log_string(eps)
-
     _logger.info(msg)
 
 
-def episode_log_string(eps):
+def episode_log_string(eps: Sequence[EP_VAR]) -> str:
     msg = ""
     try:
         msg += "\n".join(f"\t {_.date.date()} - {_.title}" for _ in eps[:3])

@@ -21,19 +21,6 @@ async def scrape_titles_urls(aiosession, main_url) -> AsyncGenerator[tuple[str, 
         async for title, url in _episode_titles_and_urls_from_listing(_, aiosession):
             yield title, url
 
-    #         ...
-    #     # urls = await _episode_urls_from_listing(_, aiosession)
-    #     # titles_urls = await _episode_titles_and_urls_from_listing(_, aiosession)
-    #     # logger.debug(f"Page {i + 1} - found {urls=}")
-    #     if newep := [_ for _ in urls if _ not in existing]:
-    #         new.extend(newep)
-    #     else:
-    #         logger.debug(f"Page {i + 1} - all episodes already in db")
-    #         break
-    #
-    # log_urls(new, msg="Scraped episodes:")
-    # return new
-
 
 async def _episode_titles_and_urls_from_listing(
     listing_page: str, aio_session: ClientSession
