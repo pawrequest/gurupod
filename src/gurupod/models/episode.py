@@ -39,6 +39,7 @@ class EpisodeBase(SQLModel):
     @property
     def data_missing(self) -> bool:
         return any(getattr(self, _) is None for _ in MAYBE_ATTRS)
+        return not all(getattr(self, _) for _ in MAYBE_ATTRS)
 
     def __str__(self):
         return f"{self.__class__.__name__}: {self.title or self.url}"

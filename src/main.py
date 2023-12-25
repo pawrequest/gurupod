@@ -5,17 +5,17 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlmodel import Session
 
-from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB, THREADS_JSON, TEST_SUB
+from data.consts import EPISODES_MOD, MONITOR_SUB, TEST_SUB, THREADS_JSON
 from data.gurunames import GURUS
 from gurupod.database import create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.responses import EpisodeWith
-from gurupod.redditbot.managers import subreddit_cm
+from gurupod.redditbot.managers import reddit_cm
 from gurupod.routing.episode_funcs import log_episodes, remove_existing
-from gurupod.routing.episode_routes import ep_router, put_ep
-from gurupod.redditbot.monitor import SubredditMonitor, flair_submission, submission_to_thread
+from gurupod.routing.episode_routes import ep_router, fetch, put_ep
+from gurupod.redditbot.monitor import SubredditMonitor
 from gurupod.routing.reddit_routes import red_router
 
 logger = get_logger()
@@ -49,30 +49,46 @@ async def lifespan(app: FastAPI):
         await import_gurus_from_file(session)
         await eps_from_json(session)
 
-        tasks = [asyncio.create_task(run_periodic_task(check_new_ep, 100))]
+        async with reddit_cm() as reddit:
+            tasks = []
+            episode_monitor_task = asyncio.create_task(run_periodic_task(session, check_new_ep, reddit, 1))
+            tasks.append(episode_monitor_task)
+            # tasks = [asyncio.create_task(run_periodic_task(reddit, 10))]
 
-        if MONITOR_SUB:
-            async with subreddit_cm(TEST_SUB) as subreddit:
+            if MONITOR_SUB:
+                subreddit = await reddit.subreddit(TEST_SUB)
                 sub_bot = SubredditMonitor(session, subreddit)
                 await sub_bot.monitor()
-                # sub_monitor = asyncio.create_task(sub_bot.monitor())
-                # tasks.append(sub_monitor)
 
-        yield
-
-        for task in tasks:
-            task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
 
+    yield
 
-async def run_periodic_task(func, interval):
+    for task in tasks:
+        task.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
+
+
+def reddit_msg_from_ep(submission, episode: Episode):
+    msg = f"""
+    New episode {episode.title} scraped from Captivate
+    posted in testsub: {submission.shortlink}
+    """
+    return msg
+
+
+async def run_periodic_task(session, func, reddit, interval):
     while True:
-        await func()
+        await func(session, reddit)
         await asyncio.sleep(interval)
 
 
-async def check_new_ep():
-    logger.info("Checking for new episodes")
+async def check_new_ep(session, reddit):
+    if neweps := await fetch(session=session):
+        for ep in neweps:
+            logger.info(f"Fetched new episode: {ep}")
+            # submitted = await submit_episode_subreddit(ep, TEST_SUB)
+            # await message_home(reddit, reddit_msg_from_ep(submitted, ep))
 
 
 app = FastAPI(lifespan=lifespan)

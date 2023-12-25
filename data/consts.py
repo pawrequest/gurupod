@@ -29,9 +29,9 @@ TEST_WIKI = "gurus"
 EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
 
 # env vars
-REDDIT_CLIENT_ID = os.environ["REDDIT_CLIENT_ID"]
-REDDIT_CLIENT_SEC = os.environ["REDDIT_CLIENT_SEC"]
-REDDIT_REF_TOK = os.environ["REDDIT_REF_TOK"]
+REDDIT_CLIENT_ID = os.environ["DTG_CLIENT_ID"]
+REDDIT_CLIENT_SEC = os.environ["DTG_CLIENT_SEC"]
+REDDIT_REF_TOK = os.environ["DTG_TOKEN"]
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
 GURU_FLAIR_ID = os.environ.get("CUSTOM_FLAIR_ID")
-MONITOR_SUB = os.environ.get("MONITOR_SUB", False)
+MONITOR_SUB = os.environ.get("RUN_SUB_BOT", False)

@@ -38,6 +38,13 @@ async def test_scrape_new_episode(test_db, cached_scrape):
     assert isinstance(res.episodes[0], EpisodeBase)
 
 
+@pytest.mark.asyncio
+def test_scrape_empty(test_db):
+    response = client.get("/eps/scrape?max_rtn=0")
+    assert response.status_code == 200
+    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
+
+
 @pytest.mark.skip(reason="duplicates scrape and put")
 @pytest.mark.asyncio
 def test_fetch_new_episode(test_db):
@@ -76,13 +83,6 @@ async def test_read_all_episodes(all_episodes_json, blank_test_db):
 
 
 @pytest.mark.asyncio
-def test_scrape_empty(test_db):
-    response = client.get("/eps/scrape?max_rtn=0")
-    assert response.status_code == 200
-    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
-
-
-@pytest.mark.asyncio
 def test_maybe_expand(random_episode_validated, test_db):
     ep = EpisodeBase(url=random_episode_validated.url)
     response = client.post("/eps/put", json=[ep.model_dump()])
@@ -91,9 +91,11 @@ def test_maybe_expand(random_episode_validated, test_db):
 
 @pytest.mark.asyncio
 def test_scraper_skips_existing(blank_test_db):
-    client.get("/eps/scrape?max_rtn=2").json()
-    client.get("/eps/fetch?max_rtn=1").json()
-
-    rescraped = client.get("/eps/scrape?max_rtn=1").json()
-    rescraped_response = EpisodeResponseNoDB.model_validate(rescraped)
-    assert rescraped_response == EpisodeResponseNoDB.empty()
+    scrape1 = client.get("/eps/scrape?max_rtn=1").json()
+    fetch1 = client.get("/eps/fetch?max_rtn=1").json()
+    fetched_ep = fetch1["episodes"][0]
+    fetched_ep.pop("gurus")
+    fetched_ep.pop("reddit_threads")
+    scrape2 = client.get("/eps/scrape?max_rtn=1").json()
+    assert scrape1["episodes"][0] == fetched_ep
+    assert scrape2["episodes"][0] != fetched_ep

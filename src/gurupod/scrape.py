@@ -12,7 +12,27 @@ from gurupod.gurulog import get_logger
 logger = get_logger()
 
 
-async def scrape_urls(aiosession, main_url, max_rtn=None) -> list[str]:
+async def scrape_urls(aiosession, main_url, max_rtn=None, existing=None) -> list[str]:
+    existing = set(existing) or {}
+    listing_pages = await _listing_pages(main_url, aiosession)
+    dupes = 0
+    new = []
+    for _ in listing_pages:
+        urls = await _episode_urls_from_listing(_, aiosession)
+        if newep := [_ for _ in urls if _ not in existing]:
+            new.extend(newep)
+        else:
+            dupes += 1
+            if dupes > 3:
+                logger.info("Found 3 duplicate pages in a row, stopping")
+                break
+        if len(new) >= max_rtn:
+            return new[:max_rtn]
+
+    return new
+
+
+async def scrape_urlsold(aiosession, main_url, max_rtn=None) -> list[str]:
     listing_pages = await _listing_pages(main_url, aiosession)
     tasks = [asyncio.create_task(_episode_urls_from_listing(_, aiosession)) for _ in listing_pages]
     result = await asyncio.gather(*tasks)
@@ -49,7 +69,7 @@ async def _listing_pages(main_url: str, session: ClientSession) -> list[str]:
     main_soup = BeautifulSoup(main_html, "html.parser")
     num_pages = _num_pages(main_soup)
     listing_pages = _listing_page_strs(main_url, num_pages)
-    return listing_pages
+    return sorted(listing_pages, key=lambda x: int(x.split("/")[-2]))
 
 
 def _listing_page_strs(main_url: str, num_pages: int) -> list[str]:

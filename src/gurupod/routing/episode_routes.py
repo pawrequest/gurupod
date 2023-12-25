@@ -19,7 +19,6 @@ from gurupod.models.responses import (
 )
 from gurupod.routing.episode_funcs import (
     remove_existing_episodes,
-    remove_existing_urls,
     validate_add,
 )
 from gurupod.scrape import scrape_urls
@@ -64,9 +63,12 @@ async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
 async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
     """endpoint for dry-run / internal use"""
     async with ClientSession() as aio_session:
-        scraped_urls = await scrape_urls(main_url=MAIN_URL, aiosession=aio_session, max_rtn=max_rtn)
-        new_urls = remove_existing_urls(scraped_urls, session)
-        new_eps = [EpisodeBase(url=_) for _ in new_urls]
+        existing_urls = session.exec(select(Episode.url)).all()
+        scraped_urls = await scrape_urls(
+            main_url=MAIN_URL, aiosession=aio_session, existing=existing_urls, max_rtn=max_rtn
+        )
+        # new_urls = remove_existing_urls(scraped_urls, session)
+        new_eps = [EpisodeBase(url=_) for _ in scraped_urls]
         expanded = await expand_and_sort(new_eps)
         return EpisodeResponseNoDB.from_episodes(expanded)
 

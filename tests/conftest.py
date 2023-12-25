@@ -82,7 +82,7 @@ app.dependency_overrides[reddit_cm()] = override_subreddit
 @pytest.mark.asyncio
 @pytest.fixture(scope="session")
 async def cached_scrape():
-    response = client.get("/eps/scrape")
+    response = client.get("/eps/scrape?max_rtn=5")
     assert response.status_code == 200
     res = EpisodeResponseNoDB.model_validate(response.json())
     return res
@@ -137,15 +137,15 @@ def blank_test_db(test_db):
 @pytest.fixture(scope="module")
 def markup_sample():
     return """# Interview with Daniël Lakens and Smriti Mehta on the state of Psychology
- 
+
 [play on captivate.fm](https://decoding-the-gurus.captivate.fm/episode/interview-with-daniel-lakens-and-smriti-mehta-on-the-state-of-psychology)
 ### Published Saturday November 18 2023
- 
+
 ### Show Notes
 
-We are back with more geeky academic discussion than you can shake a stick at. This week we are doing our bit to save civilization by discussing issues in contemporary science, the replication crisis, and open science reforms with fellow psychologists/meta-scientists/podcasters, Daniël Lakens and Smriti Mehta. Both Daniël and Smriti are well known for their advocacy for methodological reform and have been hosting a (relatively) new podcast, Nullius in Verba, all about 'science—what it is and what it could be'. 
+We are back with more geeky academic discussion than you can shake a stick at. This week we are doing our bit to save civilization by discussing issues in contemporary science, the replication crisis, and open science reforms with fellow psychologists/meta-scientists/podcasters, Daniël Lakens and Smriti Mehta. Both Daniël and Smriti are well known for their advocacy for methodological reform and have been hosting a (relatively) new podcast, Nullius in Verba, all about 'science—what it is and what it could be'.
 
-We discuss a range of topics including questionable research practices, the implications of the replication crisis, responsible heterodoxy, and the role of different communication modes in shaping discourses. 
+We discuss a range of topics including questionable research practices, the implications of the replication crisis, responsible heterodoxy, and the role of different communication modes in shaping discourses.
 
 Also featuring: exciting AI chat, Lex and Elon being teenage edge lords, feedback on the Huberman episode, and as always updates on Matt's succulents.
 
@@ -166,5 +166,5 @@ Back soon with a Decoding episode!
 [Critical commentary on Fiedler controversy at Replicability-Index](https://replicationindex.com/2022/12/30/klaus-fiedler-is-a-victim-of-his-own-arrogance/)
 
 
- 
+
  ---"""

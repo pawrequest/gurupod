@@ -32,9 +32,9 @@ async def edit_reddit_wiki(markup, wiki: WikiPage):
     return res
 
 
-async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit):
+async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) -> Submission:
     title = f"NEW EPISODE: {episode.title}"
-    writer = RPostWriter([episode])
+    writer = RPostWriter(episode)
     text = writer.write_many()
     submission: Submission = await sub_reddit.submit(title, selftext=text)
     return submission

@@ -72,3 +72,9 @@ async def submission_to_thread(session: Session, submission: Submission) -> Redd
             return thread_
     except Exception as e:
         logger.error(f"Error processing submission for DB: {e}")
+
+
+async def message_home(reddit, msg):
+    redditor = await reddit.redditor("ProsodySpeaks", fetch=False)
+    await redditor.message(subject="New Episode", message=msg)
+    logger.info("Sent test message to ProsodySpeaks")
