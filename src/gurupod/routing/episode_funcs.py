@@ -74,7 +74,9 @@ def remove_existing_urls(urls: Sequence[str], session: Session) -> tuple[str, ..
     return new_urls
 
 
-def remove_existing_smth(to_filter: Sequence[str], db_field, session: Session) -> tuple[str, ...]:
+def remove_existing(to_filter: Sequence[str], db_field, session: Session) -> tuple[str, ...]:
+    if isinstance(to_filter, str):
+        to_filter = [to_filter]
     db_entries = session.exec(select(db_field)).all()
     new_entries = tuple(_ for _ in to_filter if _ not in db_entries)
     return new_entries

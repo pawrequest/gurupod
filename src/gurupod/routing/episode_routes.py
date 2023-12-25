@@ -10,7 +10,7 @@ from sqlmodel import Session, select
 from data.consts import EPISODES_MOD, MAIN_URL
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import EpisodeBase, Episode
+from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.guru import Guru
 from gurupod.models.responses import (
     EpisodeResponse,
@@ -87,6 +87,9 @@ async def read_one(ep_id: int, session: Session = Depends(get_session)):
 async def read_all(session: Session = Depends(get_session)):
     eps = session.exec(select(Episode)).all()
     return EpisodeResponse.from_episodes(list(eps))
+
+
+HAS_GURUS = ""
 
 
 async def assign_gurus(to_assign: Sequence, session: Session):

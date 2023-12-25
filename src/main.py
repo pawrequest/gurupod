@@ -1,3 +1,4 @@
+import asyncio
 import json
 from contextlib import asynccontextmanager
 
@@ -6,18 +7,16 @@ from sqlmodel import Session
 
 from data.consts import EPISODES_MOD, GURU_SUB, MONITOR_SUB, THREADS_JSON, TEST_SUB
 from data.gurunames import GURUS
-from gurupod.database import SQLModel, create_db_and_tables, engine_
+from gurupod.database import create_db_and_tables, engine_
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
-from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.models.reddit_model import RedditThread
-from gurupod.redditbot.monitor import submission_monitor
-from gurupod.routing.episode_funcs import remove_existing_smth, log_episodes
+from gurupod.models.responses import EpisodeWith
+from gurupod.redditbot.managers import subreddit_cm
+from gurupod.routing.episode_funcs import log_episodes, remove_existing
 from gurupod.routing.episode_routes import ep_router, put_ep
-from gurupod.routing.go import SubmissionMonitor
-from gurupod.routing.reddit_routes import red_router, save_submission
-import random
+from gurupod.redditbot.monitor import SubredditMonitor, flair_submission, submission_to_thread
+from gurupod.routing.reddit_routes import red_router
 
 logger = get_logger()
 
@@ -25,6 +24,22 @@ logger = get_logger()
 # ...
 
 
+#
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     logger.debug("Starting lifespan")
+#     create_db_and_tables()
+#     logger.debug("tables created")
+#     with Session(engine_()) as session:
+#         await import_gurus_from_file(session)
+#         await eps_from_json(session)
+#         if MONITOR_SUB:
+#             async with subreddit_cm(TEST_SUB) as subreddit:
+#                 sub_bot = SubredditMonitor(session, subreddit)
+#                 await sub_bot()
+#         else:
+#             logger.info("No monitor")
+#         yield
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.debug("Starting lifespan")
@@ -32,47 +47,32 @@ async def lifespan(app: FastAPI):
     logger.debug("tables created")
     with Session(engine_()) as session:
         await import_gurus_from_file(session)
-
         await eps_from_json(session)
 
-        # [reddit.post_episode(_) for _ in new]
-    if not MONITOR_SUB:
-        logger.info("No monitor")
-        yield
-    else:
-        sub_bot = SubmissionMonitor(GURU_SUB, GURUS)
+        tasks = [asyncio.create_task(run_periodic_task(check_new_ep, 100))]
 
-        async for submission in sub_bot.stream_filtered_submissions():
-            logger.info(f"Got submission: {submission}")
-            await save_submission(session, submission)
+        if MONITOR_SUB:
+            async with subreddit_cm(TEST_SUB) as subreddit:
+                sub_bot = SubredditMonitor(session, subreddit)
+                await sub_bot.monitor()
+                # sub_monitor = asyncio.create_task(sub_bot.monitor())
+                # tasks.append(sub_monitor)
 
         yield
-        #
-        # async for sub in submission_monitor(subreddit_name=TEST_SUB):
-        #     logger.info(f"Got submission: {sub}")
-        #     await save_submission(session, sub)
-        #     yield
-        #
-        # monitor_task = asyncio.create_task(
-        #     launch_monitor(subreddit_name=GURU_SUB, timeout=None))
-        # logger.info('Started monitor')
-        # yield
-        # monitor_task.cancel()
-        # await monitor_task
-        # #
-        # monitor_task = asyncio.create_task(
-        #     launch_monitor(subreddit_name=TEST_SUB, serialised_sub_q=submission_queue, timeout=None)
-        # )
-        # while not submission_queue.empty():
-        #     submission_data = await submission_queue.get()
-        #     logger.info(f"Got submission: {submission_data}")
-        #     await save_submission(session, submission_data)
-        #     submission_queue.task_done()
 
-        # logger.info("Started monitor")
-        # yield
-        # monitor_task.cancel()
-        # await monitor_task
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+
+
+async def run_periodic_task(func, interval):
+    while True:
+        await func()
+        await asyncio.sleep(interval)
+
+
+async def check_new_ep():
+    logger.info("Checking for new episodes")
 
 
 app = FastAPI(lifespan=lifespan)
@@ -80,14 +80,13 @@ app.include_router(ep_router, prefix="/eps")
 app.include_router(red_router, prefix="/red")
 
 
-async def eps_from_json(session: Session):
+async def eps_from_json(session: Session) -> list[EpisodeWith]:
     with open(EPISODES_MOD, "r") as f:
         eps_j = json.load(f)
-        logger.debug(f"Loading {len(eps_j)} episodes from {EPISODES_MOD}")
         ep_resp = await put_ep(eps_j, session)
         if new := ep_resp.episodes:
+            logger.debug(f"Loading {len(new)} episodes from {EPISODES_MOD}")
             log_episodes(new)
-            # logger.info(f"Added {len(new)} new episodes: {[_.url for _ in new]}")
             return new
 
 
@@ -101,7 +100,7 @@ async def threads_from_json(session: Session):
 
 #
 async def import_gurus_from_file(session: Session):
-    if guru_names := remove_existing_smth(GURUS, Guru.name, session):
+    if guru_names := remove_existing(GURUS, Guru.name, session):
         logger.info(f"Adding {len(guru_names)} new gurus: {guru_names}")
         new_gurus = [Guru(name=_) for _ in guru_names]
         session.add_all(new_gurus)

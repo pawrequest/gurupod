@@ -25,7 +25,7 @@ class RedditThreadBase(SQLModel):
     class Config:
         arbitrary_types_allowed = True
 
-    reddit_id: str
+    reddit_id: str = Field(index=True, unique=True)
     title: str
     shortlink: str
     created_datetime: datetime

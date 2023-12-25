@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from asyncpraw.models import Submission, WikiPage
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
@@ -8,13 +6,10 @@ from data.consts import REDDIT_SEND_KEY
 from gurupod.database import get_session
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
-from gurupod.models.reddit_model import RedditThread
 from gurupod.models.responses import RedditThreadWith
 from gurupod.redditbot.managers import subreddit_cm, wiki_page_cm
-from gurupod.redditbot.write_to_web import edit_reddit_wiki, submit_episode_subreddit
-from gurupod.routing.episode_routes import assign_gurus
+from gurupod.redditbot.subred import edit_reddit_wiki, submit_episode_subreddit
 from gurupod.writer import RWikiWriter
-import json
 
 logger = get_logger()
 red_router = APIRouter()
@@ -56,21 +51,3 @@ async def put_thread(
         return "wrong key"
 
     submission = await Submission.fetch(submission_id)
-
-
-async def save_submission(session: Session, submission: Submission):
-    try:
-        existing_threads = session.exec(select(RedditThread.reddit_id)).all()
-        if submission.id in existing_threads:
-            logger.debug(f"Skipping existing submission: {submission.title}")
-            return
-
-        logger.info(f"Saving new submission: {submission.title}")
-        thread_ = RedditThread.from_submission(submission)
-        # thread_ = RedditThread.model_validate(exp)
-        assigned = await assign_gurus([thread_], session)
-        session.add(thread_)
-        session.commit()
-        return thread_
-    except Exception as e:
-        logger.error(f"Error processing submission for DB: {e}")
