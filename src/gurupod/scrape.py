@@ -15,20 +15,18 @@ logger = get_logger()
 async def scrape_urls(aiosession, main_url, max_rtn=None, existing=None) -> list[str]:
     existing = set(existing) or {}
     listing_pages = await _listing_pages(main_url, aiosession)
-    dupes = 0
     new = []
-    for _ in listing_pages:
+    for i, _ in enumerate(listing_pages):
         urls = await _episode_urls_from_listing(_, aiosession)
         if newep := [_ for _ in urls if _ not in existing]:
             new.extend(newep)
         else:
-            dupes += 1
-            if dupes > 3:
-                logger.info("Found 3 duplicate pages in a row, stopping")
-                break
-        if len(new) >= max_rtn:
+            logger.info(f"Page {i + 1} - all episodes already in db")
+            break
+        if max_rtn and len(new) >= max_rtn:
             return new[:max_rtn]
 
+    logger.info(f"Scraped {len(new)} new episodes")
     return new
 
 

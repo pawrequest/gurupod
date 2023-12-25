@@ -3,8 +3,11 @@ from __future__ import annotations
 from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Submission, Subreddit
 
+from gurupod.gurulog import get_logger
 from gurupod.models.episode import EpisodeBase
 from gurupod.writer import RPostWriter
+
+logger = get_logger()
 
 
 async def submission_in_stream_by_id(submission_id: str, subreddit: Subreddit) -> Submission:
@@ -33,8 +36,12 @@ async def edit_reddit_wiki(markup, wiki: WikiPage):
 
 
 async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) -> Submission:
-    title = f"NEW EPISODE: {episode.title}"
-    writer = RPostWriter(episode)
-    text = writer.write_many()
-    submission: Submission = await sub_reddit.submit(title, selftext=text)
-    return submission
+    try:
+        title = f"NEW EPISODE: {episode.title}"
+        writer = RPostWriter(episode)
+        text = writer.write_many()
+        submission: Submission = await sub_reddit.submit(title, selftext=text)
+        return submission
+    except Exception as e:
+        logger.error(f"Error submitting episode: {e}")
+        return None

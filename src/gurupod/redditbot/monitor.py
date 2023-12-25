@@ -34,7 +34,7 @@ class SubredditMonitor:
         try:
             for target in gurus:
                 if target in submission.title:
-                    logger.info(f"Guru name '{target}' found in '{submission.title}' @ {submission.shortlink}")
+                    logger.debug(f"Guru name '{target}' found in '{submission.title}' @ {submission.shortlink}")
                     return submission
             return None
         except Exception as e:
@@ -75,6 +75,10 @@ async def submission_to_thread(session: Session, submission: Submission) -> Redd
 
 
 async def message_home(reddit, msg):
-    redditor = await reddit.redditor("ProsodySpeaks", fetch=False)
-    await redditor.message(subject="New Episode", message=msg)
-    logger.info("Sent test message to ProsodySpeaks")
+    try:
+        redditor = await reddit.redditor("ProsodySpeaks", fetch=False)
+        # redditor = await reddit.redditor("decodethebot", fetch=False)
+        await redditor.message(subject="testmsg", message="testmsg")
+        logger.info("Sent test message to ProsodySpeaks")
+    except Exception as e:
+        logger.error(f"Error sending test message: {e}")

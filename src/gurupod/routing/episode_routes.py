@@ -41,12 +41,14 @@ async def put_ep(
     episodes: EpisodeBase | Sequence[EpisodeBase], session: Session = Depends(get_session)
 ) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
-    # logger.info(f"Endpoint hit: put_ep: {episodes}")
+    logger.info(f"Adding {len(episodes)} episodes to db")
     episodes = repack_validate(episodes)
     episodes = remove_existing_episodes(episodes, session)
+    if not episodes:
+        return EpisodeResponse.empty()
     episodes = await expand_and_sort(episodes)
-    episodes = validate_add(episodes, session, commit=True)
-    asigned = await assign_gurus(episodes, session)
+    addepisodes = validate_add(episodes, session, commit=True)
+    asigned = await assign_gurus(addepisodes, session)
     resp = EpisodeResponse.from_episodes(episodes)
     return resp
 
@@ -56,6 +58,7 @@ async def fetch(session: Session = Depends(get_session), max_rtn: int = None):
     """check captivate for new episodes and add to db"""
     scraped = await _scrape(session, max_rtn=max_rtn)
     eps = scraped.episodes
+    logger.info(f"Scraped {len(eps)} new episodes")
     return await put_ep(eps, session)
 
 
@@ -96,6 +99,8 @@ HAS_GURUS = ""
 
 async def assign_gurus(to_assign: Sequence, session: Session):
     gurus = session.exec(select(Guru)).all()
+    if not to_assign:
+        return to_assign
     for target in to_assign:
         title_gurus = [_ for _ in gurus if _.name in target.title]
         target.gurus.extend(title_gurus)

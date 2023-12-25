@@ -29,6 +29,9 @@ TEST_WIKI = "gurus"
 EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
 
 # env vars
+# REDDIT_CLIENT_ID = os.environ["REDDIT_CLIENT_ID"]
+# REDDIT_CLIENT_SEC = os.environ["REDDIT_CLIENT_SEC"]
+# REDDIT_REF_TOK = os.environ["REDDIT_REF_TOK"]
 REDDIT_CLIENT_ID = os.environ["DTG_CLIENT_ID"]
 REDDIT_CLIENT_SEC = os.environ["DTG_CLIENT_SEC"]
 REDDIT_REF_TOK = os.environ["DTG_TOKEN"]
