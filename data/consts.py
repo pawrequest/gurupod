@@ -6,8 +6,10 @@ from pathlib import Path
 import dotenv
 
 dotenv.load_dotenv()
+
 # Switches
-WRITE_TO_WEB = False
+WRITE_TO_WEB = True
+
 # links
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
 USER_AGENT = "Guru_Pod Wiki updater by prosodyspeaks"
@@ -23,6 +25,7 @@ EPISODES_OUT = DATA_DIR / "episodes_out.json"
 EPISODES_HTML = DATA_DIR / "episodes.html"
 GURU_DB = DATA_DIR / "guru.db"
 THREADS_JSON = DATA_DIR / "threads.json"
+BACKUP_JSON = DATA_DIR / "db_backup.json"
 
 # strings
 GURU_SUB = "DecodingTheGurus"

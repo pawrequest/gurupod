@@ -57,7 +57,10 @@ async def flair_submission(submission: Submission, flairs: list) -> bool:
     try:
         # todo reenable
         # [await submission.flair.select(flair_text) for flair_text in flairs]
-        logger.info(f"\n\tFlaired {submission.title} with {','.join(flairs)}")
+        # logger.info(f"\n\tFlaired {submission.title} with {','.join(flairs)}")
+        logger.warning(
+            "FLAIRING DISABLED --- \n\tFlaired {submission.title} with {','.join(flairs)} --- FLAIRING DISABLED"
+        )
         return True
     except Exception as e:
         logger.error(f"Error applying flair: {e}")

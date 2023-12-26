@@ -1,32 +1,46 @@
 import asyncio
+from datetime import datetime
 
 from asyncpraw.models import Redditor, Subreddit
 
-from data.consts import WRITE_TO_WEB
+from data.consts import BACKUP_JSON, WRITE_TO_WEB
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.redditbot.monitor import message_home
 from gurupod.redditbot.subred import reddit_episode_submitted_msg, submit_episode_subreddit
 from gurupod.routing.episode_routes import fetch
+from initialise import db_to_json
 
 logger = get_logger()
 
 
+async def do_backup(session, interval):
+    while True:
+        logger.debug("Waking backup bot")
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        backup_file = BACKUP_JSON.with_suffix(f".{date_str}.json")
+        await db_to_json(session, backup_file)
+        logger.debug(f"Backup bot sleeping for {interval} seconds")
+        await asyncio.sleep(interval)
+
+
 async def episode_monitor(session, subreddit, interval, recipient: Redditor | Subreddit) -> None:
     while True:
+        logger.debug("Waking episode monitor")
         await scrape_import_and_post_episode(session, subreddit, recipient)
-        logger.info(f"Sleeping for {interval} seconds")
+        logger.debug(f"Episode monitor sleeping for {interval} seconds")
         await asyncio.sleep(interval)
 
 
 async def scrape_import_and_post_episode(session, subreddit, recipient: Redditor | Subreddit) -> None:
-    if neweps := await fetch(session=session):
+    resp = await fetch(session=session)
+    if neweps := resp.episodes:
         logger.info(f"Found {len(neweps.episodes)} new episodes")
         for ep in neweps.episodes:
             # logger.info(f"Fetched new episode: {ep.title}")
             await process_new_episode(ep, recipient, subreddit)
     else:
-        logger.info("No new episodes found")
+        logger.debug("No new episodes found")
 
 
 async def process_new_episode(ep: Episode, recipient, subreddit) -> None:
