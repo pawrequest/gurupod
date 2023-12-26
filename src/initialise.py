@@ -12,7 +12,7 @@ from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, Reddi
 from gurupod.models.reddit_model import RedditThread
 from gurupod.models.responses import EpisodeWith
 from gurupod.routing.episode_funcs import remove_existing
-from gurupod.routing.episode_routes import put_ep
+from gurupod.routing.episode_routes import put_episode_db
 
 logger = get_logger()
 
@@ -20,7 +20,7 @@ logger = get_logger()
 async def eps_from_file(session: Session) -> list[EpisodeWith]:
     with open(EPISODES_MOD, "r") as f:
         eps_j = json.load(f)
-        ep_resp = await put_ep(eps_j, session)
+        ep_resp = await put_episode_db(eps_j, session)
         if new := ep_resp.episodes:
             logger.debug(f"Loading {len(new)} episodes from {EPISODES_MOD}")
             log_episodes(new, calling_func=eps_from_file, msg=f"Loading from {EPISODES_MOD}")

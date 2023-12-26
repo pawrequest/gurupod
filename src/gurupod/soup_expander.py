@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Sequence
+from typing import AsyncGenerator, Sequence
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from dateutil import parser
 
-from gurupod.gurulog import get_logger, log_episodes
+from gurupod.gurulog import get_logger
 from gurupod.models.episode import EpisodeBase
 from gurupod.scrape import _response
 
@@ -25,6 +25,14 @@ async def expand_and_sort(episodes: Sequence[EpisodeBase]) -> list[EpisodeBase]:
         complete.extend(expanded)
     # log_episodes(complete, msg="Complete episodes:")
     return sorted(complete, key=lambda x: x.date)
+
+
+async def expand_async(episodes: AsyncGenerator[EpisodeBase, None]) -> AsyncGenerator[EpisodeBase, None]:
+    logger.info(f"Expanding {len(episodes)} episodes")
+    async for episode in episodes:
+        if episode.data_missing:
+            episode = await expand_episode(episode)
+        yield episode
 
 
 async def expand_episode(ep: EpisodeBase) -> EpisodeBase:

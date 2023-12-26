@@ -25,11 +25,12 @@ def test_import_new_episodes(random_episode_json, test_db):
 
 
 @pytest.mark.asyncio
-def test_import_existing_episodes(random_episode_json, test_db):
+async def test_import_existing_episodes(random_episode_json, test_db):
     client.post("/eps/put", json=[random_episode_json])
     response = client.post("/eps/put", json=[random_episode_json])
     assert response.status_code == 200
-    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
+    assert EpisodeResponse.model_validate(response.json()) == await EpisodeResponse.emptynew()
+    # assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
 
 
 @pytest.mark.asyncio
@@ -42,7 +43,8 @@ async def test_scrape_new_episode(test_db, cached_scrape):
 def test_scrape_empty(test_db):
     response = client.get("/eps/scrape?max_rtn=0")
     assert response.status_code == 200
-    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
+    assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.emptynew()
+    # assert EpisodeResponse.model_validate(response.json()) == EpisodeResponse.empty()
 
 
 @pytest.mark.skip(reason="duplicates scrape and put")

@@ -5,7 +5,7 @@ from typing import AsyncGenerator
 from asyncpraw.models import Redditor, Submission, Subreddit
 from sqlmodel import Session, select
 
-from data.consts import WRITE_TO_WEB
+from data.consts import WRITE_TO_WEB, SKIP_OLD_THREADS
 from gurupod.gurulog import get_logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_model import RedditThread
@@ -13,6 +13,12 @@ from gurupod.routing.episode_funcs import remove_existing
 from gurupod.routing.episode_routes import assign_gurus
 
 logger = get_logger()
+
+
+async def reddit_monitor(session: Session, subreddit: Subreddit):
+    logger.info(f"Starting reddit bot for {subreddit.display_name}")
+    monitor = SubredditMonitor(session, subreddit)
+    await monitor.monitor()
 
 
 class SubredditMonitor:
@@ -27,9 +33,10 @@ class SubredditMonitor:
 
                 gurus = [_.name for _ in thread.gurus]
                 if WRITE_TO_WEB:
+                    logger.warning("WRITE TO WEB ENABLED - APPLYING FLAIR {gurus} to {submission.title}")
                     await flair_submission(submission, gurus)
                 else:
-                    logger.warning("WRITE TO WEB DISABLED")
+                    logger.warning("WRITE TO WEB DISABLED - NOT APPLYING FLAIR")
                 self.session.add(thread)
                 self.session.commit()
 
@@ -46,9 +53,7 @@ class SubredditMonitor:
             return None
 
     async def stream_filtered_submissions(self) -> AsyncGenerator[Submission, None]:
-        logger.info(f"Monitoring subreddit: {self.subreddit.display_name}")
-
-        async for submission in self.subreddit.stream.submissions(skip_existing=True):
+        async for submission in self.subreddit.stream.submissions(skip_existing=SKIP_OLD_THREADS):
             if filtered := await self.filter_submission(submission):
                 yield filtered
 
