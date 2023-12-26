@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 from data.consts import MAIN_URL
 from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
-from gurupod.scrape import scrape_titles_urls
+from gurupod.episodebot.scrape import scrape_titles_urls
 
 logger = get_logger()
 

@@ -87,20 +87,6 @@ class HtmlWriter(EpisodeWriter):
         notes = "<h3>Show Notes:</h3>\n" + "\n".join([f"<p>{_}</p>" for _ in notes]) + "\n" if notes else ""
         return notes
 
-    # def _links_text_old(self, links) -> str:
-    #     links = "<h3>Show Links:</h3>\n" + "\n".join(
-    #         [f"<a href='{link}'>{text}</a><br>" for text, link in
-    #          links.items()]) + "\n" if links else ""
-    #     return links
-
-    # def _links_text(self, links) -> str:
-    #     links = f"""
-    #     <h3>Show Links:</h3>\n
-    #     {'\n'.join([f'<a href={link}>{text}</a><br>' for text, link in links.episodes()])}
-    #      """ if links else ""
-    #
-    #     return links
-
     def _links_text(self, links) -> str:
         if links:
             links_html = "\n".join([f'<a href="{link}">{text}</a><br>' for text, link in links.episodes()])

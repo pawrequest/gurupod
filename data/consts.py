@@ -10,7 +10,8 @@ dotenv.load_dotenv()
 # Switches
 WRITE_TO_WEB = False
 SKIP_OLD_THREADS = True
-BACKUP_SLEEP = 86400
+# BACKUP_SLEEP = 86400
+BACKUP_SLEEP = 10
 EPISODE_MONITOR_SLEEP = 30
 
 # links
@@ -25,10 +26,8 @@ EPISODES_MD = DATA_DIR / "episodes.md"
 EPISODES_JSON = DATA_DIR / "episodes.json"
 EPISODES_MOD = DATA_DIR / "episodes_mod.json"
 EPISODES_OUT = DATA_DIR / "episodes_out.json"
-EPISODES_HTML = DATA_DIR / "episodes.html"
 GURU_DB = DATA_DIR / "guru.db"
-THREADS_JSON = DATA_DIR / "threads.json"
-BACKUP_JSON = DATA_DIR / "db_backup.json"
+BACKUP_JSON = DATA_DIR / "db_export.json"
 
 # strings
 GURU_SUB = "DecodingTheGurus"

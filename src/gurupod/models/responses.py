@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
 from gurupod.models.guru import GuruBase, GuruRead
-from gurupod.models.reddit_model import RedditThreadBase, RedditThreadRead
+from gurupod.models.reddit_thread import RedditThreadBase, RedditThreadRead
 
 logger = get_logger()
 
@@ -72,10 +72,6 @@ async def repack_validate_async(episodes: AsyncGenerator[EP_OR_BASE_VAR, None]) 
     for ep in episodes:
         yield await validate_ep_or_base(ep)
 
-    # validated_episodes = tuple(await validate_episode(ep) for ep in episodes)
-    # # validated_episodes = tuple(validate_episode(ep) for ep in episodes)
-    # return validated_episodes
-
 
 def repack_validate(episodes: EP_OR_BASE_VAR | Sequence[EP_OR_BASE_VAR]) -> tuple[EP_OR_BASE_VAR, ...]:
     """Takes episode or sequence, checks type, returns tuple of episodes."""
@@ -120,10 +116,6 @@ class EpisodeResponse(BaseModel):
             msg = "No Episodes Found"
 
         valid = [ep async for ep in repack_validate_async(episodes)]
-        #
-        # ep_type = type(ep)
-        # logger.debug(f"ep_type: {ep_type}")
-        # valid.append(ep_type.model_validate(ep))
 
         meta_data = EpisodeMeta(
             length=len(valid),
@@ -138,24 +130,6 @@ class EpisodeResponse(BaseModel):
     @classmethod
     async def emptynew(cls, msg: str = "No Episodes Found"):
         return await cls.from_episodesnew([], msg=msg)
-
-    # @classmethod
-    # def from_episodes(cls, episodes: EP_FIN_TYP | Sequence[EP_FIN_TYP], msg="") -> EpisodeResponse:
-    #     logger.debug("Episodes-in-db Response")
-    #     if not any([msg, episodes]):
-    #         msg = "No Episodes Found"
-    #
-    #     valid = [EpisodeWith.model_validate(_) for _ in episodes]
-    #
-    #     meta_data = EpisodeMeta(
-    #         length=len(valid),
-    #         msg=msg,
-    #     )
-    #     return cls.model_validate(dict(episodes=valid, meta=meta_data))
-
-    # @classmethod
-    # def empty(cls, msg: str = "No Episodes Found"):
-    #     return cls.from_episodes([], msg=msg)
 
 
 class EpisodeResponseNoDB(EpisodeResponse):
@@ -175,16 +149,3 @@ class EpisodeResponseNoDB(EpisodeResponse):
             msg=msg,
         )
         return cls.model_validate(dict(episodes=valid, meta=meta_data))
-
-    # @classmethod
-    # def from_episodes(cls, episodes: Sequence[EpisodeBase], msg="") -> EpisodeResponse:
-    #     if not any([msg, episodes]):
-    #         msg = "No Episodes Found"
-    #     episodes = repack_validate(episodes)
-    #     valid = [EpisodeBase.model_validate(_) for _ in episodes]
-    #     meta_data = EpisodeMeta(
-    #         length=len(valid),
-    #         # calling_func=inspect.stack()[1][3],
-    #         msg=msg,
-    #     )
-    #     return cls.model_validate(dict(episodes=valid, meta=meta_data))

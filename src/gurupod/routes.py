@@ -15,14 +15,12 @@ from gurupod.models.responses import (
     EpisodeResponseNoDB,
     repack_validatenew,
 )
-from gurupod.routing.episode_funcs import (
-    remove_existing_episodes,
+from gurupod.episodebot.episode_funcs import (
     remove_existing_episodes_async,
     scrape_and_filter,
-    validate_add,
     validate_add_async,
 )
-from gurupod.soup_expander import expand_and_sort, expand_async, expand_episode
+from gurupod.episodebot.soup_expander import expand_async, expand_episode
 
 logger = get_logger()
 ep_router = APIRouter()
@@ -46,30 +44,6 @@ async def put_episode_db(
     return resp
 
 
-#
-# @ep_router.post("/put", response_model=EpisodeResponse)
-# async def put_episode_dbold(
-#     episodes: EpisodeBase | Sequence[EpisodeBase], session: Session = Depends(get_session)
-# ) -> EpisodeResponse:
-#     """add episodes to db, minimally provide {url = <url>}"""
-#     if not episodes:
-#         return await EpisodeResponse.emptynew()
-#         # return EpisodeResponse.empty()
-#     # episodes = repack_validate(episodes)
-#     episodes = repack_validatenew(episodes)
-#     episodes = remove_existing_episodes(episodes, session)
-#     if not episodes:
-#         # return EpisodeResponse.empty()
-#         return await EpisodeResponse.emptynew()
-#
-#     episodes = await expand_and_sort(episodes)
-#     addepisodes = validate_add(episodes, session, commit=True)
-#     await assign_gurus(addepisodes, session)
-#     resp = await EpisodeResponse.from_episodesnew(addepisodes)
-#     # resp = EpisodeResponse.from_episodes(addepisodes)
-#     return resp
-
-
 @ep_router.get("/fetch", response_model=EpisodeResponse)
 async def scrape_and_import(session: Session = Depends(get_session), max_rtn: int = None):
     """check captivate for new episodes and add to db"""
@@ -80,14 +54,13 @@ async def scrape_and_import(session: Session = Depends(get_session), max_rtn: in
 
 
 @ep_router.get("/scrape", response_model=EpisodeResponseNoDB)
-async def _scrape(session: Session = Depends(get_session), max_rtn: int = None):
+async def _scrape(session: Session = Depends(get_session)):
     """endpoint for dry-run / internal use"""
     async with ClientSession() as aio_session:
         out_eps = []
         async for ep in scrape_and_filter(aio_session, session):
             exp = await expand_episode(ep)
             out_eps.append(exp)
-        # resp = EpisodeResponseNoDB.from_episodes(out_eps)
         resp = await EpisodeResponseNoDB.from_episodesnew(out_eps)
         return resp
 

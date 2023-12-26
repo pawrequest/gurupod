@@ -58,31 +58,3 @@ class RedditThread(RedditThreadBase, table=True):
 
 class RedditThreadRead(RedditThreadBase):
     id: int
-
-
-#
-# class RedditThreadExpanded(RedditThreadBase):
-#     _submission: Submission = None
-#
-#     @classmethod
-#     def from_id(cls, reddit, submission_id: str):
-#         submission = Submission(id=submission_id, reddit=reddit)
-#         tdict = dict(
-#             reddit_id=submission.id,
-#             title=submission.title,
-#             shortlink=submission.shortlink,
-#             created_datetime=submission.created_utc,
-#             _submission=submission,
-#         )
-#         return cls.model_validate(tdict)
-#
-#     @classmethod
-#     def from_submission(cls, submission: Submission):
-#         tdict = dict(
-#             reddit_id=submission.id,
-#             title=submission.title,
-#             shortlink=submission.shortlink,
-#             created_datetime=submission.created_utc,
-#             _submission=submission,
-#         )
-#         return cls.model_validate(tdict)

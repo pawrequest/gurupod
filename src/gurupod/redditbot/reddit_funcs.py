@@ -3,29 +3,27 @@ from __future__ import annotations
 from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Submission, Subreddit
 
-from data.consts import WRITE_TO_WEB
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import EpisodeBase, Episode
-from gurupod.writer import RPostWriter
+from gurupod.models.episode import Episode, EpisodeBase
+from gurupod.episodebot.writer import RPostWriter
 
 logger = get_logger()
 
 
-async def submission_in_stream_by_id(submission_id: str, subreddit: Subreddit) -> Submission:
+async def submission_in_stream_by_id(submission_id: str, subreddit: Subreddit) -> bool:
     async for submission in subreddit.stream.submissions():
-        submission: Submission = submission
         if submission_id == submission.id:
-            return submission
+            return True
 
 
-async def title_in_subreddit(title, subreddit: Subreddit) -> Submission:
+async def title_in_subreddit_stream(title, subreddit: Subreddit) -> bool:
     async for submission in subreddit.stream.submissions():
         submission: Submission = submission
         if title in submission.title:
-            return submission
+            return True
 
 
-async def edit_reddit_wiki(markup, wiki: WikiPage):
+async def edit_reddit_wiki(markup: str, wiki: WikiPage):
     await wiki.edit(content=markup)
     res = {
         "wiki": wiki.__str__,

@@ -4,8 +4,8 @@ from asyncpraw.reddit import Reddit, Subreddit
 
 from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
 from gurupod.redditbot.managers import reddit_cm, subreddit_cm, wiki_page_cm
-from gurupod.redditbot.subred import submission_in_stream_by_id, edit_reddit_wiki, submit_episode_subreddit
-from gurupod.writer import RWikiWriter
+from gurupod.redditbot.reddit_funcs import submission_in_stream_by_id, edit_reddit_wiki, submit_episode_subreddit
+from gurupod.episodebot.writer import RWikiWriter
 
 
 @pytest.mark.asyncio
@@ -53,7 +53,7 @@ async def test_post_and_get_submission_by_id(random_episode_validated):
     async with subreddit_cm(TEST_SUB) as subreddit:
         posted = await submit_episode_subreddit(random_episode_validated, subreddit)
         found = await submission_in_stream_by_id(posted.id, subreddit)
-        assert found == posted
+        assert found
 
 
 @pytest.mark.skip(reason="just for output")

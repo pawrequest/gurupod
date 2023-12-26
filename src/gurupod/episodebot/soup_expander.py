@@ -9,7 +9,7 @@ from dateutil import parser
 
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import EpisodeBase
-from gurupod.scrape import _response
+from gurupod.episodebot.scrape import _response
 
 logger = get_logger()
 

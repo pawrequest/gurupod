@@ -8,14 +8,14 @@ from sqlmodel import Session, select
 from data.consts import WRITE_TO_WEB, SKIP_OLD_THREADS
 from gurupod.gurulog import get_logger
 from gurupod.models.guru import Guru
-from gurupod.models.reddit_model import RedditThread
-from gurupod.routing.episode_funcs import remove_existing
-from gurupod.routing.episode_routes import assign_gurus
+from gurupod.models.reddit_thread import RedditThread
+from gurupod.episodebot.episode_funcs import remove_existing
+from gurupod.routes import assign_gurus
 
 logger = get_logger()
 
 
-async def reddit_monitor(session: Session, subreddit: Subreddit):
+async def subreddit_bot(session: Session, subreddit: Subreddit):
     logger.info(f"Starting reddit bot for {subreddit.display_name}")
     monitor = SubredditMonitor(session, subreddit)
     await monitor.monitor()
@@ -61,6 +61,7 @@ class SubredditMonitor:
 async def flair_submission(submission: Submission, flairs: list) -> bool:
     try:
         # todo reenable
+        # DO NOT DELETE THESE COMMENTED LINES!
         # [await submission.flair.select(flair_text) for flair_text in flairs]
         # logger.info(f"\n\tFlaired {submission.title} with {','.join(flairs)}")
         logger.warning(
@@ -73,6 +74,19 @@ async def flair_submission(submission: Submission, flairs: list) -> bool:
 
 
 async def submission_to_thread(session: Session, submission: Submission) -> RedditThread:
+    try:
+        if remove_existing(submission.id, RedditThread.reddit_id, session):
+            logger.info(f"Saving new submission: {submission.title}")
+            thread_ = RedditThread.from_submission(submission)
+            return thread_
+        else:
+            logger.debug(f"Skipping existing submission: {submission.title}")
+            return
+    except Exception as e:
+        logger.error(f"Error processing submission for DB: {e}")
+
+
+async def submission_to_threadold(session: Session, submission: Submission) -> RedditThread:
     try:
         if not remove_existing([submission.id], RedditThread.reddit_id, session):
             logger.debug(f"Skipping existing submission: {submission.title}")
