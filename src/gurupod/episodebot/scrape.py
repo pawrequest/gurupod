@@ -17,30 +17,13 @@ from gurupod.database import SQLModel
 logger = get_logger()
 
 
-async def _response(url: str, aiosession: ClientSession):
-    for _ in range(3):
-        try:
-            async with aiosession.get(url) as response:
-                response.raise_for_status()
-                return await response.text()
-        except ClientError as e:
-            logger.error(f"Request failed: {e}")
-            await asyncio.sleep(2)
-            continue
-    else:
-        raise ClientError("Request failed 3 times")
-
-
-def _listing_page_strs(main_url: str, num_pages: int) -> list[str]:
-    return [main_url + f"/episodes/{_ + 1}/#showEpisodes" for _ in range(num_pages)]
-
-
 async def do_stuff():
     async with ClientSession() as aiosession:
         mainsoup = await MainSoup.from_url(MAIN_URL, aiosession)
-        async for listing_page in mainsoup.gen_listing_soups(aiosession):
-            print(listing_page.episode_soups)
-    ...
+        async for listing_page_soup in mainsoup.gen_listing_soups(aiosession):
+            async for listing_ep in listing_page_soup.gen_l_eps():
+                print(listing_ep.title)
+            ...
 
 
 class MainSoup(BeautifulSoup):
@@ -51,8 +34,8 @@ class MainSoup(BeautifulSoup):
 
     @classmethod
     async def from_url(cls, url: str, aiosession: ClientSession):
-        response = await _response(url, aiosession)
-        main_soup = cls(response, url)
+        html = await _response(url, aiosession)
+        main_soup = cls(html, url)
         num_pgs = main_soup._num_pages
         main_soup.listing_pages = _listing_page_strs(url, num_pgs)
         return main_soup
@@ -91,14 +74,19 @@ class ListingPageSoup(BeautifulSoup):
         self.listing_eps = list()
 
     async def gen_l_eps(self) -> AsyncGenerator[ListingEpisode, None]:
-        for ep_soup in self.episode_sections:
-            listing_ep = ListingEpisode.from_soup_section(ep_soup)
-            yield listing_ep
+        for ep_section_soup in self.episode_soups:
+            list_ep = ListingEpisode(
+                title=ep_section_soup.title,
+                url=ep_section_soup.url,
+                episode_number=ep_section_soup.episode_number,
+                date=ep_section_soup.date,
+            )
+            yield list_ep
 
     @classmethod
     async def from_url(cls, url: str, aiosession: ClientSession):
-        response = await _response(url, aiosession)
-        return cls(response, url)
+        html = await _response(url, aiosession)
+        return cls(html)
 
 
 @dataclass
@@ -106,19 +94,20 @@ class EpisodeSoupSection:
     soup_section: Tag
 
     @property
-    def episode_number_from_soup_section(self):
-        return self.soup_section.select_one(".episode-info").text.strip()
+    def episode_number(self):
+        res = self.soup_section.select_one(".episode-info").text.strip().split()[1]
+        return int(res)
 
     @property
-    def episode_date_from_soup_section(self):
+    def date(self):
         return self.soup_section.select_one(".publish-date").text.strip()
 
     @property
-    def episode_url_from_soup_section(self):
+    def url(self):
         return self.soup_section.select_one(".episode-title a")["href"]
 
     @property
-    def episode_title_from_soup_section(self):
+    def title(self):
         return self.soup_section.select_one(".episode-title").text.strip()
 
 
@@ -196,6 +185,25 @@ class EpisodeSoupSection:
 #     lastpage = page_links[-1]["href"]
 #     num_pages = lastpage.split("/")[-1].split("#")[0]
 #     return int(num_pages)
+
+
+async def _response(url: str, aiosession: ClientSession):
+    for _ in range(3):
+        try:
+            async with aiosession.get(url) as response:
+                response.raise_for_status()
+                return await response.text()
+        except ClientError as e:
+            logger.error(f"Request failed: {e}")
+            await asyncio.sleep(2)
+            continue
+    else:
+        raise ClientError("Request failed 3 times")
+
+
+def _listing_page_strs(main_url: str, num_pages: int) -> list[str]:
+    return [main_url + f"/episodes/{_ + 1}/#showEpisodes" for _ in range(num_pages)]
+
 
 if __name__ == "__main__":
     asyncio.run(do_stuff())
