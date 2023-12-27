@@ -14,28 +14,32 @@ from gurupod.episodebot.scrape import _response
 logger = get_logger()
 
 
-async def expand_and_sort(episodes: Sequence[EpisodeBase]) -> list[EpisodeBase]:
-    logger.info(f"Expanding {len(episodes)} episodes")
-    complete: list[EpisodeBase] = [_ for _ in episodes if not _.data_missing]
-
-    if missing := [_ for _ in episodes if _.data_missing]:
-        # log_episodes(missing, msg="Expanding episodes:")
-        coroutines = [expand_episode(_) for _ in missing]
-        expanded = await asyncio.gather(*coroutines)
-        complete.extend(expanded)
-    # log_episodes(complete, msg="Complete episodes:")
-    return sorted(complete, key=lambda x: x.date)
+# async def expand_and_sort(episodes: Sequence[EpisodeBase]) -> list[EpisodeBase]:
+#     logger.info(f"Expanding {len(episodes)} episodes")
+#     complete: list[EpisodeBase] = [_ for _ in episodes if not _.data_missing]
+#
+#     if missing := [_ for _ in episodes if _.data_missing]:
+#         # log_episodes(missing, msg="Expanding episodes:")
+#         coroutines = [expand_episode(_) for _ in missing]
+#         expanded = await asyncio.gather(*coroutines)
+#         complete.extend(expanded)
+#     # log_episodes(complete, msg="Complete episodes:")
+#     return sorted(complete, key=lambda x: x.date)
 
 
 async def expand_async(episodes: AsyncGenerator[EpisodeBase, None]) -> AsyncGenerator[EpisodeBase, None]:
-    logger.info(f"Expanding {len(episodes)} episodes")
     async for episode in episodes:
         if episode.data_missing:
+            logger.debug(f"data missing for {episode.title}")
             episode = await expand_episode(episode)
+            logger.debug(f"expanded {episode.title}")
+
+        logger.debug(f"yielding {episode.title}")
         yield episode
 
 
 async def expand_episode(ep: EpisodeBase) -> EpisodeBase:
+    logger.debug(f"Expanding {ep.title}")
     soup = await EpisodeSoup.from_url(ep.url)
     epdict = soup.get_ep_d()
     res = EpisodeBase(**epdict, title=ep.title)

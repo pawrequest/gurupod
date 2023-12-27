@@ -10,10 +10,22 @@ if TYPE_CHECKING:
     from loguru._logger import Logger
     from gurupod.models.responses import EP_OR_BASE_VAR
 
+
+def custom_format(record):
+    file_line = f"{record['file'].path}:{record['line']}"
+
+    # Add a newline character at the end of the formatted message
+    return f"{file_line:<80} <lvl>{record['level']: <7} {record['function']}: {record['message']}</lvl>\n"
+
+
 log_file_loc = Path(__file__).parent.parent.parent / "data" / "logs" / "gurulog.log"
 _logger.remove()
+clickable = "{file.path}:{line}"
+format_ = clickable + " <lvl>{level: <8} {function}</lvl>: {message}"
+
 _logger.add(log_file_loc, rotation="1 day", delay=True)
-_logger.add(sys.stdout, level="DEBUG")
+# _logger.add(sys.stdout, level="DEBUG", format=format_)
+_logger.add(sys.stdout, level="DEBUG", format=custom_format)
 
 
 def get_logger() -> Logger:

@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from typing import AsyncGenerator, Sequence
 
+from aiohttp import ClientSession
 from sqlmodel import Session, select
 
-from data.consts import MAIN_URL
+from data.consts import MAIN_URL, DEBUG
+from gurupod.episodebot.soup_expander import expand_async
 from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.episodebot.scrape import scrape_titles_urls
+from gurupod.models.responses import EpisodeResponse
 
 logger = get_logger()
 
@@ -25,12 +28,13 @@ def validate_add(eps: Sequence[EpisodeBase], session: Session, commit=False) -> 
     return tuple(valid)
 
 
-async def validate_add_async(eps: AsyncGenerator[EpisodeBase, None], session: Session) -> AsyncGenerator[Episode, None]:
-    """Validate episodes as EpisodeBase, add to session and if commit=True to db,
-    return tuple of validated in-db Episodes."""
-    async for ep in eps:
-        session.add(Episode.model_validate(ep))
-        yield ep
+async def validate_sort_add_commit(eps: AsyncGenerator[EpisodeBase, None], session: Session) -> list[Episode]:
+    eps_ = [Episode.model_validate(_) async for _ in eps]
+    sorted_eps = sorted(eps_, key=lambda x: x.date)
+    session.add_all(sorted_eps)
+    session.commit()
+    [session.refresh(_) for _ in sorted_eps]
+    return sorted_eps
 
 
 def episode_exists(session, episode) -> bool:
@@ -75,12 +79,42 @@ async def scrape_and_filter(aio_session, session, captivate_homepage=None) -> As
     async for title, url in scrape_titles_urls(main_url=captivate_homepage, aiosession=aio_session):
         eb = EpisodeBase(title=title, url=url)
         if episode_exists(session, eb):
-            logger.debug(f"EPISODE EXISTS:  {eb.title}")
+            if DEBUG:
+                logger.debug(f"EPISODE EXISTS:  {eb.title}")
             dupes += 1
             if dupes >= 3:
-                logger.debug(f"Found {dupes} existing episodes, stopping")
+                if DEBUG:
+                    logger.debug(f"Found {dupes} existing episodes, stopping")
                 break
             continue
         else:
-            logger.debug(f"NEW EPISODE: {eb.title}")
+            logger.info(f"NEW EPISODE: {eb.title}")
             yield eb
+
+
+async def add_async(validated, session) -> AsyncGenerator[EpisodeBase]:
+    logger.info("entered add")
+    async for ep in validated:
+        logger.info("add loop")
+        session.add(ep)
+        yield ep
+
+
+async def put_episode_db(episodes: AsyncGenerator, session: Session) -> EpisodeResponse:
+    """add episodes to db, minimally provide {url = <url>}"""
+    filtered = remove_existing_episodes_async(episodes, session)
+    expanded = expand_async(filtered)
+    validated = await validate_sort_add_commit(expanded, session)
+    resp = await EpisodeResponse.from_episodes_seq(validated)
+    return resp
+
+
+async def _scrape(session: Session) -> AsyncGenerator[EpisodeBase, None]:
+    async with ClientSession() as aio_session:
+        async for ep in scrape_and_filter(aio_session, session):
+            logger.debug(f"_scraped {ep.title}")
+            yield ep
+
+
+async def has_gurus(model, session: Session):
+    return model.gurus

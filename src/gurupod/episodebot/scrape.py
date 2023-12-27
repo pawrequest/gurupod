@@ -8,6 +8,7 @@ from typing import AsyncGenerator
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup
 
+from data.consts import DEBUG
 from gurupod.gurulog import get_logger
 
 logger = get_logger()
@@ -17,7 +18,8 @@ async def scrape_titles_urls(aiosession, main_url) -> AsyncGenerator[tuple[str, 
     listing_pages = await _listing_pages(main_url, aiosession)
     new = []
     for i, _ in enumerate(listing_pages):
-        logger.debug(f"Scraping page {i + 1} of {len(listing_pages)}")
+        if DEBUG:
+            logger.debug(f"Scraping page {i + 1} of {len(listing_pages)}")
         async for title, url in _episode_titles_and_urls_from_listing(_, aiosession):
             yield title, url
 

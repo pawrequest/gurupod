@@ -11,8 +11,9 @@ dotenv.load_dotenv()
 WRITE_TO_WEB = False
 SKIP_OLD_THREADS = True
 # BACKUP_SLEEP = 86400
-BACKUP_SLEEP = 10
-EPISODE_MONITOR_SLEEP = 30
+BACKUP_SLEEP = 30
+EPISODE_MONITOR_SLEEP = 10
+DEBUG = False
 
 # links
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
@@ -23,11 +24,8 @@ REDIRECT = "http://localhost:8080"
 PROJECT_ROOT = Path(__file__).parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 EPISODES_MD = DATA_DIR / "episodes.md"
-EPISODES_JSON = DATA_DIR / "episodes.json"
-EPISODES_MOD = DATA_DIR / "episodes_mod.json"
-EPISODES_OUT = DATA_DIR / "episodes_out.json"
 GURU_DB = DATA_DIR / "guru.db"
-BACKUP_JSON = DATA_DIR / "db_export.json"
+BACKUP_JSON = DATA_DIR / "db_backup.json"
 
 # strings
 GURU_SUB = "DecodingTheGurus"

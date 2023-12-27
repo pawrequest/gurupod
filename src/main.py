@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
     create_db_and_tables()
     logger.debug("tables created")
     with Session(engine_()) as session:
-        db_from_json(session, BACKUP_JSON)
+        # db_from_json(session, BACKUP_JSON)
 
         async with reddit_cm() as reddit:
             tasks = await bot_tasks(reddit, session, sub_name)

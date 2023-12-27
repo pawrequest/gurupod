@@ -5,7 +5,7 @@ from pathlib import Path
 
 from sqlmodel import Session, select
 
-from data.consts import BACKUP_JSON
+from data.consts import BACKUP_JSON, DEBUG
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
@@ -36,8 +36,12 @@ async def db_to_json(session: Session, json_path: Path = BACKUP_JSON):
     return backup_json
 
 
-def db_from_json(session: Session, json_path: Path = BACKUP_JSON):
-    logger.info(f"Loading database from {json_path}\n{[_ for _ in model_to_json_map.keys()]}")
+def db_from_json(session: Session, json_path: Path):
+    if not json_path.exists():
+        logger.warning(f"Could not find {json_path}")
+        return
+    # logger.info(f"Loading database from {json_path}\n{[_ for _ in model_to_json_map.keys()]}")
+    added = 0
     with open(json_path, "r") as f:
         backup_j = json.load(f)
 
@@ -47,28 +51,37 @@ def db_from_json(session: Session, json_path: Path = BACKUP_JSON):
             model_instance = model_class.model_validate(data)
             try:
                 if session.get(model_class, model_instance.id):
-                    # logger.debug(f"Skipping {model_instance} as it already exists in the database")
+                    if DEBUG:
+                        logger.debug(f"Skipping {model_instance} as it already exists in the database")
                     continue
 
             except AttributeError:
                 if session.query(model_class).filter_by(**model_instance.dict()).first():
-                    # logger.debug(f"Skipping {model_instance} as it already exists in the database")
+                    if DEBUG:
+                        logger.debug(f"Skipping {model_instance} as it already exists in the database")
                     continue
 
-            logger.debug(f"Adding {model_instance} to the session")
-            session.add(model_instance)
+            if DEBUG:
+                logger.debug(f"Adding {model_instance} to the session")
 
-    if session.dirty:
-        logger.info(f"Committing {len(session.dirty)} changes to the database")
+            session.add(model_instance)
+            added += 1
+
+    if session.new:
+        logger.info(f"Adding {added} items from json")
         session.commit()
 
 
-async def backup_bot(session, interval=24 * 60 * 60):
+def get_dated_filename(path: Path):
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    return path.with_suffix(f".{date_str}.json")
+
+
+async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
     """Continuously backup the database to json with today's date every interval seconds, default = daily"""
+    backup_filename = backup_filename or BACKUP_JSON
     while True:
         await asyncio.sleep(interval)
         logger.debug("Waking backup bot")
-        date_str = datetime.now().strftime("%Y-%m-%d")
-        backup_file = BACKUP_JSON.with_suffix(f".{date_str}.json")
-        await db_to_json(session, backup_file)
+        await db_to_json(session, get_dated_filename(backup_filename))
         logger.debug(f"Backup bot sleeping for {interval} seconds")

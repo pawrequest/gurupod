@@ -18,7 +18,7 @@ logger = get_logger()
 async def subreddit_bot(session: Session, subreddit: Subreddit):
     logger.info(f"Starting reddit bot for {subreddit.display_name}")
     monitor = SubredditMonitor(session, subreddit)
-    await monitor.monitor()
+    await monitor.red_monitor()
 
 
 class SubredditMonitor:
@@ -26,7 +26,7 @@ class SubredditMonitor:
         self.subreddit = subreddit
         self.session = session
 
-    async def monitor(self):
+    async def red_monitor(self):
         async for submission in self.stream_filtered_submissions():
             if thread := await submission_to_thread(self.session, submission):
                 await assign_gurus([thread], self.session)
