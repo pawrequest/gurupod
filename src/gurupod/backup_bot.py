@@ -43,16 +43,14 @@ def db_from_json(session: Session, json_path: Path):
         logger.warning(f"Could not find {json_path}")
         return
     # logger.info(f"Loading database from {json_path}\n{[_ for _ in model_to_json_map.keys()]}")
-    added = 0
     with open(json_path, "r") as f:
         backup_j = json.load(f)
 
     for json_name, model_class in model_to_json_map.items():
-        logger.debug(f"Loaded {len(backup_j[json_name])} {json_name} from {json_path}")
-
-        for model_dict in backup_j.get(json_name):
-            data = json.loads(model_dict)
-            model_instance = model_class.model_validate(data)
+        added = 0
+        for one_entry in backup_j.get(json_name):
+            one_validated = json.loads(one_entry)
+            model_instance = model_class.model_validate(one_validated)
             try:
                 if session.get(model_class, model_instance.id):
                     if DEBUG:
@@ -70,9 +68,9 @@ def db_from_json(session: Session, json_path: Path):
 
             session.add(model_instance)
             added += 1
+        logger.debug(f"Loaded {added} {json_name} from {json_path}")
 
     if session.new:
-        logger.info(f"Adding {added} items from json")
         session.commit()
 
 

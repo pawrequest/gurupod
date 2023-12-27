@@ -9,7 +9,7 @@ dotenv.load_dotenv()
 
 # Switches
 WRITE_TO_WEB = False
-SKIP_OLD_THREADS = False
+SKIP_OLD_THREADS = True
 # BACKUP_SLEEP = 86400
 BACKUP_SLEEP = 30
 EPISODE_MONITOR_SLEEP = 10
