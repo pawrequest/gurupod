@@ -34,7 +34,7 @@ def episode_exists(session, episode) -> bool:
     return existing_episode is not None
 
 
-async def remove_existing_episodes_async(
+async def remove_existing_episodes_async_gen(
     episodes: AsyncGenerator[EpisodeBase, None], session: Session
 ) -> AsyncGenerator[EpisodeBase, None]:
     """Yields episodes that do not exist in db."""
@@ -73,17 +73,9 @@ async def scrape_and_filter(
             yield eb
 
 
-async def add_async(validated, session) -> AsyncGenerator[EpisodeBase]:
-    logger.info("entered add")
-    async for ep in validated:
-        logger.info("add loop")
-        session.add(ep)
-        yield ep
-
-
-async def put_episode_db(episodes: AsyncGenerator, session: Session) -> EpisodeResponse:
+async def put_episodes_db(episodes: AsyncGenerator, session: Session) -> EpisodeResponse:
     """add episodes to db, minimally provide {url = <url>}"""
-    filtered = remove_existing_episodes_async(episodes, session)
+    filtered = remove_existing_episodes_async_gen(episodes, session)
     expanded = expand_async(filtered)
     if validated := await validate_sort_add_commit(expanded, session):
         logger.debug(f"validated {len(validated)} episodes")
@@ -94,7 +86,7 @@ async def put_episode_db(episodes: AsyncGenerator, session: Session) -> EpisodeR
     return resp
 
 
-async def _scrape(session: Session) -> AsyncGenerator[EpisodeBase, None]:
+async def scrape(session: Session) -> AsyncGenerator[EpisodeBase, None]:
     async with ClientSession() as aio_session:
         async for ep in scrape_and_filter(aio_session, session):
             if DEBUG:
