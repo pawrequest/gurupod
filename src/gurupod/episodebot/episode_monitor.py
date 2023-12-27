@@ -2,7 +2,7 @@ import asyncio
 
 from asyncpraw.models import Redditor, Subreddit
 
-from data.consts import WRITE_TO_WEB
+from data.consts import SUBMIT_EP_TO_SUBREDDIT
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.responses import EpisodeWith
@@ -34,7 +34,7 @@ async def scrape_import_and_post_episode(session, subreddit, recipient: Redditor
 
 
 async def process_new_episode(ep: EpisodeWith, recipient, subreddit) -> None:
-    if WRITE_TO_WEB:
+    if SUBMIT_EP_TO_SUBREDDIT:
         logger.warning(
             f"WRITE TO WEB ENABLED:\n\t\t - SUBMITTING EPISODE TO {subreddit.display_name} - \n\t\t - MESSAGING {recipient.name} -"
         )

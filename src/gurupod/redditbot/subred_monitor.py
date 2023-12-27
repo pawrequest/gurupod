@@ -5,12 +5,11 @@ from typing import AsyncGenerator
 from asyncpraw.models import Redditor, Submission, Subreddit
 from sqlmodel import Session, select
 
-from data.consts import SKIP_OLD_THREADS, WRITE_TO_WEB
+from data.consts import DO_FLAIR, SKIP_OLD_THREADS
 from gurupod.gurulog import get_logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread
-from gurupod.episodebot.episode_funcs import remove_existing
-from gurupod.routes import assign_tags
+from gurupod.episodebot.episode_funcs import assign_tags, remove_existing
 
 logger = get_logger()
 
@@ -29,14 +28,14 @@ class SubredditMonitor:
     async def red_monitor(self):
         async for submission in self.stream_filtered_submissions():
             if thread := await submission_to_thread(self.session, submission):
-                assigned = [_ for _ in assign_tags([thread], self.session)]
+                assigned = [_ for _ in assign_tags([thread], self.session, Guru)]
 
                 gurus = [_.name for _ in thread.gurus]
-                if WRITE_TO_WEB:
-                    logger.warning("WRITE TO WEB ENABLED - APPLYING FLAIR {gurus} to {submission.title}")
+                if DO_FLAIR:
+                    logger.warning("DO FLAIR ENABLED - APPLYING FLAIR {gurus} to {submission.title}")
                     await flair_submission(submission, gurus)
                 else:
-                    logger.warning("WRITE TO WEB DISABLED - NOT APPLYING FLAIR")
+                    logger.warning("DO FLAIR DISABLED - NOT APPLYING FLAIR")
                 self.session.add(thread)
                 self.session.commit()
 
@@ -73,7 +72,7 @@ async def flair_submission(submission: Submission, flairs: list) -> bool:
         return False
 
 
-async def submission_to_thread(session: Session, submission: Submission) -> RedditThread:
+async def submission_to_thread(session: Session, submission: Submission) -> RedditThread | None:
     try:
         if remove_existing(submission.id, RedditThread.reddit_id, session):
             logger.info(f"Saving new submission: {submission.title}")

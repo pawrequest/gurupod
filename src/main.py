@@ -18,7 +18,6 @@ logger = get_logger()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    sub_name = SUB_IN_USE
     create_db_and_tables()
     logger.info("tables created")
     with Session(engine_()) as session:
@@ -27,7 +26,7 @@ async def lifespan(app: FastAPI):
             db_from_json(session, BACKUP_JSON)
 
         async with reddit_cm() as reddit:
-            tasks = await bot_tasks(reddit, session, sub_name)
+            tasks = await bot_tasks(reddit, session, SUB_IN_USE)
             yield
             logger.info("Shutting down")
 

@@ -8,7 +8,8 @@ import dotenv
 dotenv.load_dotenv()
 
 # Switches
-WRITE_TO_WEB = False
+SUBMIT_EP_TO_SUBREDDIT = False
+DO_FLAIR = False
 SKIP_OLD_THREADS = True
 BACKUP_SLEEP = 86400
 # BACKUP_SLEEP = 30
@@ -34,7 +35,7 @@ TEST_SUB = "test"
 EPISODES_WIKI = "episodes"
 TEST_WIKI = "gurus"
 EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
-SUB_IN_USE = TEST_SUB
+SUB_IN_USE = GURU_SUB
 
 # env vars
 PROSODY_CLIENT_ID = os.environ["PROSODY_CLIENT_ID"]

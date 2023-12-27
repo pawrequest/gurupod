@@ -1,32 +1,19 @@
 from __future__ import annotations
 
-from typing import AsyncGenerator, Sequence
+from typing import AsyncGenerator, Sequence, Generator
 
 from aiohttp import ClientSession
 from sqlmodel import Session, select
 
-from data.consts import MAIN_URL, DEBUG
+from data.consts import DEBUG, MAIN_URL
 from gurupod.episodebot.soup_expander import expand_async
-from gurupod.gurulog import get_logger, log_episodes
+from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.episodebot.scrape import scrape_titles_urls
+from gurupod.models.guru import Guru
 from gurupod.models.responses import EpisodeResponse
-from gurupod.routes import assign_tags
 
 logger = get_logger()
-
-
-def validate_add(eps: Sequence[EpisodeBase], session: Session, commit=False) -> tuple[Episode, ...]:
-    """Validate episodes as EpisodeBase, add to session and if commit=True to db,
-    return tuple of validated in-db Episodes."""
-    log_episodes(eps, calling_func=validate_add, msg="Validating")
-    valid = [Episode.model_validate(_) for _ in eps]
-    session.add_all(valid)
-    if commit:
-        session.commit()
-        # needed?
-        [session.refresh(_) for _ in valid]
-    return tuple(valid)
 
 
 async def validate_sort_add_commit(eps: AsyncGenerator[EpisodeBase, None], session: Session) -> list[Episode]:
@@ -45,12 +32,6 @@ def episode_exists(session, episode) -> bool:
     ).first()
 
     return existing_episode is not None
-
-
-def remove_existing_episodes(episodes: Sequence[EpisodeBase], session: Session) -> tuple[EpisodeBase, ...]:
-    """Returns tuple of episodes that do not exist in db."""
-    new_eps = tuple(_ for _ in episodes if not episode_exists(session, _))
-    return new_eps
 
 
 async def remove_existing_episodes_async(
@@ -82,12 +63,9 @@ async def scrape_and_filter(
     async for title, url in scrape_titles_urls(main_url=captivate_homepage, aiosession=aio_session):
         eb = EpisodeBase(title=title, url=url)
         if episode_exists(session, eb):
-            if DEBUG:
-                logger.debug(f"EPISODE EXISTS:  {eb.title}")
             dupes += 1
             if dupes >= 3:
-                if DEBUG:
-                    logger.debug(f"Found {dupes} existing episodes, stopping")
+                logger.debug(f"{dupes} duplicates found, giving up")
                 break
             continue
         else:
@@ -109,7 +87,7 @@ async def put_episode_db(episodes: AsyncGenerator, session: Session) -> EpisodeR
     expanded = expand_async(filtered)
     if validated := await validate_sort_add_commit(expanded, session):
         logger.debug(f"validated {len(validated)} episodes")
-        assigned = tuple(_ for _ in assign_tags(validated, session))
+        assigned = tuple(_ for _ in assign_tags(validated, session, Guru))
         logger.debug(f"assigned {len(assigned)} episodes")
         session.commit()
     resp = await EpisodeResponse.from_episodes_seq(validated)
@@ -126,3 +104,17 @@ async def _scrape(session: Session) -> AsyncGenerator[EpisodeBase, None]:
 
 async def has_gurus(model, session: Session):
     return model.gurus
+
+
+def assign_tags(to_assign: Sequence, session: Session, tag_model) -> Generator[Episode, None]:
+    """Tagmodel has name attr"""
+    if not hasattr(tag_model, "name"):
+        raise AttributeError(f"tag_model must have name attribute, got {tag_model}")
+
+    tag_models = session.exec(select(tag_model)).all()
+    for target in to_assign:
+        if title_tags := [_ for _ in tag_models if _.name in target.title]:
+            target.gurus.extend(title_tags)
+            session.add(target)
+            logger.info(f"Assigned tags {title_tags} to {target.title}")
+            yield target
