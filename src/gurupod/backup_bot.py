@@ -39,12 +39,12 @@ async def db_to_json(session: Session, json_path: Path = BACKUP_JSON):
 
 
 def db_from_json(session: Session, json_path: Path):
-    if not json_path.exists():
-        logger.warning(f"Could not find {json_path}")
+    try:
+        with open(json_path, "r") as f:
+            backup_j = json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading json: {e}")
         return
-    # logger.info(f"Loading database from {json_path}\n{[_ for _ in model_to_json_map.keys()]}")
-    with open(json_path, "r") as f:
-        backup_j = json.load(f)
 
     for json_name, model_class in model_to_json_map.items():
         added = 0
@@ -68,7 +68,8 @@ def db_from_json(session: Session, json_path: Path):
 
             session.add(model_instance)
             added += 1
-        logger.debug(f"Loaded {added} {json_name} from {json_path}")
+        if added:
+            logger.info(f"Loaded {added} {json_name} from {json_path}")
 
     if session.new:
         session.commit()

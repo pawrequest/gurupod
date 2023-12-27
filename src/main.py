@@ -20,7 +20,7 @@ logger = get_logger()
 async def lifespan(app: FastAPI):
     sub_name = SUB_IN_USE
     create_db_and_tables()
-    logger.debug("tables created")
+    logger.info("tables created")
     with Session(engine_()) as session:
         if INITIALIZE:
             gu = await gurus_from_file(session)

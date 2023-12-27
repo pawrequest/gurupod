@@ -15,9 +15,9 @@ logger = get_logger()
 
 async def episode_bot(session, subreddit, interval, recipient: Redditor | Subreddit) -> None:
     while True:
-        logger.debug("Waking")
+        logger.debug("Waking Episode Scraper")
         await scrape_import_and_post_episode(session, subreddit, recipient)
-        logger.info(f"Sleeping for {interval} seconds")
+        logger.debug(f"Sleeping for {interval} seconds")
         await asyncio.sleep(interval)
 
 

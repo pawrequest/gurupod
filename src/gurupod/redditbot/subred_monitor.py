@@ -16,7 +16,7 @@ logger = get_logger()
 
 
 async def subreddit_bot(session: Session, subreddit: Subreddit):
-    logger.info(f"Starting reddit bot for {subreddit.display_name}")
+    logger.info(f"Monitoring r/{subreddit.display_name} for guru related threads")
     monitor = SubredditMonitor(session, subreddit)
     await monitor.red_monitor()
 
