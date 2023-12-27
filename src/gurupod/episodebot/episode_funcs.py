@@ -11,6 +11,7 @@ from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.episodebot.scrape import scrape_titles_urls
 from gurupod.models.responses import EpisodeResponse
+from gurupod.routes import assign_tags
 
 logger = get_logger()
 
@@ -71,7 +72,9 @@ def remove_existing(to_filter: Sequence[str], db_field, session: Session) -> tup
     return new_entries
 
 
-async def scrape_and_filter(aio_session, session, captivate_homepage=None) -> AsyncGenerator[EpisodeBase, None]:
+async def scrape_and_filter(
+    aio_session, session, captivate_homepage=None, max_rtn=None
+) -> AsyncGenerator[EpisodeBase, None]:
     """Scrape titles and urls starting from captivate_mainpage, filter out episodes already in db,
     give up if 3 already existing episodes found."""
     captivate_homepage = captivate_homepage or MAIN_URL
@@ -104,7 +107,11 @@ async def put_episode_db(episodes: AsyncGenerator, session: Session) -> EpisodeR
     """add episodes to db, minimally provide {url = <url>}"""
     filtered = remove_existing_episodes_async(episodes, session)
     expanded = expand_async(filtered)
-    validated = await validate_sort_add_commit(expanded, session)
+    if validated := await validate_sort_add_commit(expanded, session):
+        logger.debug(f"validated {len(validated)} episodes")
+        assigned = tuple(_ for _ in assign_tags(validated, session))
+        logger.debug(f"assigned {len(assigned)} episodes")
+        session.commit()
     resp = await EpisodeResponse.from_episodes_seq(validated)
     return resp
 
@@ -112,7 +119,8 @@ async def put_episode_db(episodes: AsyncGenerator, session: Session) -> EpisodeR
 async def _scrape(session: Session) -> AsyncGenerator[EpisodeBase, None]:
     async with ClientSession() as aio_session:
         async for ep in scrape_and_filter(aio_session, session):
-            logger.debug(f"_scraped {ep.title}")
+            if DEBUG:
+                logger.debug(f"_scraped {ep.title}")
             yield ep
 
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import AsyncGenerator, Sequence
+from typing import AsyncGenerator, Sequence, Generator
 
 from fastapi import APIRouter
 from sqlmodel import Session, select
@@ -34,23 +34,33 @@ ep_router = APIRouter()
 #     return await EpisodeResponse.from_episodes_old(list(eps))
 
 
-async def assign_gurus(to_assign: Sequence, session: Session):
-    gurus = session.exec(select(Guru)).all()
-    if not to_assign:
-        return to_assign
+# async def assign_gurus(to_assign: Sequence, session: Session):
+#     gurus = session.exec(select(Guru)).all()
+#     if not to_assign:
+#         return to_assign
+#     for target in to_assign:
+#         title_gurus = [_ for _ in gurus if _.name in target.title]
+#         target.gurus.extend(title_gurus)
+#         session.add(target)
+#     session.commit()
+#     [session.refresh(_) for _ in to_assign]
+#     return to_assign
+
+
+# async def assign_tags_gen(to_assign: AsyncGenerator[Episode, None], session: Session) -> AsyncGenerator[Episode, None]:
+#     tags = set(session.exec(select(Guru.name)).all())
+#     async for target in to_assign:
+#         if title_gurus := [_ for _ in tags if _ in target.title]:
+#             target.gurus.extend(title_gurus)
+#             session.add(target)
+#             yield target
+
+
+def assign_tags(to_assign: Sequence, session: Session, tag_model_field=Guru) -> Generator[Episode, None]:
+    tag_models = session.exec(select(tag_model_field)).all()
     for target in to_assign:
-        title_gurus = [_ for _ in gurus if _.name in target.title]
-        target.gurus.extend(title_gurus)
-        session.add(target)
-    session.commit()
-    [session.refresh(_) for _ in to_assign]
-    return to_assign
-
-
-async def assign_tags(to_assign: AsyncGenerator[Episode, None], session: Session) -> AsyncGenerator[Episode, None]:
-    tags = set(session.exec(select(Guru.name)).all())
-    async for target in to_assign:
-        if title_gurus := [_ for _ in tags if _ in target.title]:
-            target.gurus.extend(title_gurus)
+        if title_tags := [_ for _ in tag_models if _.name in target.title]:
+            target.gurus.extend(title_tags)
             session.add(target)
+            logger.info(f"Assigned tags {title_tags} to {target.title}")
             yield target

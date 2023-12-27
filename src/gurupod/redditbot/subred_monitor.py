@@ -5,12 +5,12 @@ from typing import AsyncGenerator
 from asyncpraw.models import Redditor, Submission, Subreddit
 from sqlmodel import Session, select
 
-from data.consts import WRITE_TO_WEB, SKIP_OLD_THREADS
+from data.consts import SKIP_OLD_THREADS, WRITE_TO_WEB
 from gurupod.gurulog import get_logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread
 from gurupod.episodebot.episode_funcs import remove_existing
-from gurupod.routes import assign_gurus
+from gurupod.routes import assign_tags
 
 logger = get_logger()
 
@@ -29,7 +29,7 @@ class SubredditMonitor:
     async def red_monitor(self):
         async for submission in self.stream_filtered_submissions():
             if thread := await submission_to_thread(self.session, submission):
-                await assign_gurus([thread], self.session)
+                assigned = [_ for _ in assign_tags([thread], self.session)]
 
                 gurus = [_.name for _ in thread.gurus]
                 if WRITE_TO_WEB:

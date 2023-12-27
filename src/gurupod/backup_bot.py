@@ -6,6 +6,8 @@ from pathlib import Path
 from sqlmodel import Session, select
 
 from data.consts import BACKUP_JSON, DEBUG
+from data.gurunames import GURU_NAMES_SET
+from gurupod.episodebot.episode_funcs import remove_existing
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
@@ -26,10 +28,10 @@ model_to_json_map = {
 
 async def db_to_json(session: Session, json_path: Path = BACKUP_JSON):
     backup_json = {}
-    for json_name, model_class in model_to_json_map.items():
+    for model_name_in_json, model_class in model_to_json_map.items():
         results = session.exec(select(model_class)).all()
-        backup_json[json_name] = [_.model_dump_json() for _ in results]
-        logger.debug(f"Dumped {len(backup_json[json_name])} {json_name} to json")
+        backup_json[model_name_in_json] = [_.model_dump_json() for _ in results]
+        logger.debug(f"Dumped {len(backup_json[model_name_in_json])} {model_name_in_json} to {json_path}")
     with open(json_path, "w") as f:
         json.dump(backup_json, f, indent=4)
     logger.info(f"Saved {len(backup_json)} models to {json_path}")
@@ -46,6 +48,8 @@ def db_from_json(session: Session, json_path: Path):
         backup_j = json.load(f)
 
     for json_name, model_class in model_to_json_map.items():
+        logger.debug(f"Loaded {len(backup_j[json_name])} {json_name} from {json_path}")
+
         for model_dict in backup_j.get(json_name):
             data = json.loads(model_dict)
             model_instance = model_class.model_validate(data)
@@ -83,5 +87,16 @@ async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
     while True:
         await asyncio.sleep(interval)
         logger.debug("Waking backup bot")
-        await db_to_json(session, get_dated_filename(backup_filename))
+        dated_filename = get_dated_filename(backup_filename)
+        await db_to_json(session, dated_filename)
         logger.debug(f"Backup bot sleeping for {interval} seconds")
+
+
+async def gurus_from_file(session: Session):
+    if guru_names := remove_existing(GURU_NAMES_SET, Guru.name, session):
+        logger.info(f"Adding {len(guru_names)} new gurus: {guru_names}")
+        new_gurus = [Guru(name=_) for _ in guru_names]
+        session.add_all(new_gurus)
+        session.commit()
+        [session.refresh(_) for _ in new_gurus]
+        return new_gurus

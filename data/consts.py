@@ -9,11 +9,12 @@ dotenv.load_dotenv()
 
 # Switches
 WRITE_TO_WEB = False
-SKIP_OLD_THREADS = True
+SKIP_OLD_THREADS = False
 # BACKUP_SLEEP = 86400
 BACKUP_SLEEP = 30
 EPISODE_MONITOR_SLEEP = 10
 DEBUG = False
+INITIALIZE = True
 
 # links
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"

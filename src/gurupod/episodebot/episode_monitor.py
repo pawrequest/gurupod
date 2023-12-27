@@ -6,7 +6,7 @@ from data.consts import WRITE_TO_WEB
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.responses import EpisodeWith
-from gurupod.redditbot.monitor import message_home
+from gurupod.redditbot.subred_monitor import message_home
 from gurupod.redditbot.reddit_funcs import reddit_episode_submitted_msg, submit_episode_subreddit
 from gurupod.episodebot.episode_funcs import put_episode_db, _scrape
 

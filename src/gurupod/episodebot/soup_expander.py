@@ -30,16 +30,13 @@ logger = get_logger()
 async def expand_async(episodes: AsyncGenerator[EpisodeBase, None]) -> AsyncGenerator[EpisodeBase, None]:
     async for episode in episodes:
         if episode.data_missing:
-            logger.debug(f"data missing for {episode.title}")
             episode = await expand_episode(episode)
             logger.debug(f"expanded {episode.title}")
 
-        logger.debug(f"yielding {episode.title}")
         yield episode
 
 
 async def expand_episode(ep: EpisodeBase) -> EpisodeBase:
-    logger.debug(f"Expanding {ep.title}")
     soup = await EpisodeSoup.from_url(ep.url)
     epdict = soup.get_ep_d()
     res = EpisodeBase(**epdict, title=ep.title)
