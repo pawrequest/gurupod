@@ -46,9 +46,6 @@ class EpisodeBot:
     async def _scrape_and_process_new_eps(self):
         for ep in await self._scrape():
             await self._process_new_episode(ep)
-        # if committed := await self._scrape():
-        #     for ep in committed:
-        #         await self._process_new_episode(ep)
 
     async def _scrape(self) -> list[EpisodeWith]:
         episode_stream = self.main_soup.episode_stream(aiosession=self.aio_session)

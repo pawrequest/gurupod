@@ -66,7 +66,7 @@ def db_from_json(session: Session, json_path: Path):
                         logger.debug(f"Skipping {model_instance} as it already exists in the database")
                     continue
 
-            logger.debug(f"Adding {json_name}: {model_instance} to the session")
+            logger.debug(f"Adding {json_name}: {model_instance} from JSON")
             session.add(model_instance)
             added += 1
         if added:

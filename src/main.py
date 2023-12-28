@@ -34,7 +34,6 @@ async def lifespan(app: FastAPI):
     logger.info("tables created")
     with Session(engine_()) as session:
         if INITIALIZE:
-            # gu = await gurus_from_file(session)
             db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
