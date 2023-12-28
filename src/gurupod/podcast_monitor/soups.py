@@ -39,7 +39,7 @@ class MainSoup(BeautifulSoup):
 
     async def listing_soups(self, aiosession) -> AsyncGenerator[ListingSoup, None]:
         for listing_page in self.listing_pages:
-            logger.debug(f"Scraping listing page {listing_page}")
+            logger.debug(f"Scraper | listing page {listing_page}")
             listing_page_soup = await ListingSoup.from_url(listing_page, aiosession)
             yield listing_page_soup
 

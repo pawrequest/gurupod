@@ -38,7 +38,7 @@ class EpisodeBot:
 
     async def run(self, sleep_interval: int = EPISODE_MONITOR_SLEEP):
         logger.info(
-            f"Scraper | Monitoring for new episodes: {self.main_soup.main_url} - Posting to http://reddit.com/r/{self.subreddit.display_name}"
+            f"Scraper | Watching for new episodes: {self.main_soup.main_url} - Posting to http://reddit.com/r/{self.subreddit.display_name}"
         )
         while True:
             logger.debug("Scraper | Waking")
