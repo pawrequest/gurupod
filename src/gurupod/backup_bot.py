@@ -50,8 +50,8 @@ def db_from_json(session: Session, json_path: Path):
 
     for json_name, model_class in model_to_json_map.items():
         added = 0
-        for one_entry in backup_j.get(json_name):
-            json_record = json.loads(one_entry)
+        for json_string in backup_j.get(json_name):
+            json_record = json.loads(json_string)
             model_instance = model_class.model_validate(json_record)
 
             try:
@@ -66,7 +66,6 @@ def db_from_json(session: Session, json_path: Path):
                         logger.debug(f"Skipping {model_instance} as it already exists in the database")
                     continue
 
-            logger.debug(f"Adding {json_name}: {model_instance} from JSON")
             session.add(model_instance)
             added += 1
         if added:
