@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 from asyncpraw.models import Redditor, Subreddit
 from sqlmodel import Session, select
 
-from data.consts import DEBUG, MAX_DUPES, WRITE_EP_TO_SUBREDDIT
+from data.consts import DEBUG, MAX_SCRAPED_DUPES, WRITE_EP_TO_SUBREDDIT
 from gurupod.podcast_monitor.soups import MainSoup
 from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
@@ -54,7 +54,7 @@ class EpisodeBot:
         episode_stream = self.main_soup.episode_stream(aiosession=self.aio_session)
         new_eps = self._filter_existing_episodes(episode_stream)
         committed = await self._validate_sort_add_commit(new_eps)
-        if committed is None:
+        if not committed:
             logger.debug("No new episodes found")
             return []
         if gurus_assigned := tuple(_ for _ in self._assign_tags(committed, Guru)):
@@ -68,7 +68,8 @@ class EpisodeBot:
     async def _process_new_episode(self, ep: EpisodeWith) -> None:
         if WRITE_EP_TO_SUBREDDIT:
             logger.warning(
-                f"WRITE TO WEB ENABLED:\n\t\t - SUBMITTING EPISODE TO {self.subreddit.display_name} - \n\t\t - MESSAGING {self.recipient.name} -"
+                f"Write to web enabled - submitting episode to http://reddit.com/r/{self.subreddit.display_name} "
+                f"- and messaging {self.recipient.name}"
             )
             submitted = await submit_episode_subreddit(ep, self.subreddit)
             message_txt = reddit_episode_submitted_msg(submitted, ep)
@@ -94,7 +95,7 @@ class EpisodeBot:
         async for episode in episodes:
             if self._episode_exists(episode):
                 dupes += 1
-                if dupes >= MAX_DUPES:
+                if dupes >= MAX_SCRAPED_DUPES:
                     if DEBUG:
                         logger.debug(f"{dupes} duplicates found, giving up")
                     break

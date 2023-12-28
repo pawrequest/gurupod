@@ -7,13 +7,13 @@ from asyncpraw.reddit import Reddit, Subreddit
 
 from data.consts import (
     GURU_SUB,
-    PROSODY_CLIENT_ID,
-    PROSODY_CLIENT_SEC,
-    PROSODY_REF_TOK,
     REDIRECT,
     TEST_SUB,
     TEST_WIKI,
     USER_AGENT,
+    CLIENT_ID,
+    CLIENT_SEC,
+    REDDIT_TOKEN,
 )
 from gurupod.gurulog import get_logger
 
@@ -27,11 +27,11 @@ if TYPE_CHECKING:
 async def reddit_cm() -> Reddit:
     try:
         async with Reddit(
-            client_id=PROSODY_CLIENT_ID,
-            client_secret=PROSODY_CLIENT_SEC,
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SEC,
             user_agent=USER_AGENT,
             redirect_uri=REDIRECT,
-            refresh_token=PROSODY_REF_TOK,
+            refresh_token=REDDIT_TOKEN,
         ) as reddit:
             yield reddit
     finally:

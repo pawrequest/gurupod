@@ -6,9 +6,16 @@ from pathlib import Path
 import dotenv
 
 dotenv.load_dotenv()
+# strings
+GURU_SUB = "DecodingTheGurus"
+TEST_SUB = "test"
+EPISODES_WIKI = "episodes"
+TEST_WIKI = "gurus"
+EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
 
 # Switches
-WRITE_EP_TO_SUBREDDIT = False
+USE_PERSONAL = True
+WRITE_EP_TO_SUBREDDIT = True
 DO_FLAIR = False
 SKIP_OLD_THREADS = False
 BACKUP_SLEEP = 86400
@@ -20,10 +27,15 @@ INITIALIZE = False
 RUN_EP_BOT = True
 RUN_SUB_BOT = True
 RUN_BACKUP_BOT = True
+SUB_IN_USE = TEST_SUB
+
+# SUB_IN_USE = GURU_SUB
+MAX_SCRAPED_DUPES = 3
+
 
 # links
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
-USER_AGENT = "Guru_Pod Wiki updater by prosodyspeaks"
+USER_AGENT = "DecodeTheBot v0.1"
 REDIRECT = "http://localhost:8080"
 
 # paths
@@ -33,21 +45,16 @@ EPISODES_MD = DATA_DIR / "episodes.md"
 GURU_DB = DATA_DIR / "guru.db"
 BACKUP_JSON = DATA_DIR / "db_backup.json"
 
-# strings
-GURU_SUB = "DecodingTheGurus"
-TEST_SUB = "test"
-EPISODES_WIKI = "episodes"
-TEST_WIKI = "gurus"
-EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
-SUB_IN_USE = GURU_SUB
 
 # env vars
-PROSODY_CLIENT_ID = os.environ["PROSODY_CLIENT_ID"]
-PROSODY_CLIENT_SEC = os.environ["PROSODY_CLIENT_SEC"]
-PROSODY_REF_TOK = os.environ["PROSODY_REF_TOK"]
-# REDDIT_CLIENT_ID = os.environ["DTG_CLIENT_ID"]
-# REDDIT_CLIENT_SEC = os.environ["DTG_CLIENT_SEC"]
-# REDDIT_REF_TOK = os.environ["DTG_TOKEN"]
+if USE_PERSONAL:
+    CLIENT_ID = os.environ["PROSODY_CLIENT_ID"]
+    CLIENT_SEC = os.environ["PROSODY_CLIENT_SEC"]
+    REDDIT_TOKEN = os.environ["PROSODY_REF_TOK"]
+else:
+    CLIENT_ID = os.environ["DTG_CLIENT_ID"]
+    CLIENT_SEC = os.environ["DTG_CLIENT_SEC"]
+    REDDIT_TOKEN = os.environ["DTG_TOKEN"]
+
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
 GURU_FLAIR_ID = os.environ.get("CUSTOM_FLAIR_ID")
-MAX_DUPES = 3

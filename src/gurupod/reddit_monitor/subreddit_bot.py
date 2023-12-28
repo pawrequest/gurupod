@@ -15,11 +15,6 @@ from gurupod.podcast_monitor.writer import RPostWriter
 logger = get_logger()
 
 
-async def subreddit_bot(session: Session, subreddit: Subreddit):
-    bot = SubredditBot(session, subreddit)
-    await bot.monitor()
-
-
 class SubredditBot:
     def __init__(self, session: Session, subreddit: Subreddit):
         self.subreddit = subreddit
