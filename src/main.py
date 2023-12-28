@@ -9,6 +9,8 @@ from sqlmodel import Session
 from data.consts import (
     BACKUP_JSON,
     BACKUP_SLEEP,
+    DM_ADDRESS,
+    GURU_SUB,
     INITIALIZE,
     MAIN_URL,
     READ_SUB,
@@ -17,16 +19,13 @@ from data.consts import (
     RUN_SUB_BOT,
     WIKI_TO_WRITE,
     WRITE_SUB,
-    GURU_SUB,
-    DM_ADDRESS,
 )
-from gurupod.episode_monitor.episode_bot import EpisodeBot
+from gurupod import EpisodeBot, SubredditMonitor
 from gurupod.database import create_db_and_tables, engine_
 from gurupod.episode_monitor.soups import MainSoup
 from gurupod.gurulog import get_logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.routes import ep_router
-from gurupod.reddit_monitor.subreddit_bot import SubredditMonitor
 from gurupod.backup_bot import backup_bot, db_from_json, db_to_json, get_dated_filename
 
 logger = get_logger()
