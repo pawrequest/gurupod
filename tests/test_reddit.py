@@ -4,7 +4,7 @@ from asyncpraw.reddit import Reddit, Subreddit
 
 from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
 from gurupod.reddit_monitor.managers import reddit_cm, subreddit_cm, wiki_page_cm
-from gurupod.reddit_monitor.subreddit_bot import edit_reddit_wiki, submit_episode_subreddit
+from gurupod.reddit_monitor.subreddit_bot import _edit_reddit_wiki, submit_episode_subreddit
 from gurupod.podcast_monitor.writer import RWikiWriter
 
 
@@ -31,7 +31,7 @@ async def test_wiki_cm():
 async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird):
     async with wiki_page_cm(GURU_SUB, TEST_WIKI) as wiki:
         wiki: WikiPage = wiki
-        await edit_reddit_wiki("", wiki)
+        await _edit_reddit_wiki("", wiki)
         await wiki.load()
         assert wiki.content_md == ""
 
@@ -39,7 +39,7 @@ async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird
         writer = RWikiWriter(episodes_weird)
         markup = writer.write_many()
 
-        await edit_reddit_wiki(markup, wiki)
+        await _edit_reddit_wiki(markup, wiki)
         await wiki.load()
         print(f"http://reddit.com/r/{GURU_SUB}/wiki/{TEST_WIKI}")
         # assert wiki.content_md == markup_sample

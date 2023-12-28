@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Sequence
 
 from data.consts import EPISODE_PAGE_TITLE
 from gurupod.models.episode import EpisodeBase
 
 
 class EpisodeWriter(ABC):
-    def __init__(self, episodes: EpisodeBase | list[EpisodeBase]):
-        if not isinstance(episodes, list):
-            episodes = [episodes]
+    def __init__(self, episodes: EpisodeBase | Sequence[EpisodeBase]):
+        if not isinstance(episodes, Sequence):
+            episodes = (episodes,)
         self.episodes = episodes
 
     def write_many(self, eps=None) -> str:
@@ -24,6 +25,7 @@ class EpisodeWriter(ABC):
         text += self._date_text(episode.date.date().strftime("%A %B %d %Y"))
         text += self._notes_text(episode.notes) or ""
         text += self._links_text(episode.links) or ""
+        text += self._ep_tail_text()
         return text
 
     @abstractmethod
@@ -88,10 +90,10 @@ class HtmlWriter(EpisodeWriter):
         return notes
 
     def _links_text(self, links) -> str:
-        if links:
-            links_html = "\n".join([f'<a href="{link}">{text}</a><br>' for text, link in links.items()])
-            return f"<h3>Show Links:</h3>\n{links_html}"
-        return ""
+        if not links:
+            return ""
+        links_html = "\n".join([f'<a href="{link}">{text}</a><br>' for text, link in links.items()])
+        return f"<h3>Show Links:</h3>\n{links_html}"
 
     def _ep_tail_text(self) -> str:
         return "<br> <br>"
@@ -115,8 +117,10 @@ class RPostWriter(EpisodeWriter):
         return notes
 
     def _links_text(self, links: dict[str, str]) -> str:
-        links = "***Show Links:***\n \n" + "\n \n".join([f"[{text}]({link})\n" for text, link in links.items()])
-        return links
+        if not links:
+            return ""
+        links_str = "***Show Links:***\n \n" + "\n \n".join([f"[{text}]({link})\n" for text, link in links.items()])
+        return links_str
 
     def _ep_tail_text(self) -> str:
         return "\n \n"
@@ -140,11 +144,13 @@ class RWikiWriter(EpisodeWriter):
         return notes
 
     def _links_text(self, links: dict[str, str]) -> str:
+        if not links:
+            return ""
         links = "***Links:***\n \n" + "\n \n".join([f"[{text}]({link})" for text, link in links.items()]) + "\n \n"
         return links
 
     def _ep_tail_text(self) -> str:
-        return "\n \n"
+        return "\n\n---------------------\n\n"
 
     def _post_tail_text(self) -> str:
-        return "\n \n"
+        return "\n \n --- \n \n"

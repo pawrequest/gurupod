@@ -14,8 +14,12 @@ TEST_WIKI = "gurus"
 EPISODE_PAGE_TITLE = "Decoding The Gurus Episodes"
 
 # Switches
+READ_SUB = GURU_SUB
+WRITE_SUB = TEST_SUB
+WIKI_TO_WRITE = EPISODES_WIKI
 USE_PERSONAL = True
-WRITE_EP_TO_SUBREDDIT = False
+WRITE_EP_TO_SUBREDDIT = True
+UPDATE_WIKI = True
 DO_FLAIR = False
 SKIP_OLD_THREADS = False
 BACKUP_SLEEP = 24 * 60 * 60
@@ -25,12 +29,7 @@ INITIALIZE = True
 RUN_EP_BOT = True
 RUN_SUB_BOT = True
 RUN_BACKUP_BOT = True
-SUB_IN_USE = TEST_SUB
-READ_SUB = GURU_SUB
-WRITE_SUB = TEST_SUB
-# SUB_IN_USE = GURU_SUB
 MAX_SCRAPED_DUPES = 3
-
 
 # links
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
@@ -44,7 +43,6 @@ EPISODES_MD = DATA_DIR / "episodes.md"
 GURU_DB = DATA_DIR / "guru.db"
 BACKUP_JSON = DATA_DIR / "db_backup.json"
 
-
 # env vars
 if USE_PERSONAL:
     CLIENT_ID = os.environ["PROSODY_CLIENT_ID"]
@@ -57,3 +55,4 @@ else:
 
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
 GURU_FLAIR_ID = os.environ.get("CUSTOM_FLAIR_ID")
+DM_ADDRESS = "decodethebot"

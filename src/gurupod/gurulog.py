@@ -57,7 +57,7 @@ def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = ""
     else:
         calling_f = f"{inspect.stack()[1].function} INSPECTED, YOU SHOULD PROVIDE THE FUNC"
 
-    new_msg = f"Logger called by {calling_f}:\n\t\t{msg} {len(eps)} Episodes:\n"
+    new_msg = f"{calling_f} logging:\n\t\t{msg} {len(eps)} Episodes:\n"
     new_msg += episode_log_msg(eps)
     _logger.info(new_msg)
 
