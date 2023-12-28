@@ -78,39 +78,6 @@ class EpisodeBot:
         return resp
 
 
-# async def episode_bot(
-#     session: Session, aio_session, subreddit: Subreddit, interval: int, recipient: Redditor | Subreddit, main_url=None
-# ) -> None:
-#     """Schedule episode scraping and processing."""
-#     while True:
-#         logger.debug("Waking Episode Scraper")
-#         await scrape_and_process_new_eps(session, aio_session, subreddit, recipient)
-#         logger.debug(f"Sleeping Episode Scraper for {interval} seconds")
-#         await asyncio.sleep(interval)
-
-#
-# async def scrape_and_process_new_eps(session, aiosession, subreddit, recipient: Redditor | Subreddit, main_url) -> None:
-#     """Scrape, import to db and post episodes to subreddit and message recipient."""
-#     if committed := await scrape_and_commit_entry(session, aiosession, main_url):
-#         logger.info(f"Committed {len(committed.episodes)} new episodes to db")
-#         log_episodes(committed.episodes, scrape_and_process_new_eps, "Committed")
-#         for ep in committed.episodes:
-#             await process_new_episode(ep, recipient, subreddit)
-#     else:
-#         logger.debug("No new episodes found")
-
-
-# async def process_new_episode(ep: EpisodeWith, recipient, subreddit) -> None:
-#     """Submit episode post to subreddit and message recipient."""
-#     if WRITE_EP_TO_SUBREDDIT:
-#         logger.warning(
-#             f"WRITE TO WEB ENABLED:\n\t\t - SUBMITTING EPISODE TO {subreddit.display_name} - \n\t\t - MESSAGING {recipient.name} -"
-#         )
-#         submitted = await submit_episode_subreddit(ep, subreddit)
-#         message_txt = reddit_episode_submitted_msg(submitted, ep)
-#         await message_home(recipient, message_txt)
-#     else:
-#         logger.warning("WRITE TO WEB DISABLED - NOT PROCESSING NEW EPISODE")
 def reddit_episode_submitted_msg(submission, episode: EpisodeWith):
     msg = f"""
     DecodeTheBot discovered a New episode "{episode.title}" on Captivate.fm
