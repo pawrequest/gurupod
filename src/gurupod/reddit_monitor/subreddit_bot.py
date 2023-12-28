@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import AsyncGenerator, Sequence
 
-from asyncpraw.models import Redditor, Submission, Subreddit, WikiPage
+from asyncpraw.models import Redditor, Subreddit, WikiPage
+from asyncpraw.reddit import Submission
 from sqlmodel import Session, select
 
-from data.consts import DO_FLAIR, SKIP_OLD_THREADS
+from data.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import EpisodeBase
 from gurupod.models.guru import Guru
@@ -43,11 +44,15 @@ class SubredditBot:
 
 async def flair_submission(submission: Submission, flairs: list) -> bool:
     try:
-        # todo this probably doesnt work? need to use the flairid....
         # todo reenable
         # DO NOT DELETE THESE COMMENTED LINES!
-        # [await submission.flair.select(flair_text) for flair_text in flairs]
-        # logger.info(f"\n\tFlaired {submission.title} with {','.join(flairs)}")
+        for flair in flairs:
+            try:
+                await submission.flair.select(GURU_FLAIR_ID, text=flair)
+                logger.info(f"\n\tFlaired {submission.title} with {flair}")
+            except Exception as e:
+                logger.error(f"Error applying flair: to {submission.title} {e}")
+        # [await submission.flair.select(GURU_FLAIR_ID, text=flair)for flair in flairs]
         logger.warning(
             "FLAIRING DISABLED --- \n\tFlaired {submission.title} with {','.join(flairs)} --- FLAIRING DISABLED"
         )
