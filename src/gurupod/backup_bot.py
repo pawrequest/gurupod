@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 
 from data.consts import BACKUP_JSON, DEBUG
 from data.gurunames import GURU_NAMES_SET
-from gurupod.episodebot.episode_funcs import remove_existing
+from gurupod.episodebot.episode_funcs import remove_existing_str
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
@@ -51,6 +51,8 @@ def db_from_json(session: Session, json_path: Path):
         for one_entry in backup_j.get(json_name):
             one_validated = json.loads(one_entry)
             model_instance = model_class.model_validate(one_validated)
+            logger.debug(f"VALIDATED IN DB FROM JSON {model_instance}")
+
             try:
                 if session.get(model_class, model_instance.id):
                     if DEBUG:
@@ -92,7 +94,7 @@ async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
 
 
 async def gurus_from_file(session: Session):
-    if guru_names := remove_existing(GURU_NAMES_SET, Guru.name, session):
+    if guru_names := remove_existing_str(GURU_NAMES_SET, Guru.name, session):
         logger.info(f"Adding {len(guru_names)} new gurus: {guru_names}")
         new_gurus = [Guru(name=_) for _ in guru_names]
         session.add_all(new_gurus)

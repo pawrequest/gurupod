@@ -3,10 +3,11 @@ from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
 from dateutil import parser
-from pydantic import field_validator, model_validator
+from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
+from data.consts import DEBUG
 from gurupod.gurulog import get_logger
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
@@ -23,17 +24,17 @@ class EpisodeBase(SQLModel):
     notes: Optional[list[str]] = Field(default=None, sa_column=Column(JSON))
     links: Optional[dict[str, str]] = Field(default=None, sa_column=Column(JSON))
     date: Optional[datetime] = Field(default=None)
+    episode_number: str
 
     @field_validator("date", mode="before")
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
             try:
-                if len(v) == 10:
-                    v = v + "T00:00:00"
                 v = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S")
             except Exception:
                 v = parser.parse(v)
-                logger.warning(f"Could not parse date with standard format yyyy-mm-ddTHH:MM:SS - AutoParsed to {v}")
+                if DEBUG:
+                    logger.info(f"AutoParsed Date to {v}")
         return v
 
     @property

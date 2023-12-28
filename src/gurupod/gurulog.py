@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import inspect
 import sys
 from pathlib import Path
 from typing import Sequence, TYPE_CHECKING
 
 from loguru import logger as _logger
+
 
 if TYPE_CHECKING:
     from loguru._logger import Logger
@@ -12,10 +14,15 @@ if TYPE_CHECKING:
 
 
 def custom_format(record):
-    file_line = f"{record['file'].path}:{record['line']}"
+    max_length = 90
+    # file_line = f"{record['file'].path}:{record['line']} - {record['function']}:"
+    file_line = f"{record['file'].path}:{record['line']} - {record['function']}:"
+
+    if len(file_line) > max_length:
+        file_line = file_line[:max_length]
 
     # Add a newline character at the end of the formatted message
-    return f"{file_line:<80} <lvl>{record['level']: <7} {record['function']}: {record['message']}</lvl>\n"
+    return f"{file_line:<{max_length}} <lvl>{record['level']: <7}  {record['message']}</lvl>\n"
 
 
 log_file_loc = Path(__file__).parent.parent.parent / "data" / "logs" / "gurulog.log"

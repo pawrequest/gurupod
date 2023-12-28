@@ -8,14 +8,18 @@ import dotenv
 dotenv.load_dotenv()
 
 # Switches
-SUBMIT_EP_TO_SUBREDDIT = False
+WRITE_EP_TO_SUBREDDIT = False
 DO_FLAIR = False
 SKIP_OLD_THREADS = True
 BACKUP_SLEEP = 86400
 # BACKUP_SLEEP = 30
-EPISODE_MONITOR_SLEEP = 60 * 20
+EPISODE_MONITOR_SLEEP = 10
+# EPISODE_MONITOR_SLEEP = 60 * 20
 DEBUG = False
 INITIALIZE = True
+RUN_EP_BOT = True
+RUN_SUB_BOT = False
+RUN_BACKUP_BOT = False
 
 # links
 MAIN_URL = "https://decoding-the-gurus.captivate.fm"
@@ -46,4 +50,4 @@ PROSODY_REF_TOK = os.environ["PROSODY_REF_TOK"]
 # REDDIT_REF_TOK = os.environ["DTG_TOKEN"]
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
 GURU_FLAIR_ID = os.environ.get("CUSTOM_FLAIR_ID")
-MONITOR_SUB = os.environ.get("RUN_SUB_BOT", False)
+MAX_DUPES = 3

@@ -9,11 +9,12 @@ from data.consts import DO_FLAIR, SKIP_OLD_THREADS
 from gurupod.gurulog import get_logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread
-from gurupod.episodebot.episode_funcs import assign_tags, remove_existing
+from gurupod.episodebot.episode_funcs import assign_tags, remove_existing_str
 
 logger = get_logger()
 
 
+# @warning_log
 async def subreddit_bot(session: Session, subreddit: Subreddit):
     logger.info(f"Monitoring r/{subreddit.display_name} for guru related threads")
     monitor = SubredditMonitor(session, subreddit)
@@ -25,6 +26,7 @@ class SubredditMonitor:
         self.subreddit = subreddit
         self.session = session
 
+    # @warning_log
     async def red_monitor(self):
         async for submission in self.stream_filtered_submissions():
             if thread := await submission_to_thread(self.session, submission):
@@ -74,7 +76,7 @@ async def flair_submission(submission: Submission, flairs: list) -> bool:
 
 async def submission_to_thread(session: Session, submission: Submission) -> RedditThread | None:
     try:
-        if remove_existing(submission.id, RedditThread.reddit_id, session):
+        if remove_existing_str(submission.id, RedditThread.reddit_id, session):
             logger.info(f"Saving new submission: {submission.title}")
             thread_ = RedditThread.from_submission(submission)
             return thread_
@@ -87,7 +89,7 @@ async def submission_to_thread(session: Session, submission: Submission) -> Redd
 
 async def submission_to_threadold(session: Session, submission: Submission) -> RedditThread:
     try:
-        if not remove_existing([submission.id], RedditThread.reddit_id, session):
+        if not remove_existing_str([submission.id], RedditThread.reddit_id, session):
             logger.debug(f"Skipping existing submission: {submission.title}")
             return
         else:

@@ -9,7 +9,9 @@ from sqlmodel import Field, JSON, Relationship
 
 from gurupod.database import SQLModel
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
+from gurupod.gurulog import get_logger
 
+logger = get_logger()
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru, Episode
 
@@ -46,6 +48,7 @@ class RedditThreadBase(SQLModel):
             created_datetime=submission.created_utc,
             submission=submission,
         )
+        logger.debug(f"VALIDATING IN REDDITTHREAD FROM SUBMISSION {tdict['title']}")
         return cls.model_validate(tdict)
 
 

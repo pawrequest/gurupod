@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import AsyncGenerator, List, Optional, Sequence, TypeVar, Union
+from typing import List, Optional, Sequence, TypeVar, Union
 
 from pydantic import BaseModel, ValidationError
 
@@ -32,7 +32,7 @@ class RedditThreadWith(RedditThreadBase):
 EP_IN_DB_TYP = Union[EpisodeRead, Episode, EpisodeWith]
 EP_OR_BASE_TYP = Union[EpisodeBase, EP_IN_DB_TYP]
 EP_IN_DB_VAR = TypeVar("EP_IN_DB_VAR", bound=EP_IN_DB_TYP)
-EP_OR_BASE_VAR = TypeVar("EP__OR_BASE_VAR", bound=EP_OR_BASE_TYP)
+EP_OR_BASE_VAR = TypeVar("EP_OR_BASE_VAR", bound=EP_OR_BASE_TYP)
 
 
 # def validate_episode(episode: EP_OR_BASE_VAR) -> EP_OR_BASE_VAR:
@@ -48,8 +48,10 @@ EP_OR_BASE_VAR = TypeVar("EP__OR_BASE_VAR", bound=EP_OR_BASE_TYP)
 def validate_ep_or_base(episode) -> Episode | EpisodeRead:
     try:
         res = EpisodeRead.model_validate(episode)
+        logger.debug(f"VALIDATED IN VALIDATE_EP_OR_BASE {res}")
     except ValidationError as e:
         res = Episode.model_validate(episode)
+        logger.debug(f"VALIDATED IN VALIDATE_EP_OR_BASE {res}")
     return res
 
 
@@ -90,14 +92,16 @@ class EpisodeResponse(BaseModel):
 
     @classmethod
     async def from_episodes_seq(cls, episodes: Sequence[EP_OR_BASE_VAR], msg="") -> EpisodeResponse:
-        eps = [ep for ep in episodes]
+        eps = [EpisodeWith.model_validate(ep) for ep in episodes]
         if len(eps) == 0:
             msg = "No Episodes Found"
         meta_data = EpisodeMeta(
             length=len(eps),
             msg=msg,
         )
-        return cls.model_validate(dict(episodes=eps, meta=meta_data))
+        res = cls.model_validate(dict(episodes=eps, meta=meta_data))
+        logger.debug(f"Validated: EpsiodeResponse {res.episodes}")
+        return res
 
     def __str__(self):
         return f"{self.__class__.__name__}: {self.meta.length} {self.episodes[0].__class__.__name__}s"

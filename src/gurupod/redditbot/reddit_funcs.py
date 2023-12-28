@@ -4,9 +4,8 @@ from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Submission, Subreddit
 
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import Episode, EpisodeBase
+from gurupod.models.episode import EpisodeBase
 from gurupod.episodebot.writer import RPostWriter
-from gurupod.models.responses import EpisodeWith
 
 logger = get_logger()
 
@@ -47,16 +46,3 @@ async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) 
     except Exception as e:
         logger.error(f"Error submitting episode: {e}")
         return None
-
-
-def reddit_episode_submitted_msg(submission, episode: EpisodeWith):
-    msg = f"""
-    DecodeTheBot discovered a New episode "{episode.title}" on Captivate.fm
-    It has been [posted to the test subreddit]({submission.shortlink})
-
-
-    message u/ProsodySpeaks with thoughts or feedback
-
-    (currently sent from my personal account because the bot is shaddowbanned already lol)
-    """
-    return msg
