@@ -19,12 +19,12 @@ from gurupod.models.reddit_thread import RedditThread
 logger = get_logger()
 
 model_to_json_map = {
-    "episodes": Episode,
-    "gurus": Guru,
-    "reddit_threads": RedditThread,
-    "guru_ep_links": GuruEpisodeLink,
-    "reddit_thread_episode_links": RedditThreadEpisodeLink,
-    "reddit_thread_guru_links": RedditThreadGuruLink,
+    "episode": Episode,
+    "guru": Guru,
+    "reddit_thread": RedditThread,
+    "guru_ep_link": GuruEpisodeLink,
+    "reddit_thread_episode_link": RedditThreadEpisodeLink,
+    "reddit_thread_guru_link": RedditThreadGuruLink,
 }
 
 
@@ -51,8 +51,8 @@ def db_from_json(session: Session, json_path: Path):
     for json_name, model_class in model_to_json_map.items():
         added = 0
         for one_entry in backup_j.get(json_name):
-            one_validated = json.loads(one_entry)
-            model_instance = model_class.model_validate(one_validated)
+            json_record = json.loads(one_entry)
+            model_instance = model_class.model_validate(json_record)
 
             try:
                 if session.get(model_class, model_instance.id):
@@ -66,7 +66,7 @@ def db_from_json(session: Session, json_path: Path):
                         logger.debug(f"Skipping {model_instance} as it already exists in the database")
                     continue
 
-            logger.debug(f"Adding {model_instance} to the session")
+            logger.debug(f"Adding {json_name}: {model_instance} to the session")
             session.add(model_instance)
             added += 1
         if added:
