@@ -5,8 +5,8 @@ from asyncpraw.reddit import Reddit, Subreddit
 from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
 from gurupod.reddit_monitor.managers import reddit_cm, subreddit_cm, wiki_page_cm
 from gurupod.reddit_monitor.subreddit_bot import _edit_reddit_wiki
-from gurupod.podcast_monitor.podcast_bot import submit_episode_subreddit
-from gurupod.podcast_monitor.writer import RWikiWriter
+from gurupod.episode_monitor.episode_bot import submit_episode_subreddit
+from gurupod.episode_monitor.writer import RWikiWriter
 
 
 @pytest.mark.asyncio

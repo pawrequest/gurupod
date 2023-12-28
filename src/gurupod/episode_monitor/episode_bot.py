@@ -9,12 +9,12 @@ from asyncpraw.reddit import Submission
 from sqlmodel import Session, desc, select
 
 from data.consts import DEBUG, EPISODE_MONITOR_SLEEP, MAX_SCRAPED_DUPES, UPDATE_WIKI, WRITE_EP_TO_SUBREDDIT
-from gurupod.podcast_monitor.soups import MainSoup
+from gurupod.episode_monitor.soups import MainSoup
 from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.guru import Guru
 from gurupod.models.responses import EP_OR_BASE_VAR, EpisodeWith
-from gurupod.podcast_monitor.writer import RWikiWriter, RPostWriter
+from gurupod.episode_monitor.writer import RWikiWriter, RPostWriter
 
 logger = get_logger()
 

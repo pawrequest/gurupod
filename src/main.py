@@ -20,9 +20,9 @@ from data.consts import (
     GURU_SUB,
     DM_ADDRESS,
 )
-from gurupod.podcast_monitor.podcast_bot import EpisodeBot
+from gurupod.episode_monitor.episode_bot import EpisodeBot
 from gurupod.database import create_db_and_tables, engine_
-from gurupod.podcast_monitor.soups import MainSoup
+from gurupod.episode_monitor.soups import MainSoup
 from gurupod.gurulog import get_logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.routes import ep_router
