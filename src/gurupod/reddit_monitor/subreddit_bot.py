@@ -2,16 +2,14 @@ from __future__ import annotations
 
 from typing import AsyncGenerator, Sequence
 
-from asyncpraw.models import Redditor, Subreddit, WikiPage
+from asyncpraw.models import Subreddit, WikiPage
 from asyncpraw.reddit import Submission
-from sqlmodel import Session, select, desc
+from sqlmodel import Session, select
 
 from data.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS
 from gurupod.gurulog import get_logger
-from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread
-from gurupod.podcast_monitor.writer import RPostWriter, RWikiWriter
 
 logger = get_logger()
 
@@ -105,15 +103,6 @@ async def subs_to_threads(
             yield thread_
 
 
-async def message_home(recipient: Redditor | Subreddit, msg):
-    recip_name = recipient.name if isinstance(recipient, Redditor) else recipient.display_name
-    try:
-        await recipient.message(subject="New Episode Posted", message=msg)
-        logger.info(f"\n\tMonitor | Sent dm to u/{recip_name}")
-    except Exception as e:
-        logger.error(f'Monitor | Error sending dm to user or subreddit "{recip_name}": {e}')
-
-
 async def subs_with_gurus(
     submission_stream: AsyncGenerator[Submission, None], session: Session
 ) -> AsyncGenerator[tuple[Submission, Sequence[Guru]], None]:
@@ -132,19 +121,6 @@ async def _edit_reddit_wiki(markup: str, wiki: WikiPage):
         "revision": wiki.revision_id,
     }
     return res
-
-
-async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) -> Submission:
-    try:
-        title = f"NEW EPISODE: {episode.title}"
-        writer = RPostWriter(episode)
-        text = writer.write_many()
-        submission: Submission = await sub_reddit.submit(title, selftext=text)
-        logger.info(f"\n\tMonitor | Submitted {episode.title} to {sub_reddit.display_name}: {submission.shortlink}")
-
-        return submission
-    except Exception as e:
-        logger.error(f"Monitor | Error submitting episode: {e}")
 
 
 # dont delete, good for testing

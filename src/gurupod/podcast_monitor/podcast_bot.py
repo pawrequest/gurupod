@@ -5,6 +5,7 @@ from typing import AsyncGenerator, Generator, Sequence
 
 from aiohttp import ClientSession
 from asyncpraw.models import Redditor, Subreddit, WikiPage
+from asyncpraw.reddit import Submission
 from sqlmodel import Session, desc, select
 
 from data.consts import DEBUG, EPISODE_MONITOR_SLEEP, MAX_SCRAPED_DUPES, UPDATE_WIKI, WRITE_EP_TO_SUBREDDIT
@@ -13,8 +14,7 @@ from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.guru import Guru
 from gurupod.models.responses import EP_OR_BASE_VAR, EpisodeWith
-from gurupod.podcast_monitor.writer import RWikiWriter
-from gurupod.reddit_monitor.subreddit_bot import message_home, submit_episode_subreddit
+from gurupod.podcast_monitor.writer import RWikiWriter, RPostWriter
 
 logger = get_logger()
 
@@ -147,3 +147,25 @@ def reddit_episode_submitted_msg(submission, episode: EpisodeWith):
     (currently sent from my personal account because the bot is shaddowbanned already lol)
     """
     return msg
+
+
+async def message_home(recipient: Redditor | Subreddit, msg):
+    recip_name = recipient.name if isinstance(recipient, Redditor) else recipient.display_name
+    try:
+        await recipient.message(subject="New Episode Posted", message=msg)
+        logger.info(f"\n\tMonitor | Sent dm to u/{recip_name}")
+    except Exception as e:
+        logger.error(f'Monitor | Error sending dm to user or subreddit "{recip_name}": {e}')
+
+
+async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) -> Submission:
+    try:
+        title = f"NEW EPISODE: {episode.title}"
+        writer = RPostWriter(episode)
+        text = writer.write_many()
+        submission: Submission = await sub_reddit.submit(title, selftext=text)
+        logger.info(f"\n\tMonitor | Submitted {episode.title} to {sub_reddit.display_name}: {submission.shortlink}")
+
+        return submission
+    except Exception as e:
+        logger.error(f"Monitor | Error submitting episode: {e}")
