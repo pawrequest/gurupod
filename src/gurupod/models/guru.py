@@ -8,7 +8,8 @@ from sqlmodel import Field, Relationship, SQLModel
 from gurupod.models.links import GuruEpisodeLink, RedditThreadGuruLink
 
 if TYPE_CHECKING:
-    from gurupod.models.episode import Episode, RedditThread
+    from gurupod.models.episode import Episode
+    from gurupod.models.reddit_thread import RedditThread
 
 
 class GuruBase(SQLModel):

@@ -26,6 +26,10 @@ class EpisodeBase(SQLModel):
     date: Optional[datetime] = Field(default=None)
     episode_number: str
 
+    @field_validator("episode_number", mode="before")
+    def ep_number_is_str(cls, v) -> str:
+        return str(v)
+
     @field_validator("date", mode="before")
     def parse_date(cls, v) -> datetime:
         if isinstance(v, str):
@@ -34,13 +38,8 @@ class EpisodeBase(SQLModel):
             except Exception:
                 v = parser.parse(v)
                 if DEBUG:
-                    logger.info(f"AutoParsed Date to {v}")
+                    logger.debug(f"AutoParsed Date to {v}")
         return v
-
-    @property
-    def data_missing(self) -> bool:
-        # return any(getattr(self, _) is None for _ in MAYBE_ATTRS)
-        return not all(getattr(self, _) for _ in MAYBE_ATTRS)
 
     def __str__(self):
         return f"{self.__class__.__name__}: {self.title or self.url}"
@@ -66,16 +65,3 @@ class EpisodeRead(EpisodeBase):
     links: Optional[dict[str, str]]
     gurus: Optional[list[str]]
     reddit_threads: Optional[list[str]]
-
-
-#
-# def slugify(value: str) -> str:
-#     """
-#     Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
-#     dashes to single dashes. Also strip leading and trailing whitespace, dashes,
-#     and underscores.
-#     """
-#     value = str(value)
-#     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
-#     value = re.sub(r'[^\w\s-]', '', value.lower())
-#     return re.sub(r'[-\s]+', '-', value).strip('-_')

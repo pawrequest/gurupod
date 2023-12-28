@@ -10,19 +10,20 @@ from data.consts import (
     BACKUP_SLEEP,
     EPISODE_MONITOR_SLEEP,
     INITIALIZE,
+    MAIN_URL,
     RUN_BACKUP_BOT,
     RUN_EP_BOT,
     RUN_SUB_BOT,
     SUB_IN_USE,
-    MAIN_URL,
 )
-from gurupod.episodebot.episode_monitor import EpisodeBot
+from gurupod.podcast_monitor.podcast_bot import EpisodeBot
 from gurupod.database import create_db_and_tables, engine_
+from gurupod.podcast_monitor.soups import MainSoup
 from gurupod.gurulog import get_logger
-from gurupod.redditbot.managers import reddit_cm
+from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.routes import ep_router
-from gurupod.redditbot.subred_monitor import subreddit_bot
-from gurupod.backup_bot import backup_bot, db_to_json, get_dated_filename, gurus_from_file
+from gurupod.reddit_monitor.subreddit_bot import SubredditBot
+from gurupod.backup_bot import backup_bot, db_from_json, db_to_json, get_dated_filename
 
 logger = get_logger()
 
@@ -33,8 +34,8 @@ async def lifespan(app: FastAPI):
     logger.info("tables created")
     with Session(engine_()) as session:
         if INITIALIZE:
-            gu = await gurus_from_file(session)
-            # db_from_json(session, BACKUP_JSON)
+            # gu = await gurus_from_file(session)
+            db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
                 tasks = await bot_tasks(session, aio_session, reddit, SUB_IN_USE)
@@ -55,15 +56,17 @@ async def bot_tasks(session, aio_session, reddit, sub_name):
         recipient = await reddit.redditor("decodethebot", fetch=False)
         tasks = []
         if RUN_EP_BOT:
-            ep_bot = EpisodeBot(session, aio_session, subreddit, EPISODE_MONITOR_SLEEP, recipient, MAIN_URL)
+            mainsoup = await MainSoup.from_url(MAIN_URL, aio_session)
+            ep_bot = EpisodeBot(session, aio_session, subreddit, EPISODE_MONITOR_SLEEP, recipient, mainsoup)
             tasks.append(
-                asyncio.create_task(ep_bot.wake())
+                asyncio.create_task(ep_bot.run())
                 # asyncio.create_task(episode_bot(session, aio_session, subreddit, EPISODE_MONITOR_SLEEP, recipient))
             )
         if RUN_BACKUP_BOT:
             tasks.append(asyncio.create_task(backup_bot(session, BACKUP_SLEEP)))
         if RUN_SUB_BOT:
-            tasks.append(asyncio.create_task(subreddit_bot(session, subreddit)))
+            sub_bot = SubredditBot(session, subreddit)
+            tasks.append(asyncio.create_task(sub_bot.monitor()))
         return tasks
     except Exception as e:
         logger.error(f"Error in monitor_tasks: {e}")

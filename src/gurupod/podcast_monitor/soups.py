@@ -84,7 +84,7 @@ class ListingEpisodeSubSoup:
     def episode_number(self):
         """string bercause 'bonus' episodes are not numbered"""
         res = self._soup_section.select_one(".episode-info").text.strip().split()[1]
-        return res
+        return str(res)
 
     @property
     def date(self):

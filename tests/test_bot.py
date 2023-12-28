@@ -4,9 +4,9 @@
 # import pytest
 #
 # from data.consts import TEST_SUB, GURU_SUB
-# from gurupod.redditbot.managers import subreddit_cm
-# from gurupod.redditbot.monitor import submission_monitor
-# from gurupod.redditbot.write_to_web import submit_episode_subreddit
+# from gurupod.reddit_monitor.managers import subreddit_cm
+# from gurupod.reddit_monitor.monitor import submission_monitor
+# from gurupod.reddit_monitor.write_to_web import submit_episode_subreddit
 #
 #
 # @pytest.mark.asyncio

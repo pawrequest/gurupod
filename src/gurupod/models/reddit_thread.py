@@ -31,7 +31,6 @@ class RedditThreadBase(SQLModel):
     title: str
     shortlink: str
     created_datetime: datetime
-    # submission: dict = Field(sa_column=Column(JSON))
     submission: Submission | dict = Field(sa_column=Column(JSON))
 
     @field_validator("submission", mode="before")
@@ -40,7 +39,6 @@ class RedditThreadBase(SQLModel):
 
     @classmethod
     def from_submission(cls, submission: Submission):
-        # su = db_ready_submission(submission)
         tdict = dict(
             reddit_id=submission.id,
             title=submission.title,
@@ -48,13 +46,11 @@ class RedditThreadBase(SQLModel):
             created_datetime=submission.created_utc,
             submission=submission,
         )
-        logger.debug(f"VALIDATING IN REDDITTHREAD FROM SUBMISSION {tdict['title']}")
         return cls.model_validate(tdict)
 
 
 class RedditThread(RedditThreadBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    # submission: Optional[dict] = None
     gurus: Optional[List["Guru"]] = Relationship(back_populates="reddit_threads", link_model=RedditThreadGuruLink)
     episodes: List["Episode"] = Relationship(back_populates="reddit_threads", link_model=RedditThreadEpisodeLink)
 

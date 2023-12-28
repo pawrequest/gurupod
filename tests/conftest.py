@@ -16,7 +16,7 @@ from gurupod.database import SQLModel, get_session
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.responses import EpisodeResponseNoDB
-from gurupod.redditbot.managers import reddit_cm
+from gurupod.reddit_monitor.managers import reddit_cm
 from main import app
 
 TEST_DB = "sqlite://"

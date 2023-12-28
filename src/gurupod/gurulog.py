@@ -15,13 +15,11 @@ if TYPE_CHECKING:
 
 def custom_format(record):
     max_length = 90
-    # file_line = f"{record['file'].path}:{record['line']} - {record['function']}:"
     file_line = f"{record['file'].path}:{record['line']} - {record['function']}:"
 
     if len(file_line) > max_length:
         file_line = file_line[:max_length]
 
-    # Add a newline character at the end of the formatted message
     return f"{file_line:<{max_length}} <lvl>{record['level']: <7}  {record['message']}</lvl>\n"
 
 
@@ -31,7 +29,6 @@ clickable = "{file.path}:{line}"
 format_ = clickable + " <lvl>{level: <8} {function}</lvl>: {message}"
 
 _logger.add(log_file_loc, rotation="1 day", delay=True)
-# _logger.add(sys.stdout, level="DEBUG", format=format_)
 _logger.add(sys.stdout, level="DEBUG", format=custom_format)
 
 
@@ -53,22 +50,25 @@ def log_urls(urls: Sequence[str], msg: str = None):
 
 
 def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = ""):
-    msg = msg + f" {len(eps)} Episodes:"
-    if calling_func:
-        msg = f"Logger called by {calling_func.__name__}:\n\t{msg}\n"
     if not eps:
         return
-    msg += episode_log_string(eps)
-    _logger.info(msg)
+    if calling_func:
+        calling_f = calling_func.__name__
+    else:
+        calling_f = f"{inspect.stack()[1].function} INSPECTED, YOU SHOULD PROVIDE THE FUNC"
+
+    new_msg = f"Logger called by {calling_f}:\n\t\t{msg} {len(eps)} Episodes:\n"
+    new_msg += episode_log_msg(eps)
+    _logger.info(new_msg)
 
 
-def episode_log_string(eps: Sequence[EP_OR_BASE_VAR]) -> str:
+def episode_log_msg(eps: Sequence[EP_OR_BASE_VAR]) -> str:
     msg = ""
     try:
-        msg += "\n".join(f"\t {_.date.date()} - {_.title}" for _ in eps[:3])
+        msg += "\n".join(f"\t\t <green>{_.date.date()}</green> - <bold><cyan>{_.title}</cyan></bold>" for _ in eps[:3])
     except AttributeError:
         try:
-            msg += "\n".join("\t" + _.url for _ in eps[:3])
+            msg += "\n".join("\t\t" + _.url for _ in eps[:3])
         except AttributeError:
             raise TypeError(f"Expected Episode, got {type(eps[0])}")
     if len(eps) == 4:
@@ -77,7 +77,7 @@ def episode_log_string(eps: Sequence[EP_OR_BASE_VAR]) -> str:
     elif len(eps) > 4:
         to_log = min([2, abs(len(eps) - 4)])
         msg += " \n\t...\n"
-        msg += "\n".join(f"\t {_.date.date()} - {_.title}" for _ in eps[-to_log:])
+        msg += "\n".join(f"\t\t {_.date.date()} - {_.title}" for _ in eps[-to_log:])
     if len(eps) > 5:
         msg += " \n\t... more ..."
     return msg

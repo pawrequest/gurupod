@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 import asyncio
 import json
 from datetime import datetime
 from pathlib import Path
+from typing import Sequence
 
 from sqlmodel import Session, select
 
 from data.consts import BACKUP_JSON, DEBUG
 from data.gurunames import GURU_NAMES_SET
-from gurupod.episodebot.episode_funcs import remove_existing_str
 from gurupod.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
@@ -51,7 +53,6 @@ def db_from_json(session: Session, json_path: Path):
         for one_entry in backup_j.get(json_name):
             one_validated = json.loads(one_entry)
             model_instance = model_class.model_validate(one_validated)
-            logger.debug(f"VALIDATED IN DB FROM JSON {model_instance}")
 
             try:
                 if session.get(model_class, model_instance.id):
@@ -65,9 +66,7 @@ def db_from_json(session: Session, json_path: Path):
                         logger.debug(f"Skipping {model_instance} as it already exists in the database")
                     continue
 
-            if DEBUG:
-                logger.debug(f"Adding {model_instance} to the session")
-
+            logger.debug(f"Adding {model_instance} to the session")
             session.add(model_instance)
             added += 1
         if added:
@@ -84,6 +83,7 @@ def get_dated_filename(path: Path):
 
 async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
     """Continuously backup the database to json with today's date every interval seconds, default = daily"""
+    logger.info(f"Backup bot started, backing up every {interval/60} minutes")
     backup_filename = backup_filename or BACKUP_JSON
     while True:
         await asyncio.sleep(interval)
@@ -101,3 +101,13 @@ async def gurus_from_file(session: Session):
         session.commit()
         [session.refresh(_) for _ in new_gurus]
         return new_gurus
+
+
+def remove_existing_str(to_filter: Sequence[str], db_field, session: Session) -> tuple[str, ...]:
+    """Returns tuple of strings which do not match the given db-model-field ."""
+    if isinstance(to_filter, str):
+        to_filter = [to_filter]
+    existing_entries = session.query(db_field).filter(db_field.in_(to_filter)).all()
+    existing_set = set(entry[0] for entry in existing_entries)
+    new_entries = tuple(_ for _ in to_filter if _ not in existing_set)
+    return new_entries

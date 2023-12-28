@@ -4,7 +4,8 @@ from typing import List, Optional, Sequence, TypeVar, Union
 
 from pydantic import BaseModel, ValidationError
 
-from gurupod.gurulog import get_logger
+from data.consts import DEBUG
+from gurupod.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
 from gurupod.models.guru import GuruBase, GuruRead
 from gurupod.models.reddit_thread import RedditThreadBase, RedditThreadRead
@@ -26,59 +27,10 @@ class EpisodeWith(EpisodeBase):
 class RedditThreadWith(RedditThreadBase):
     episodes: Optional[List["EpisodeRead"]]
     gurus: Optional[List["GuruRead"]]
-    # _submission: Optional["Submission"]
 
 
-EP_IN_DB_TYP = Union[EpisodeRead, Episode, EpisodeWith]
-EP_OR_BASE_TYP = Union[EpisodeBase, EP_IN_DB_TYP]
-EP_IN_DB_VAR = TypeVar("EP_IN_DB_VAR", bound=EP_IN_DB_TYP)
-EP_OR_BASE_VAR = TypeVar("EP_OR_BASE_VAR", bound=EP_OR_BASE_TYP)
-
-
-# def validate_episode(episode: EP_OR_BASE_VAR) -> EP_OR_BASE_VAR:
-#     try:
-#         return EpisodeRead.model_validate(episode)
-#     except Exception as e:
-#         try:
-#             return Episode.model_validate(episode)
-#         except Exception:
-#             raise ValueError(f"episodes must be {EP_OR_BASE_TYP} or Sequence-of, not {type(episode)}")
-
-
-def validate_ep_or_base(episode) -> Episode | EpisodeRead:
-    try:
-        res = EpisodeRead.model_validate(episode)
-        logger.debug(f"VALIDATED IN VALIDATE_EP_OR_BASE {res}")
-    except ValidationError as e:
-        res = Episode.model_validate(episode)
-        logger.debug(f"VALIDATED IN VALIDATE_EP_OR_BASE {res}")
-    return res
-
-
-# async def repack_validate_old(
-#     episodes: EP_OR_BASE_VAR | Sequence[EP_OR_BASE_VAR],
-# ) -> AsyncGenerator[EP_OR_BASE_VAR, None]:
-#     """Takes episode or sequence, checks type, returns tuple of episodes."""
-#     if not isinstance(episodes, Sequence):
-#         episodes = (episodes,)
-#     for ep in episodes:
-#         yield validate_ep_or_base(ep)
-
-
-# async def repack_validate_async(episodes: AsyncGenerator[EP_OR_BASE_VAR, None]) -> AsyncGenerator[EP_OR_BASE_VAR, None]:
-#     logger.debug("repack_validate_async")
-#     async for ep in episodes:
-#         logger.debug(f"repack_validate_async in loop: {ep}")
-#         yield validate_ep_or_base(ep)
-
-
-# def repack_validate(episodes: EP_OR_BASE_VAR | Sequence[EP_OR_BASE_VAR]) -> tuple[EP_OR_BASE_VAR, ...]:
-#     """Takes episode or sequence, checks type, returns tuple of episodes."""
-#     if not isinstance(episodes, Sequence):
-#         episodes = (episodes,)
-#     validated_episodes = tuple(validate_ep_or_base(ep) for ep in episodes)
-#     # validated_episodes = tuple(validate_episode(ep) for ep in episodes)
-#     return validated_episodes
+EP_IN_DB_VAR = TypeVar("EP_IN_DB_VAR", bound=Union[Episode, EpisodeRead, EpisodeWith])
+EP_OR_BASE_VAR = TypeVar("EP_OR_BASE_VAR", bound=Union[EpisodeBase, Episode, EpisodeRead, EpisodeWith])
 
 
 class EpisodeMeta(BaseModel):
@@ -91,7 +43,7 @@ class EpisodeResponse(BaseModel):
     episodes: list[EpisodeWith]
 
     @classmethod
-    async def from_episodes_seq(cls, episodes: Sequence[EP_OR_BASE_VAR], msg="") -> EpisodeResponse:
+    async def from_episodes(cls, episodes: Sequence[EP_OR_BASE_VAR], msg="") -> EpisodeResponse:
         eps = [EpisodeWith.model_validate(ep) for ep in episodes]
         if len(eps) == 0:
             msg = "No Episodes Found"
@@ -100,7 +52,8 @@ class EpisodeResponse(BaseModel):
             msg=msg,
         )
         res = cls.model_validate(dict(episodes=eps, meta=meta_data))
-        logger.debug(f"Validated: EpsiodeResponse {res.episodes}")
+        if DEBUG:
+            log_episodes(res.episodes, msg="Responding")
         return res
 
     def __str__(self):

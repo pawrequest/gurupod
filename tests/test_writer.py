@@ -1,6 +1,6 @@
 import pytest
 
-from gurupod.episodebot.writer import RWikiWriter
+from gurupod.podcast_monitor.writer import RWikiWriter
 
 
 @pytest.mark.asyncio

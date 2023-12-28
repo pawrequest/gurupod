@@ -3,9 +3,9 @@ from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Reddit, Subreddit
 
 from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
-from gurupod.redditbot.managers import reddit_cm, subreddit_cm, wiki_page_cm
-from gurupod.redditbot.reddit_funcs import submission_in_stream_by_id, edit_reddit_wiki, submit_episode_subreddit
-from gurupod.episodebot.writer import RWikiWriter
+from gurupod.reddit_monitor.managers import reddit_cm, subreddit_cm, wiki_page_cm
+from gurupod.reddit_monitor.subreddit_bot import edit_reddit_wiki, submit_episode_subreddit
+from gurupod.podcast_monitor.writer import RWikiWriter
 
 
 @pytest.mark.asyncio
@@ -48,12 +48,12 @@ async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird
 
 
 # @pytest.mark.skip(reason="Writes to web")
-@pytest.mark.asyncio
-async def test_post_and_get_submission_by_id(random_episode_validated):
-    async with subreddit_cm(TEST_SUB) as subreddit:
-        posted = await submit_episode_subreddit(random_episode_validated, subreddit)
-        found = await submission_in_stream_by_id(posted.id, subreddit)
-        assert found
+# @pytest.mark.asyncio
+# async def test_post_and_get_submission_by_id(random_episode_validated):
+#     async with subreddit_cm(TEST_SUB) as subreddit:
+#         posted = await submit_episode_subreddit(random_episode_validated, subreddit)
+#         found = await submission_in_stream_by_id(posted.id, subreddit)
+#         assert found
 
 
 @pytest.mark.skip(reason="just for output")
