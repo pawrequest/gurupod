@@ -15,6 +15,8 @@ from data.consts import (
     RUN_EP_BOT,
     RUN_SUB_BOT,
     SUB_IN_USE,
+    READ_SUB,
+    WRITE_SUB,
 )
 from gurupod.podcast_monitor.podcast_bot import EpisodeBot
 from gurupod.database import create_db_and_tables, engine_
@@ -37,7 +39,7 @@ async def lifespan(app: FastAPI):
             db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
-                tasks = await bot_tasks(session, aio_session, reddit, SUB_IN_USE)
+                tasks = await bot_tasks(session, aio_session, reddit, READ_SUB, WRITE_SUB)
                 yield
                 logger.info("Shutting down")
 
@@ -49,14 +51,15 @@ async def lifespan(app: FastAPI):
                 await db_to_json(session, dated_filename)
 
 
-async def bot_tasks(session, aio_session, reddit, sub_name):
+async def bot_tasks(session, aio_session, reddit, read_sub, write_sub):
     try:
-        subreddit = await reddit.subreddit(sub_name)
+        read_subreddit = await reddit.subreddit(read_sub)
+        write_subreddit = await reddit.subreddit(write_sub)
         recipient = await reddit.redditor("decodethebot", fetch=False)
         tasks = []
         if RUN_EP_BOT:
             mainsoup = await MainSoup.from_url(MAIN_URL, aio_session)
-            ep_bot = EpisodeBot(session, aio_session, subreddit, EPISODE_MONITOR_SLEEP, recipient, mainsoup)
+            ep_bot = EpisodeBot(session, aio_session, write_subreddit, EPISODE_MONITOR_SLEEP, recipient, mainsoup)
             tasks.append(
                 asyncio.create_task(ep_bot.run())
                 # asyncio.create_task(episode_bot(session, aio_session, subreddit, EPISODE_MONITOR_SLEEP, recipient))
@@ -64,7 +67,7 @@ async def bot_tasks(session, aio_session, reddit, sub_name):
         if RUN_BACKUP_BOT:
             tasks.append(asyncio.create_task(backup_bot(session, BACKUP_SLEEP)))
         if RUN_SUB_BOT:
-            sub_bot = SubredditBot(session, subreddit)
+            sub_bot = SubredditBot(session, read_subreddit)
             tasks.append(asyncio.create_task(sub_bot.monitor()))
         return tasks
     except Exception as e:

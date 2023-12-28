@@ -36,7 +36,9 @@ class EpisodeBot:
         self.main_soup = main_soup
 
     async def run(self):
-        logger.info(f"Episode Scraper Created for {self.main_soup.main_url}")
+        logger.info(
+            f"Episode Scraper Created for {self.main_soup.main_url} - Writing to http://reddit.com/r/{self.subreddit.display_name}"
+        )
         while True:
             logger.debug("Waking Episode Scraper")
             await self._scrape_and_process_new_eps()
@@ -65,7 +67,7 @@ class EpisodeBot:
     async def _process_new_episode(self, ep: EpisodeWith) -> None:
         if WRITE_EP_TO_SUBREDDIT:
             logger.warning(
-                f"Write to web enabled - submitting episode to http://reddit.com/r/{self.subreddit.display_name} "
+                f"Write to web enabled - submitting episode to http://reddit.com/r/{self.subreddit.display_name}"
                 f"- and messaging {self.recipient.name}"
             )
             submitted = await submit_episode_subreddit(ep, self.subreddit)

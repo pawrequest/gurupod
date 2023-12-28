@@ -22,7 +22,9 @@ class SubredditBot:
         self.session = session
 
     async def monitor(self):
-        logger.info(f"DecodeTheBot monitoring r/{self.subreddit.display_name} for guru related threads")
+        logger.info(
+            f"DecodeTheBot monitoring http://reddit.com/r/{self.subreddit.display_name} for guru related threads"
+        )
 
         sub_stream = self.submission_stream()
         new = filter_existing_submissions(sub_stream, self.session)
