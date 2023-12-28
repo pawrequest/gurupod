@@ -108,7 +108,7 @@ async def subs_with_gurus(
 ) -> AsyncGenerator[tuple[Submission, Sequence[Guru]], None]:
     tag_models = session.exec(select(Guru)).all()
     async for submission in submission_stream:
-        if matched_tag_models := [_ for _ in tag_models if _.name in submission.title]:
+        if matched_tag_models := [_ for _ in tag_models if _.name.lower() in submission.title.lower()]:
             yield submission, matched_tag_models
 
 
