@@ -3,7 +3,7 @@ import re
 import pytest
 
 from data.consts import PROJECT_ROOT
-from gurupod.gurulog import log_file_loc
+from gurupod.core.gurulog import log_file_loc
 from tests.conftest import override_logger
 
 
@@ -14,7 +14,7 @@ async def test_log_loc():
 
 
 @pytest.mark.asyncio
-async def test_log(tmp_path, test_logger):
+async def test_log1(tmp_path, test_logger):
     test_logger.info("test")
 
 
@@ -31,6 +31,4 @@ async def test_log(tmp_path):
     match = re.match(pat_xml, LOG1)
 
     assert match
-    assert match.string.endswith(
-        f" | INFO     | tests.test_log:test_log:{logged_line} - test\n"
-    )
+    assert match.string.endswith(f" | INFO     | tests.test_log:test_log:{logged_line} - test\n")

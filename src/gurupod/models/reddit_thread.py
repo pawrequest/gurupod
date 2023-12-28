@@ -7,9 +7,9 @@ from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship
 
-from gurupod.database import SQLModel
+from gurupod.core.database import SQLModel
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.gurulog import get_logger
+from gurupod.core.gurulog import get_logger
 
 logger = get_logger()
 if TYPE_CHECKING:

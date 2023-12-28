@@ -10,7 +10,7 @@ from sqlmodel import Session, select
 
 from data.consts import BACKUP_JSON, DEBUG
 from data.gurunames import GURU_NAMES_SET
-from gurupod.gurulog import get_logger
+from gurupod.core.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
@@ -37,6 +37,7 @@ async def db_to_json(session: Session, json_path: Path = BACKUP_JSON):
     with open(json_path, "w") as f:
         json.dump(backup_json, f, indent=4)
     logger.info(f"BackupBot | Saved {len(backup_json)} models to {json_path}")
+
     return backup_json
 
 
@@ -86,8 +87,8 @@ async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
     backup_filename = backup_filename or BACKUP_JSON
     while True:
         logger.debug("BackupBot | Waking")
-        dated_filename = get_dated_filename(backup_filename)
-        await db_to_json(session, dated_filename)
+        # dated_filename = get_dated_filename(backup_filename)
+        await db_to_json(session, backup_filename)
         logger.debug(f"BackupBot | Sleeping for {interval} seconds")
         await asyncio.sleep(interval)
 

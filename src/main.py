@@ -21,12 +21,12 @@ from data.consts import (
     WRITE_SUB,
 )
 from gurupod import EpisodeBot, SubredditMonitor
-from gurupod.database import create_db_and_tables, engine_
+from gurupod.core.database import create_db_and_tables, engine_
 from gurupod.episode_monitor.soups import MainSoup
-from gurupod.gurulog import get_logger
+from gurupod.core.gurulog import get_logger
 from gurupod.reddit_monitor.managers import reddit_cm
-from gurupod.routes import ep_router
-from gurupod.backup_bot import backup_bot, db_from_json, db_to_json, get_dated_filename
+from gurupod.core.routes import ep_router
+from gurupod.core.backup_bot import backup_bot, db_from_json, db_to_json, get_dated_filename
 
 logger = get_logger()
 
@@ -48,8 +48,8 @@ async def lifespan(app: FastAPI):
                     task.cancel()
 
                 await asyncio.gather(*tasks, return_exceptions=True)
-                dated_filename = get_dated_filename(BACKUP_JSON)
-                await db_to_json(session, dated_filename)
+                # dated_filename = get_dated_filename(BACKUP_JSON)
+                await db_to_json(session, BACKUP_JSON)
 
 
 async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit, read_sub: str, write_sub: str):

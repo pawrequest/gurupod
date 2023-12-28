@@ -9,8 +9,7 @@ from typing import AsyncGenerator
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup, Tag
 
-from data.consts import DEBUG
-from gurupod.gurulog import get_logger
+from gurupod.core.gurulog import get_logger
 from gurupod.models.episode import EpisodeBase
 
 logger = get_logger()

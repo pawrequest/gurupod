@@ -4,8 +4,8 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
-from gurupod.database import get_session
-from gurupod.gurulog import get_logger
+from gurupod.core.database import get_session
+from gurupod.core.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.responses import EpisodeResponse
 

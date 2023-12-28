@@ -41,7 +41,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 EPISODES_MD = DATA_DIR / "episodes.md"
 GURU_DB = DATA_DIR / "guru.db"
-BACKUP_JSON = DATA_DIR / "db_backup.json"
+BACKUP_JSON = DATA_DIR / "backup" / "db_backup.json"
 
 # env vars
 if USE_PERSONAL:

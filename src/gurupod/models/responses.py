@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import List, Optional, Sequence, TypeVar, Union
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
 from data.consts import DEBUG
-from gurupod.gurulog import get_logger, log_episodes
+from gurupod.core.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
 from gurupod.models.guru import GuruBase, GuruRead
 from gurupod.models.reddit_thread import RedditThreadBase, RedditThreadRead

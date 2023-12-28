@@ -12,8 +12,8 @@ from sqlmodel import Session
 from starlette.testclient import TestClient
 
 from data.consts import EPISODES_MOD
-from gurupod.database import SQLModel, get_session
-from gurupod.gurulog import get_logger
+from gurupod.core.database import SQLModel, get_session
+from gurupod.core.gurulog import get_logger
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.responses import EpisodeResponseNoDB
 from gurupod.reddit_monitor.managers import reddit_cm
