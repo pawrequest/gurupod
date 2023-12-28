@@ -146,3 +146,17 @@ async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) 
     except Exception as e:
         logger.error(f"Error submitting episode: {e}")
         return None
+
+
+# dont delete, good for testing
+async def submission_in_stream_by_id(submission_id: str, subreddit: Subreddit) -> bool:
+    async for submission in subreddit.stream.submissions():
+        if submission_id == submission.id:
+            return True
+
+
+async def submission_in_stream_by_title(title, subreddit: Subreddit) -> bool:
+    async for submission in subreddit.stream.submissions():
+        submission: Submission = submission
+        if title in submission.title:
+            return True
