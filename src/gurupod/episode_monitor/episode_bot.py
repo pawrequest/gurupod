@@ -153,7 +153,7 @@ async def message_home(recipient: Redditor | Subreddit, msg):
     recip_name = recipient.name if isinstance(recipient, Redditor) else recipient.display_name
     try:
         await recipient.message(subject="New Episode Posted", message=msg)
-        logger.info(f"\n\tMonitor | Sent dm to u/{recip_name}")
+        logger.info(f"\tMonitor | Sent dm to u/{recip_name}")
     except Exception as e:
         logger.error(f'Monitor | Error sending dm to user or subreddit "{recip_name}": {e}')
 
@@ -164,7 +164,7 @@ async def submit_episode_subreddit(episode: EpisodeBase, sub_reddit: Subreddit) 
         writer = RPostWriter(episode)
         text = writer.write_many()
         submission: Submission = await sub_reddit.submit(title, selftext=text)
-        logger.info(f"\n\tMonitor | Submitted {episode.title} to {sub_reddit.display_name}: {submission.shortlink}")
+        logger.info(f"\tMonitor | Submitted {episode.title} to {sub_reddit.display_name}: {submission.shortlink}")
 
         return submission
     except Exception as e:
