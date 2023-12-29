@@ -41,6 +41,12 @@ class EpisodeBase(SQLModel):
                     logger.debug(f"AutoParsed Date to {v}")
         return v
 
+    def log_str(self) -> str:
+        if self.title and self.date:
+            return f"\t\t<green>{self.date.date()}</green> - <bold><cyan>{self.title}</cyan></bold>"
+        else:
+            return f"\t\t{self.url}"
+
     def __str__(self):
         return f"{self.__class__.__name__}: {self.title or self.url}"
 

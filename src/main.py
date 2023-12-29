@@ -18,6 +18,7 @@ from gurupod.core.consts import (
     WIKI_TO_WRITE,
     SUB_TO_POST,
     SUB_TO_WIKI,
+    param_log_strs,
 )
 from gurupod import EpisodeBot, SubredditMonitor
 from gurupod.core.database import create_db_and_tables, engine_
@@ -25,17 +26,19 @@ from gurupod.episode_monitor.soups import MainSoup
 from gurupod.core.gurulogging import get_logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.core.routes import ep_router
-from gurupod.backup_restore.backup_bot import backup_bot, db_from_json, db_to_json
+from gurupod.backup_restore.backup_bot import backup_bot, db_from_json, db_to_json, gurus_from_file
 
 logger = get_logger()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.warning(f"Loading with params:\n{'\n'.join(param_log_strs())}")
     create_db_and_tables()
     logger.info("tables created")
     with Session(engine_()) as session:
         if INITIALIZE:
+            gurus_from_file(session)
             db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
@@ -47,7 +50,8 @@ async def lifespan(app: FastAPI):
                     task.cancel()
 
                 await asyncio.gather(*tasks, return_exceptions=True)
-                await db_to_json(session, BACKUP_JSON)
+                if RUN_BACKUP_BOT:
+                    await db_to_json(session, BACKUP_JSON)
 
 
 async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit):

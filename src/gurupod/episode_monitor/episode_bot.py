@@ -38,33 +38,48 @@ class EpisodeBot:
 
     async def run(self, sleep_interval: int = EPISODE_MONITOR_SLEEP):
         logger.info(
-            f"Scraper | Watching for new episodes: {self.main_soup.main_url} - Posting to http://reddit.com/r/{self.subreddit.display_name}"
+            f"Scraper | Initialised : {self.main_soup.main_url} - Posting to http://reddit.com/r/{self.subreddit.display_name}"
         )
         while True:
             logger.debug("Scraper | Waking")
-            await self._scrape_and_process_new_eps()
+            await self.scrape_and_process_new_eps()
             logger.debug(f"Scraper | Sleeping for {sleep_interval} seconds")
             await asyncio.sleep(sleep_interval)
 
-    async def _scrape_and_process_new_eps(self):
-        eps = await self._scrape()
-        if gurus_assigned := tuple(_ for _ in self._assign_tags(eps, Guru)):
-            self.session.commit()
-            logger.info(f"Scraper | assigned {len(gurus_assigned)} episodes")
-        eptasks = [asyncio.create_task(self._process_new_episode(ep)) for ep in eps]
-        await asyncio.gather(*eptasks)
+    async def scrape_and_process_new_eps(self):
+        if new_eps := await self._scrape():
+            eptasks = [asyncio.create_task(self._process_new_episode(ep)) for ep in new_eps]
+            await asyncio.gather(*eptasks)
 
     async def _scrape(self) -> list[EpisodeWith]:
+        existing_gurus = self.session.exec(select(Guru)).all()
+        existing_guru_names = set([_.name for _ in existing_gurus])
         episode_stream = self.main_soup.episode_stream(aiosession=self.aio_session)
-        new_eps = self._filter_existing_episodes(episode_stream)
-        committed = await self._validate_sort_add_commit(new_eps)
-        if not committed:
-            logger.debug("Scraper | No new episodes found")
-            return []
+        new_eps = self._filter_existing_eps(episode_stream)
+        # self._assign_tags(ep, Guru)
+        added = []
+        async for ep in new_eps:
+            logger.info(f"Scraper | New Episode: {ep.title} @ {ep.url}")
+            val = Episode.model_validate(ep)
+            try:
+                self.session.add(val)
+                val = self._assign_tags_one(val, existing_gurus)
+                self.session.add(val)
+                added.append(val)
+            except Exception as e:
+                logger.error(f"Scraper | Error adding {ep.title} to session: {e}")
+                continue
 
-        log_episodes(committed, self._scrape, "Scraper | Committed")
+            if DEBUG:
+                if len(added) >= 3:
+                    logger.warning("DEBUG - LIMITING RESULTS")
+                    break
 
-        resp = [EpisodeWith.model_validate(ep) for ep in committed]
+        if added:
+            self.session.commit()
+            log_episodes(added, self._scrape, "Scraper | Committed")
+
+        resp = [EpisodeWith.model_validate(ep) for ep in added]
         return resp
 
     async def _process_new_episode(self, ep: EpisodeWith) -> None:
@@ -90,17 +105,31 @@ class EpisodeBot:
         await wiki_page.edit(content=markup)
         logger.warning(f"Scraper | WRITE_TO_WIKI is enabled - Updated {link} with {len(episodes)} episodes")
 
-    async def _validate_sort_add_commit(self, eps: AsyncGenerator[EpisodeBase, None]) -> list[Episode]:
-        eps_ = [Episode.model_validate(_) async for _ in eps]
-        if DEBUG:
-            logger.debug(f"Scraper | Validated {len(eps_)} episodes")
-        sorted_eps = sorted(eps_, key=lambda x: x.date)
-        self.session.add_all(sorted_eps)
-        self.session.commit()
-        [self.session.refresh(_) for _ in sorted_eps]
-        return sorted_eps
+    # async def _validate_sort_add_commit(self, eps: AsyncGenerator[EpisodeBase, None]) -> list[Episode]:
+    #     eps_ = [Episode.model_validate(_) async for _ in eps]
+    #     if DEBUG:
+    #         logger.debug(f"Scraper | Validated {len(eps_)} episodes")
+    #     sorted_eps = sorted(eps_, key=lambda x: x.date)
+    #     self.session.add_all(sorted_eps)
+    #     self.session.commit()
+    #     [self.session.refresh(_) for _ in sorted_eps]
+    #     return sorted_eps
 
-    async def _filter_existing_episodes(
+    # async def _validate_sort_add_commitnew(
+    #     self, eps: AsyncGenerator[EpisodeBase, None]
+    # ) -> AsyncGenerator[Episode, None]:
+    #     async for _ in eps:
+    #         val = Episode.model_validate(_)
+    #
+    #     if DEBUG:
+    #         logger.debug(f"Scraper | Validated {len(eps)} episodes")
+    #     sorted_eps = sorted(eps, key=lambda x: x.date)
+    #     self.session.add_all(sorted_eps)
+    #     self.session.commit()
+    #     [self.session.refresh(_) for _ in sorted_eps]
+    #     return sorted_eps
+
+    async def _filter_existing_eps(
         self, episodes: AsyncGenerator[EP_OR_BASE_VAR, None]
     ) -> AsyncGenerator[EP_OR_BASE_VAR, None]:
         """Yields episodes that do not exist in db."""
@@ -113,7 +142,6 @@ class EpisodeBot:
                         logger.debug(f"Scraper | {dupes} duplicates found, giving up")
                     break
                 continue
-            logger.info(f'Scraper | New Episode: "{episode.title}" @ {episode.url}')
             yield episode
 
     def _episode_exists(self, episode: EP_OR_BASE_VAR) -> bool:
@@ -124,21 +152,55 @@ class EpisodeBot:
 
         return existing_episode is not None
 
-    # todo make async generator ? consider ordering
-    def _assign_tags(self, episodes: Sequence, tag_model) -> Generator[Episode, None]:
-        """Tagmodel has name attr"""
-        if not hasattr(tag_model, "name"):
-            raise AttributeError(f"tag_model must have name attribute, got {tag_model}")
+    # def _assign_tags(self, episodes: Sequence, tag_model) -> Generator[Episode, None]:
+    #     """Tagmodel has name attr"""
+    #     if not hasattr(tag_model, "name"):
+    #         raise AttributeError(f"tag_model must have name attribute, got {tag_model}")
+    #     tag_instances = self.session.exec(select(tag_model)).all()
+    #     for ep in episodes:
+    #         eppy = self._assign_tags_one(ep, tag_instances)
+    #         # logger.info(f"Scraper | Assigned tags {matched} to {ep.title}")
+    #         yield eppy
 
-        tag_models = self.session.exec(select(tag_model)).all()
-        for ep in episodes:
-            if title_tags := [_ for _ in tag_models if _.name in ep.title]:
-                ep.gurus.extend(title_tags)
-                self.session.add(ep)
-                logger.info(f"Scraper | Assigned tags {[_.name for _ in title_tags]} to {ep.title}")
-                yield ep
-            else:
-                logger.warning(f"Scraper | No tags found for {ep.title}")
+    # def _assign_tags2(self, episodes: As, tag_model) -> Generator[Episode, None]:
+    #     """Tagmodel has name attr"""
+    #     if not hasattr(tag_model, "name"):
+    #         raise AttributeError(f"tag_model must have name attribute, got {tag_model}")
+    #     tag_instances = self.session.exec(select(tag_model)).all()
+    #     for ep in episodes:
+    #         self.session.add(ep)
+    #         eppy = self._assign_tags_one(ep, tag_instances)
+    #         # logger.info(f"Scraper | Assigned tags {matched} to {ep.title}")
+    #         yield eppy
+
+    def _assign_tags_one(self, episode: Episode, tags) -> Episode:
+        tag_names = set([_.name for _ in tags])
+        matched = self.get_matched_strs(episode, tag_names)
+        matched_gurus = [_ for _ in tags if _.name in matched]
+        if matched_gurus:
+            episode.gurus.extend(matched_gurus)
+            logger.info(f"Scraper | Assigned tags {[_ for _ in matched]} to {episode.title}")
+        return episode
+
+    def get_matched_strs(self, episode: Episode, tags: set[str]) -> set[str]:
+        return {_ for _ in tags if _.lower() in episode.title.lower()}
+
+    # async def _assign_tagsas(self, episodes: AsyncGenerator, tag_model) -> AsyncGenerator[Episode, None]:
+    #     """Tagmodel has name attr"""
+    #     if not hasattr(tag_model, "name"):
+    #         raise AttributeError(f"tag_model must have name attribute, got {tag_model}")
+    #
+    #     tag_models = self.session.exec(select(tag_model)).all()
+    #     async for ep in episodes:
+    #         matched_tags = [_ for _ in tag_models if _.name in ep.title]
+    #         if matched_tags:
+    #             ep = Episode.model_validate(ep)
+    #             ep.gurus.extend(matched_tags)
+    #             self.session.add(ep)
+    #             logger.info(f"Scraper | Assigned tags {[_.name for _ in matched_tags]} to {ep.title}")
+    #         else:
+    #             logger.warning(f"Scraper | No tags found for {ep.title}")
+    #         yield ep
 
 
 def reddit_episode_submitted_msg(submission, episode: EpisodeWith):

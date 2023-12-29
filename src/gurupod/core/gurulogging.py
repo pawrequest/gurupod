@@ -33,17 +33,17 @@ def get_logger() -> Logger:
     return _logger
 
 
-def log_urls(urls: Sequence[str], msg: str = None):
-    if not urls:
-        return
-    if msg:
-        _logger.info(msg)
-        return
-    msg += f"\nFound {len(urls)} urls:\n"
-    msg += "\n".join("\t" + _ for _ in urls[:5])
-    if len(urls) > 5:
-        msg += " \n\t... more ..."
-    _logger.info(msg)
+# def log_urls(urls: Sequence[str], msg: str = None):
+#     if not urls:
+#         return
+#     if msg:
+#         _logger.info(msg)
+#         return
+#     msg += f"\nFound {len(urls)} urls:\n"
+#     msg += "\n".join("\t" + _ for _ in urls[:5])
+#     if len(urls) > 5:
+#         msg += " \n\t... more ..."
+#     _logger.info(msg)
 
 
 def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = ""):
@@ -61,20 +61,15 @@ def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = ""
 
 def episode_log_msg(eps: Sequence[EP_OR_BASE_VAR]) -> str:
     msg = ""
-    try:
-        msg += "\n".join(f"\t\t <green>{_.date.date()}</green> - <bold><cyan>{_.title}</cyan></bold>" for _ in eps[:3])
-    except AttributeError:
-        try:
-            msg += "\n".join("\t\t" + _.url for _ in eps[:3])
-        except AttributeError:
-            raise TypeError(f"Expected Episode, got {type(eps[0])}")
+    msg += "\n".join([_.log_str() for _ in eps[:3]])
+
     if len(eps) == 4:
         fth = eps[3]
-        msg += f"\n\t {fth.date.date()} - {fth.title}"
+        msg += fth.log_str()
     elif len(eps) > 4:
         to_log = min([2, abs(len(eps) - 4)])
         msg += " \n\t...\n"
-        msg += "\n".join(f"\t\t {_.date.date()} - {_.title}" for _ in eps[-to_log:])
+        msg += "\n".join([_.log_str() for _ in eps[-to_log:]])
     if len(eps) > 5:
         msg += " \n\t... more ..."
     return msg

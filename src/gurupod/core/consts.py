@@ -5,11 +5,12 @@ import shutil
 import sys
 import tomllib
 from pathlib import Path
-from pprint import pprint
+
 from loguru import logger
 import dotenv
 
 dotenv.load_dotenv()
+
 HERE = Path(__file__).parent
 PROJECT_ROOT = HERE.parent.parent.parent
 DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR")
@@ -83,3 +84,27 @@ else:
     REDDIT_TOKEN = os.environ["REDDIT_TOKEN"]
 
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
+
+GURU_NAME_LIST_FILE = BACKUP_RESTORE_DIR / guru_conf.get("gurus_file")
+
+params_to_log_names = [
+    "USE_PERSONAL_ACCOUNT",
+    "WRITE_EP_TO_SUBREDDIT",
+    "UPDATE_WIKI",
+    "DO_FLAIR",
+    "RUN_EP_BOT",
+    "RUN_SUB_BOT",
+    "RUN_BACKUP_BOT",
+    "SKIP_OLD_THREADS",
+    "DEBUG",
+    "INITIALIZE",
+]
+
+# Create a list of tuples, each containing a parameter name and its value
+params_to_log = [(param, globals()[param]) for param in params_to_log_names]
+
+
+# Pass the list to your logger
+def param_log_strs() -> list[str]:
+    res = [f"{param}: {value}" for param, value in params_to_log]
+    return res
