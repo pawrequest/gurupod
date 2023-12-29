@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import inspect
 import sys
-from pathlib import Path
 from typing import Sequence, TYPE_CHECKING
 
 from loguru import logger as _logger
 
+from data.consts import LOG_FILE
 
 if TYPE_CHECKING:
     from loguru._logger import Logger
@@ -23,12 +23,11 @@ def custom_format(record):
     return f"{file_line:<{max_length}} <lvl>{record['level']: <7}  {record['message']}</lvl>\n"
 
 
-log_file_loc = Path(__file__).parent.parent.parent / "data" / "logs" / "gurulog.log"
 _logger.remove()
 clickable = "{file.path}:{line}"
 format_ = clickable + " <lvl>{level: <8} {function}</lvl>: {message}"
 
-_logger.add(log_file_loc, rotation="1 day", delay=True)
+_logger.add(LOG_FILE, rotation="1 day", delay=True)
 _logger.add(sys.stdout, level="DEBUG", format=custom_format)
 
 

@@ -42,6 +42,8 @@ DATA_DIR = PROJECT_ROOT / "data"
 EPISODES_MD = DATA_DIR / "episodes.md"
 GURU_DB = DATA_DIR / "guru.db"
 BACKUP_JSON = DATA_DIR / "backup" / "db_backup.json"
+LOG_DIR = DATA_DIR / "logs"
+LOG_FILE = LOG_DIR / "gurulog.log"
 
 # env vars
 if USE_PERSONAL:
