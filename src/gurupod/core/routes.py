@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from gurupod.core.database import get_session
-from gurupod.core.gurulog import get_logger
+from gurupod.core.gurulogging import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.responses import EpisodeResponse
 

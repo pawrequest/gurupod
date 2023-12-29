@@ -9,7 +9,7 @@ from sqlmodel import Field, JSON, Relationship
 
 from gurupod.core.database import SQLModel
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.core.gurulog import get_logger
+from gurupod.core.gurulogging import get_logger
 
 logger = get_logger()
 if TYPE_CHECKING:

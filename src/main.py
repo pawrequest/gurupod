@@ -22,10 +22,10 @@ from gurupod.core.consts import (
 from gurupod import EpisodeBot, SubredditMonitor
 from gurupod.core.database import create_db_and_tables, engine_
 from gurupod.episode_monitor.soups import MainSoup
-from gurupod.core.gurulog import get_logger
+from gurupod.core.gurulogging import get_logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.core.routes import ep_router
-from gurupod.core.backup_bot import backup_bot, db_from_json, db_to_json
+from gurupod.backup_restore.backup_bot import backup_bot, db_from_json, db_to_json
 
 logger = get_logger()
 

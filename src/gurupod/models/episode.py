@@ -8,7 +8,7 @@ from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
 from gurupod.core.consts import DEBUG
-from gurupod.core.gurulog import get_logger
+from gurupod.core.gurulogging import get_logger
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:

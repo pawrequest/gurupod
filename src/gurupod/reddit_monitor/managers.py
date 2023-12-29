@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from asyncpraw.reddit import Reddit, Subreddit
 
 from gurupod.core.consts import CLIENT_ID, CLIENT_SEC, REDDIT_TOKEN, REDIRECT, SUB_TO_TEST, USER_AGENT
-from gurupod.core.gurulog import get_logger
+from gurupod.core.gurulogging import get_logger
 
 logger = get_logger()
 

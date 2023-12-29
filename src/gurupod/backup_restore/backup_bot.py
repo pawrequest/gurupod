@@ -8,7 +8,7 @@ from pathlib import Path
 from sqlmodel import Session, select
 
 from gurupod.core.consts import BACKUP_JSON, BACKUP_SLEEP, DEBUG
-from gurupod.core.gurulog import get_logger
+from gurupod.core.gurulogging import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
