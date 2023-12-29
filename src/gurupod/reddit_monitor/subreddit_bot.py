@@ -6,7 +6,7 @@ from asyncpraw.models import Subreddit, WikiPage
 from asyncpraw.reddit import Submission
 from sqlmodel import Session, select
 
-from data.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS
+from gurupod.core.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS
 from gurupod.core.gurulog import get_logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread

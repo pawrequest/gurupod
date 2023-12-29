@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from asyncpraw.reddit import Reddit, Subreddit
 
-from data.consts import CLIENT_ID, CLIENT_SEC, REDDIT_TOKEN, REDIRECT, TEST_SUB, USER_AGENT
+from gurupod.core.consts import CLIENT_ID, CLIENT_SEC, REDDIT_TOKEN, REDIRECT, SUB_TO_TEST, USER_AGENT
 from gurupod.core.gurulog import get_logger
 
 logger = get_logger()
@@ -32,7 +32,7 @@ async def reddit_cm() -> Reddit:
 @asynccontextmanager
 async def subreddit_cm(sub_name: str = None) -> Subreddit:
     if sub_name is None:
-        sub_name = TEST_SUB
+        sub_name = SUB_TO_TEST
     async with reddit_cm() as reddit:
         subreddit: Subreddit = await reddit.subreddit(sub_name)
         try:

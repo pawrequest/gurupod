@@ -8,7 +8,7 @@ from asyncpraw.models import Redditor, Subreddit, WikiPage
 from asyncpraw.reddit import Submission
 from sqlmodel import Session, desc, select
 
-from data.consts import DEBUG, EPISODE_MONITOR_SLEEP, MAX_SCRAPED_DUPES, UPDATE_WIKI, WRITE_EP_TO_SUBREDDIT
+from gurupod.core.consts import DEBUG, EPISODE_MONITOR_SLEEP, MAX_SCRAPED_DUPES, UPDATE_WIKI, WRITE_EP_TO_SUBREDDIT
 from gurupod.episode_monitor.soups import MainSoup
 from gurupod.core.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
@@ -122,18 +122,20 @@ class EpisodeBot:
 
         return existing_episode is not None
 
-    def _assign_tags(self, to_assign: Sequence, tag_model) -> Generator[Episode, None]:
+    def _assign_tags(self, episodes: Sequence, tag_model) -> Generator[Episode, None]:
         """Tagmodel has name attr"""
         if not hasattr(tag_model, "name"):
             raise AttributeError(f"tag_model must have name attribute, got {tag_model}")
 
         tag_models = self.session.exec(select(tag_model)).all()
-        for target in to_assign:
-            if title_tags := [_ for _ in tag_models if _.name in target.title]:
-                target.gurus.extend(title_tags)
-                self.session.add(target)
-                logger.info(f"Scraper | Assigned tags {[_.name for _ in title_tags]} to {target.title}")
-                yield target
+        for ep in episodes:
+            if title_tags := [_ for _ in tag_models if _.name in ep.title]:
+                ep.gurus.extend(title_tags)
+                self.session.add(ep)
+                logger.info(f"Scraper | Assigned tags {[_.name for _ in title_tags]} to {ep.title}")
+                yield ep
+            else:
+                logger.warning(f"Scraper | No tags found for {ep.title}")
 
 
 def reddit_episode_submitted_msg(submission, episode: EpisodeWith):

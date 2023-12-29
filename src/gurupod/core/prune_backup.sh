@@ -1,11 +1,22 @@
 #!/bin/bash
 DEBUG_MODE=0 # do stuff even if not the right day
 INPUT_FILE=$1
-TODAY=$2:$(date +%Y-%m-%d)
+TODAY=$2$(date +%Y-%m-%d)
 TODAY2="${VARIABLE:-default}"
+echo "TODAY = $TODAY"
+echo "TODAY2 = $TODAY2"
+
+# if input file doesnt exist:
+if [ ! -f "$INPUT_FILE" ]; then
+    echo "File $INPUT_FILE does not exist"
+    exit 1
+fi
+
 
 ROOT_DIR=$(dirname "$INPUT_FILE")
 
+# how many backups to keep for each period
+# also defines folder names
 declare -A INTERVAL
 INTERVAL["day"]=7
 INTERVAL["week"]=4
@@ -22,6 +33,7 @@ echo "INPUT_FILE = $INPUT_FILE"
 check_dirs_exist() {
     for PERIOD in "${!INTERVAL[@]}"; do
         local BACKUP_DIR="${ROOT_DIR}/${PERIOD}"
+        echo "Checking if $BACKUP_DIR exists"
         if [ ! -d "$BACKUP_DIR" ]; then
             return 1 # Return 1 if any directory doesn't exist
         fi

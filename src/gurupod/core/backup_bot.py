@@ -4,12 +4,10 @@ import asyncio
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Sequence
 
 from sqlmodel import Session, select
 
-from data.consts import BACKUP_JSON, DEBUG
-from data.gurunames import GURU_NAMES_SET
+from gurupod.core.consts import BACKUP_JSON, BACKUP_SLEEP, DEBUG
 from gurupod.core.gurulog import get_logger
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
@@ -41,7 +39,7 @@ async def db_to_json(session: Session, json_path: Path = BACKUP_JSON):
     return backup_json
 
 
-def db_from_json(session: Session, json_path: Path):
+def db_from_json(session: Session, json_path: Path = BACKUP_JSON):
     try:
         with open(json_path, "r") as f:
             backup_j = json.load(f)
@@ -81,10 +79,9 @@ def get_dated_filename(path: Path):
     return path.with_suffix(f".{date_str}.json")
 
 
-async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
+async def backup_bot(session, interval=BACKUP_SLEEP, backup_filename=BACKUP_JSON):
     """Continuously backup the database to json with today's date every interval seconds, default = daily"""
-    logger.info(f"BackupBot | Backup bot started, backing up every {interval/60} minutes")
-    backup_filename = backup_filename or BACKUP_JSON
+    logger.info(f"BackupBot | Backup bot started, backing up every {interval / 60} minutes")
     while True:
         logger.debug("BackupBot | Waking")
         # dated_filename = get_dated_filename(backup_filename)

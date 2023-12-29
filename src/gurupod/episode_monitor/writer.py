@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Sequence
 
-from data.consts import EPISODE_PAGE_TITLE
+from gurupod.core.consts import HTML_TITLE
 from gurupod.models.episode import EpisodeBase
 
 
@@ -72,7 +72,7 @@ class HtmlWriter(EpisodeWriter):
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>{EPISODE_PAGE_TITLE}</title>
+                <title>{HTML_TITLE}</title>
             </head>
             <body>
             """

@@ -4,7 +4,7 @@ from typing import List, Optional, Sequence, TypeVar, Union
 
 from pydantic import BaseModel
 
-from data.consts import DEBUG
+from gurupod.core.consts import DEBUG
 from gurupod.core.gurulog import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
 from gurupod.models.guru import GuruBase, GuruRead

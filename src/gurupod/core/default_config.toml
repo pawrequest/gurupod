@@ -1,0 +1,42 @@
+# reddit
+sub_to_monitor = "DecodingTheGurus"
+sub_to_post = "test"
+sub_to_wiki = "DecodingTheGurus"
+wiki_page = "episodes"
+test_wiki = "gurus"
+sub_to_test = "test"
+custom_flair = "f0c29d96-93e4-11ee-bdde-e666ed3aa602"
+dm_address = "decodethebot"
+
+
+# switches
+use_personal = false
+write_ep_to_subreddit = false
+update_wiki = false
+do_flair = false
+skip_old_threads = false
+debug = false
+initialize = true
+run_ep_bot = true
+run_sub_bot = true
+run_backup_bot = true
+
+# consts
+backup_sleep = 86400
+episode_monitor_sleep = 600
+max_scraped_dupes = 3
+
+# links
+html_page_title = "Decoding The Gurus Episodes"
+main_url = "https://decoding-the-gurus.captivate.fm"
+user_agent = "DecodeTheBot v0.1"
+redirect = "http://localhost:8080"
+
+# paths
+data_dir = "data"
+db_name = "guru.db"
+episodes_md = "episodes.md"
+log_dir = "logs"
+backup_dir = "backup"
+backup_json = "db_backup.json"
+log_file = "gurulog.log"

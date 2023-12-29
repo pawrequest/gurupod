@@ -7,7 +7,7 @@ from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
-from data.consts import DEBUG
+from gurupod.core.consts import DEBUG
 from gurupod.core.gurulog import get_logger
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 

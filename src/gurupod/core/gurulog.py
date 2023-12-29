@@ -6,7 +6,7 @@ from typing import Sequence, TYPE_CHECKING
 
 from loguru import logger as _logger
 
-from data.consts import LOG_FILE
+from gurupod.core.consts import LOG_FILE
 
 if TYPE_CHECKING:
     from loguru._logger import Logger
@@ -24,8 +24,6 @@ def custom_format(record):
 
 
 _logger.remove()
-clickable = "{file.path}:{line}"
-format_ = clickable + " <lvl>{level: <8} {function}</lvl>: {message}"
 
 _logger.add(LOG_FILE, rotation="1 day", delay=True)
 _logger.add(sys.stdout, level="DEBUG", format=custom_format)
@@ -80,3 +78,7 @@ def episode_log_msg(eps: Sequence[EP_OR_BASE_VAR]) -> str:
     if len(eps) > 5:
         msg += " \n\t... more ..."
     return msg
+
+
+# clickable = "{file.path}:{line}"
+# format_ = clickable + " <lvl>{level: <8} {function}</lvl>: {message}"

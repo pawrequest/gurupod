@@ -1,8 +1,7 @@
 import pytest
 from asyncpraw.models import WikiPage
 from asyncpraw.reddit import Reddit, Subreddit
-
-from data.consts import EPISODES_WIKI, GURU_SUB, TEST_SUB, TEST_WIKI
+from data.consts import EPISODES_WIKI, SUB_TO_WIKI, TEST_SUB, TEST_WIKI
 from gurupod.reddit_monitor.managers import reddit_cm, subreddit_cm, wiki_page_cm
 from gurupod.reddit_monitor.subreddit_bot import _edit_reddit_wiki
 from gurupod.episode_monitor.episode_bot import submit_episode_subreddit
@@ -30,7 +29,7 @@ async def test_wiki_cm():
 @pytest.mark.skip(reason="Writes to web")
 @pytest.mark.asyncio
 async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird):
-    async with wiki_page_cm(GURU_SUB, TEST_WIKI) as wiki:
+    async with wiki_page_cm(SUB_TO_WIKI, TEST_WIKI) as wiki:
         wiki: WikiPage = wiki
         await _edit_reddit_wiki("", wiki)
         await wiki.load()
@@ -42,7 +41,6 @@ async def test_edit_wiki(markup_sample, random_episode_validated, episodes_weird
 
         await _edit_reddit_wiki(markup, wiki)
         await wiki.load()
-        print(f"http://reddit.com/r/{GURU_SUB}/wiki/{TEST_WIKI}")
         # assert wiki.content_md == markup_sample
 
         # cl = await edit_reddit_wiki('', wiki)

@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Session
 
 def engine_(config=None):
     if config is None:
-        from data.consts import GURU_DB
+        from gurupod.core.consts import GURU_DB
 
         db_url = f"sqlite:///{GURU_DB}"
         connect_args = {"check_same_thread": False}

@@ -6,19 +6,18 @@ from asyncpraw import Reddit
 from fastapi import FastAPI
 from sqlmodel import Session
 
-from data.consts import (
+from gurupod.core.consts import (
     BACKUP_JSON,
-    BACKUP_SLEEP,
     DM_ADDRESS,
-    GURU_SUB,
     INITIALIZE,
     MAIN_URL,
-    READ_SUB,
+    SUB_TO_MONITOR,
     RUN_BACKUP_BOT,
     RUN_EP_BOT,
     RUN_SUB_BOT,
     WIKI_TO_WRITE,
-    WRITE_SUB,
+    SUB_TO_POST,
+    SUB_TO_WIKI,
 )
 from gurupod import EpisodeBot, SubredditMonitor
 from gurupod.core.database import create_db_and_tables, engine_
@@ -26,7 +25,7 @@ from gurupod.episode_monitor.soups import MainSoup
 from gurupod.core.gurulog import get_logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.core.routes import ep_router
-from gurupod.core.backup_bot import backup_bot, db_from_json, db_to_json, get_dated_filename
+from gurupod.core.backup_bot import backup_bot, db_from_json, db_to_json
 
 logger = get_logger()
 
@@ -40,7 +39,7 @@ async def lifespan(app: FastAPI):
             db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
-                tasks = await bot_tasks(session, aio_session, reddit, READ_SUB, WRITE_SUB)
+                tasks = await bot_tasks(session, aio_session, reddit)
                 yield
                 logger.info("Shutting down")
 
@@ -48,17 +47,16 @@ async def lifespan(app: FastAPI):
                     task.cancel()
 
                 await asyncio.gather(*tasks, return_exceptions=True)
-                # dated_filename = get_dated_filename(BACKUP_JSON)
                 await db_to_json(session, BACKUP_JSON)
 
 
-async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit, read_sub: str, write_sub: str):
+async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit):
     try:
         tasks = []
 
         if RUN_EP_BOT:
-            sub_to_post = await reddit.subreddit(write_sub)
-            sub_to_update_wiki = await reddit.subreddit(GURU_SUB)
+            sub_to_post = await reddit.subreddit(SUB_TO_POST)
+            sub_to_update_wiki = await reddit.subreddit(SUB_TO_WIKI)
             wiki = await sub_to_update_wiki.wiki.get_page(WIKI_TO_WRITE)
             recipient = await reddit.redditor(DM_ADDRESS, fetch=False)
             mainsoup = await MainSoup.from_url(MAIN_URL, aio_session)
@@ -66,10 +64,10 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
             tasks.append(asyncio.create_task(ep_bot.run()))
 
         if RUN_BACKUP_BOT:
-            tasks.append(asyncio.create_task(backup_bot(session, BACKUP_SLEEP)))
+            tasks.append(asyncio.create_task(backup_bot(session)))
 
         if RUN_SUB_BOT:
-            sub_to_monitor = await reddit.subreddit(read_sub)
+            sub_to_monitor = await reddit.subreddit(SUB_TO_MONITOR)
             sub_bot = SubredditMonitor(session, sub_to_monitor)
             tasks.append(asyncio.create_task(sub_bot.monitor()))
 
