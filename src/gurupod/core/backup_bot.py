@@ -91,23 +91,3 @@ async def backup_bot(session, interval=24 * 60 * 60, backup_filename=None):
         await db_to_json(session, backup_filename)
         logger.debug(f"BackupBot | Sleeping for {interval} seconds")
         await asyncio.sleep(interval)
-
-
-async def gurus_from_file(session: Session):
-    if guru_names := remove_existing_str(GURU_NAMES_SET, Guru.name, session):
-        logger.info(f"BackupBot | Adding {len(guru_names)} new gurus: {guru_names}")
-        new_gurus = [Guru(name=_) for _ in guru_names]
-        session.add_all(new_gurus)
-        session.commit()
-        [session.refresh(_) for _ in new_gurus]
-        return new_gurus
-
-
-def remove_existing_str(to_filter: Sequence[str], db_field, session: Session) -> tuple[str, ...]:
-    """Returns tuple of strings which do not match the given db-model-field ."""
-    if isinstance(to_filter, str):
-        to_filter = [to_filter]
-    existing_entries = session.query(db_field).filter(db_field.in_(to_filter)).all()
-    existing_set = set(entry[0] for entry in existing_entries)
-    new_entries = tuple(_ for _ in to_filter if _ not in existing_set)
-    return new_entries

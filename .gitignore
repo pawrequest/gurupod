@@ -5,3 +5,4 @@
 *.log
 /data/guru.db
 /data/db_backup.20*.json
+/data/backup/
