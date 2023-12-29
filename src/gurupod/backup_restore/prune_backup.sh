@@ -1,10 +1,16 @@
 #!/bin/bash
+# This script creates daily, weekly, monthly, and yearly backups of a file
+# It should be run daily, and will create a backup for the current day
+# If it's the first day of the week, month, or year, it will also create a backup for that period
+# It will then delete old backups, keeping days, weeks, months, years as defined in args, or 7, 4, 12, and 5 by default
+
 DEBUG_MODE=0 # do stuff even if not the right day
 INPUT_FILE=$1
-TODAY=$2$(date +%Y-%m-%d)
-TODAY2="${VARIABLE:-default}"
-echo "TODAY = $TODAY"
-echo "TODAY2 = $TODAY2"
+TODAY=${2:-$(date +%Y-%m-%d)}
+DAY_RETAIN=${3:-7}
+WEEK_RETAIN=${4:-4}
+MONTH_RETAIN=${5:-12}
+YEAR_RETAIN=${6:-5}
 
 # if input file doesnt exist:
 if [ ! -f "$INPUT_FILE" ]; then
@@ -18,10 +24,10 @@ ROOT_DIR=$(dirname "$INPUT_FILE")
 # how many backups to keep for each period
 # also defines folder names
 declare -A INTERVAL
-INTERVAL["day"]=7
-INTERVAL["week"]=4
-INTERVAL["month"]=12
-INTERVAL["year"]=5
+INTERVAL["day"]=$DAY_RETAIN
+INTERVAL["week"]=$WEEK_RETAIN
+INTERVAL["month"]=$MONTH_RETAIN
+INTERVAL["year"]=$YEAR_RETAIN
 
 EXTENSION="${INPUT_FILE##*.}"
 FILENAME_ONLY="$(basename "$INPUT_FILE" ."$EXTENSION")"
@@ -60,6 +66,8 @@ checkem(){
 }
 
 make_backups() {
+  # append today's date to the filename then copy it to the daily backup directory
+  # if it's the first day of the week, month, or year, also copy it to the respective directory
   local daily_file="${ROOT_DIR}/day/${DATED_FILENAME}"
   cp "$INPUT_FILE" "$daily_file"
   echo "Backup created at $daily_file"
@@ -84,16 +92,14 @@ make_backups() {
 #  echo "Pruned backups in $backup_dir for $FILENAME_ONLY"
 #}
 prune_backups() {
+  # delete old backups, keep as many as defined in INTERVAL for each period
     local backup_dir=$1
     local retention=${INTERVAL[$(basename "$backup_dir")]}
     local count=0
 
-    # Use a for-loop with globbing to iterate over backup files
     for file in "$backup_dir/$FILENAME_ONLY"*; do
-        # Only consider regular files (not directories)
         if [ -f "$file" ]; then
             ((count++))
-            # If the count exceeds the retention limit, delete the file
             if [ $count -gt $retention ]; then
                 echo "Removing old backup: $file"
                 rm -- "$file"

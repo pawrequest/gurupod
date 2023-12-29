@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -27,14 +28,22 @@ model_to_json_map = {
 
 
 async def db_to_json(session: Session, json_path: Path = BACKUP_JSON):
-    backup_json = {}
-    for model_name_in_json, model_class in model_to_json_map.items():
-        results = session.exec(select(model_class)).all()
-        backup_json[model_name_in_json] = [_.model_dump_json() for _ in results]
-        logger.debug(f"BackupBot | Dumped {len(backup_json[model_name_in_json])} {model_name_in_json} to {json_path}")
+    # backup_json = {}
+    backup_json = {
+        model_name_in_json: [_.model_dump_json() for _ in session.exec(select(model_class)).all()]
+        for model_name_in_json, model_class in model_to_json_map.items()
+    }
+    backup_up_model_strs = [f"{len(backup_json[model])} {model}s" for model in backup_json if backup_json[model]]
+
+    logger.info(f"BackupBot | Dumped {', '.join(backup_up_model_strs)} to json")
+
+    if not json_path.exists():
+        logger.warning(f"BackupBot | {json_path} does not exist, creating")
+        json_path.parent.mkdir(parents=True, exist_ok=True)
+        json_path.touch()
     with open(json_path, "w") as f:
         json.dump(backup_json, f, indent=4)
-    logger.info(f"BackupBot | Saved {len(backup_json)} models to {json_path}")
+    logger.info(f"BackupBot | Saved {sum(len(v)for v in backup_json.values())} models to {json_path}")
 
     return backup_json
 

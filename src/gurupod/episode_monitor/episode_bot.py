@@ -14,7 +14,7 @@ from gurupod.core.gurulogging import get_logger, log_episodes
 from gurupod.models.episode import Episode, EpisodeBase
 from gurupod.models.guru import Guru
 from gurupod.models.responses import EP_OR_BASE_VAR, EpisodeWith
-from gurupod.episode_monitor.writer import RWikiWriter, RPostWriter
+from gurupod.episode_monitor.writer import RPostWriter, RWikiWriter
 
 logger = get_logger()
 
@@ -47,8 +47,12 @@ class EpisodeBot:
             await asyncio.sleep(sleep_interval)
 
     async def _scrape_and_process_new_eps(self):
-        for ep in await self._scrape():
-            await self._process_new_episode(ep)
+        eps = await self._scrape()
+        if gurus_assigned := tuple(_ for _ in self._assign_tags(eps, Guru)):
+            self.session.commit()
+            logger.info(f"Scraper | assigned {len(gurus_assigned)} episodes")
+        eptasks = [asyncio.create_task(self._process_new_episode(ep)) for ep in eps]
+        await asyncio.gather(*eptasks)
 
     async def _scrape(self) -> list[EpisodeWith]:
         episode_stream = self.main_soup.episode_stream(aiosession=self.aio_session)
@@ -57,9 +61,7 @@ class EpisodeBot:
         if not committed:
             logger.debug("Scraper | No new episodes found")
             return []
-        if gurus_assigned := tuple(_ for _ in self._assign_tags(committed, Guru)):
-            self.session.commit()
-            logger.info(f"Scraper | assigned {len(gurus_assigned)} episodes")
+
         log_episodes(committed, self._scrape, "Scraper | Committed")
 
         resp = [EpisodeWith.model_validate(ep) for ep in committed]
@@ -122,6 +124,7 @@ class EpisodeBot:
 
         return existing_episode is not None
 
+    # todo make async generator ? consider ordering
     def _assign_tags(self, episodes: Sequence, tag_model) -> Generator[Episode, None]:
         """Tagmodel has name attr"""
         if not hasattr(tag_model, "name"):

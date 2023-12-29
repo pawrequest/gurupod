@@ -6,30 +6,31 @@ import sys
 import tomllib
 from pathlib import Path
 from pprint import pprint
-
+from loguru import logger
 import dotenv
 
 dotenv.load_dotenv()
 HERE = Path(__file__).parent
 PROJECT_ROOT = HERE.parent.parent.parent
 DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR")
-
+BACKUP_RESTORE_DIR = HERE.parent / "backup_restore"
 conf_file = os.environ.get("CONFIG_FILE")
 conf_path = DATA_DIR / conf_file
-default_config_path = HERE / "default_config.toml"
+default_config_path = BACKUP_RESTORE_DIR / "default_config.toml"
 
-if not conf_path.exists():
-    with open(default_config_path, "rb") as f:
-        def_conf = tomllib.load(f)
-    pprint(def_conf)
-    if input(f"Config file not found at {conf_path}. Create one from default values? (y/n):").lower() == "y":
-        shutil.copy(default_config_path, conf_path)
-        guru_conf = def_conf
-    else:
-        sys.exit(1)
-else:
+if conf_path.exists():
     with open(conf_path, "rb") as f:
         guru_conf = tomllib.load(f)
+else:
+    if not default_config_path.exists():
+        sys.exit(f"Default config file not found at {default_config_path}")
+    with open(default_config_path, "rb") as f:
+        def_conf = tomllib.load(f)
+    logger.warning(f"Config file not found at {conf_path}. Creating from default values:\n{def_conf}")
+    Path.mkdir(DATA_DIR, exist_ok=True)
+    shutil.copy(default_config_path, conf_path)
+    guru_conf = def_conf
+
 # reddits
 SUB_TO_MONITOR = guru_conf.get("sub_to_monitor")
 SUB_TO_POST = guru_conf.get("sub_to_post")
