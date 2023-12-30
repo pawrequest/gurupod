@@ -1,4 +1,3 @@
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -10,7 +9,7 @@ def prune(
     input_file: Path, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None
 ):
     logger.warning(f"Pruning {input_file}", bot_name="BackupBot")
-    if not os.path.isfile(input_file):
+    if not input_file.exists():
         raise FileNotFoundError(f"File {input_file} does not exist")
 
     root_dir = input_file.parent
@@ -25,10 +24,10 @@ def prune(
     logger.warning("Pruning complete", extra={"bot_name": "BackupBot"})
 
 
-def create_backup_dirs(root_dir, intervals):
+def create_backup_dirs(root_dir: Path, intervals):
     for period in intervals:
-        backup_dir = os.path.join(root_dir, period)
-        os.makedirs(backup_dir, exist_ok=True)
+        backup_dir = root_dir / period
+        Path.mkdir(backup_dir, exist_ok=True)
         print(f"Created backup directory: {backup_dir}")
 
 
@@ -61,10 +60,20 @@ def should_copy_to_period(period, backup_date=None):
     return False
 
 
-def prune_backups(root_dir, intervals):
+def prune_backups(root_dir: Path, intervals):
     for period, retention in intervals.items():
-        backup_dir = os.path.join(root_dir, period)
-        all_files = sorted(os.listdir(backup_dir), reverse=True)
+        backup_dir = root_dir / period
+        all_files = sorted(backup_dir.iterdir(), key=lambda x: x.stat().st_mtime, reverse=True)
+
         for file in all_files[retention:]:
-            os.remove(os.path.join(backup_dir, file))
+            file.unlink()
             print(f"Removed old backup: {file}")
+
+
+# def prune_backups(root_dir: Path, intervals):
+#     for period, retention in intervals.items():
+#         backup_dir = root_dir / period
+#         all_files = sorted(os.listdir(backup_dir), reverse=True)
+#         for file in all_files[retention:]:
+#             os.remove(os.path.join(backup_dir, file))
+#             print(f"Removed old backup: {file}")
