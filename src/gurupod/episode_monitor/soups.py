@@ -8,12 +8,14 @@ from typing import AsyncGenerator
 
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup, Tag
-
 from loguru import logger
+
 from gurupod.models.episode import EpisodeBase
 
 
 class MainSoup(BeautifulSoup):
+    """BeautifulSoup extended to parse main page for listing pages"""
+
     def __init__(self, markup: str, main_url, parser: str = "html.parser"):
         super().__init__(markup, parser)
         self.main_url = main_url
@@ -27,26 +29,31 @@ class MainSoup(BeautifulSoup):
         main_soup.listing_pages = _listing_page_strs(url, num_pgs)
         return main_soup
 
-    @property
-    def _num_pages(self) -> int:
-        page_links = self.select(".page-link")
-        lastpage = page_links[-1]["href"]
-        num_pages = lastpage.split("/")[-1].split("#")[0]
-        return int(num_pages)
+    async def episode_stream(self, aiosession) -> AsyncGenerator[EpisodeBase, None]:
+        """Yield EpisodeBase objects for each episode on each listing page"""
+        async for listing_soup in self.listing_soups(aiosession):
+            async for ep in listing_soup.episodes():
+                yield ep
 
     async def listing_soups(self, aiosession) -> AsyncGenerator[ListingSoup, None]:
+        """Yield ListingSoup object for each listing page"""
         for listing_page in self.listing_pages:
             logger.debug(f"listing page {listing_page}", bot_name="Scraper")
             listing_page_soup = await ListingSoup.from_url(listing_page, aiosession)
             yield listing_page_soup
 
-    async def episode_stream(self, aiosession) -> AsyncGenerator[EpisodeBase, None]:
-        async for listing_soup in self.listing_soups(aiosession):
-            async for ep in listing_soup.episodes():
-                yield ep
+    @property
+    def _num_pages(self) -> int:
+        """Get number of pages of listings from pagination controls on mainpage"""
+        page_links = self.select(".page-link")
+        lastpage = page_links[-1]["href"]
+        num_pages = lastpage.split("/")[-1].split("#")[0]
+        return int(num_pages)
 
 
 class ListingSoup(BeautifulSoup):
+    """BeautifulSoup extended to parse listing page"""
+
     def __init__(self, markup: str, lp_url, parser: str = "html.parser"):
         super().__init__(markup, parser)
         self.episode_sections = self.select(".episode")
@@ -55,6 +62,7 @@ class ListingSoup(BeautifulSoup):
         self.listing_page_url = lp_url
 
     async def episodes(self) -> AsyncGenerator[EpisodeBase, None]:
+        """Yield EpisodeBase objects for each episode on this listing page"""
         for ep_subsoup in self.episode_soups:
             ep_detail_soup = await EpisodeDetailsSoup.from_url(ep_subsoup.url)
             list_ep_dict = dict(
@@ -75,11 +83,13 @@ class ListingSoup(BeautifulSoup):
 
 @dataclass
 class ListingEpisodeSubSoup:
+    """Subsection of listing page soup containing episode info"""
+
     _soup_section: Tag
 
     @property
     def episode_number(self):
-        """string bercause 'bonus' episodes are not numbered"""
+        """string because 'bonus' episodes are not numbered"""
         res = self._soup_section.select_one(".episode-info").text.strip().split()[1]
         return str(res)
 
@@ -97,6 +107,8 @@ class ListingEpisodeSubSoup:
 
 
 class EpisodeDetailsSoup(BeautifulSoup):
+    """BeautifulSoup extended to parse episode details page"""
+
     def __init__(self, markup: str, parser: str = "html.parser", url=None):
         super().__init__(markup, parser)
         self.episode_url = url
@@ -124,6 +136,7 @@ class EpisodeDetailsSoup(BeautifulSoup):
 
 
 async def _response(url: str, aiosession: ClientSession):
+    """Get response from url, retry 3 times if request fails"""
     for _ in range(3):
         try:
             async with aiosession.get(url) as response:
@@ -138,4 +151,5 @@ async def _response(url: str, aiosession: ClientSession):
 
 
 def _listing_page_strs(main_url: str, num_pages: int) -> list[str]:
+    """Construct list of listing page urls from main url and number of pages"""
     return [main_url + f"/episodes/{_ + 1}/#showEpisodes" for _ in range(num_pages)]

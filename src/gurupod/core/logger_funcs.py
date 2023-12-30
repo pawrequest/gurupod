@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 
 def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = "", bot_name="General"):
+    """Logs the first 3 episodes and the last 2 episodes of a sequence of any episode type"""
     if not eps:
         return
     if calling_func:

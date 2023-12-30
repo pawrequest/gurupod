@@ -1,33 +1,30 @@
 from __future__ import annotations
 
 import sys
-from typing import Literal, TYPE_CHECKING
+from typing import Literal
 
-from loguru import logger as _logger
-
-if TYPE_CHECKING:
-    from loguru import logger
+from loguru import logger
 
 
 def get_logger(log_file, profile: Literal["local", "remote", "default"] = None) -> logger:
     if profile == "local":
-        _logger.info("Using local log profile")
-        terminal_format = terminal_format_local
+        logger.info("Using local log profile")
+        terminal_format = log_fmt_local_terminal
     elif profile == "remote":
-        _logger.info("Using remote log profile")
-        terminal_format = terminal_format_remote
+        logger.info("Using remote log profile")
+        terminal_format = log_fmt_server_terminal
     elif profile is None:
-        _logger.info("Using default log profile (remote)")
-        terminal_format = terminal_format_remote
+        logger.info("Using default log profile (remote)")
+        terminal_format = log_fmt_server_terminal
     else:
         raise ValueError(f"Invalid profile: {profile}")
 
-    _logger.remove()
+    logger.remove()
 
-    _logger.add(log_file, rotation="1 day", delay=True)
-    _logger.add(sys.stdout, level="DEBUG", format=terminal_format)
+    logger.add(log_file, rotation="1 day", delay=True)
+    logger.add(sys.stdout, level="DEBUG", format=terminal_format)
 
-    return _logger
+    return logger
 
 
 BOT_COLOR = {
@@ -37,7 +34,7 @@ BOT_COLOR = {
 }
 
 
-def terminal_format_local(record):
+def log_fmt_local_terminal(record):
     bot_name = record["extra"].get("bot_name", "General")
     bot_name = f"{bot_name:<9}"
     bot_colour = BOT_COLOR.get(bot_name, "white")
@@ -55,7 +52,8 @@ def coloured(msg: str, colour: str) -> str:
     return f"<{colour}>{msg}</{colour}>"
 
 
-def terminal_format_remote(record):
+def log_fmt_server_terminal(record):
+    """Format for server-side logging"""
     bot_name = record["extra"].get("bot_name", "General")
     bot_name = f"{bot_name:<9}"
     bot_colour = BOT_COLOR.get(bot_name, "white")

@@ -31,6 +31,7 @@ from gurupod.episode_monitor.writer import RPostWriter, RWikiWriter
 
 
 async def get_wiki(sub_to_update_wiki):
+    """Returns wiki page or optionally creates it if it doesn't exist."""
     try:
         wiki = await sub_to_update_wiki.wiki.get_page(WIKI_TO_WRITE)
         return wiki
