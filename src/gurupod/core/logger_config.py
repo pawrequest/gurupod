@@ -39,14 +39,16 @@ BOT_COLOR = {
 
 def terminal_format_local(record):
     bot_name = record["extra"].get("bot_name", "General")
+    bot_name = f"{bot_name:<9}"
     bot_colour = BOT_COLOR.get(bot_name, "white")
     max_length = 80
-    file_line = f"{record['file'].path}:{record['line']}"
+    file_txt = f"{record['file'].path}:{record['line']}"
 
-    if len(file_line) > max_length:
-        file_line = file_line[:max_length]
+    if len(file_txt) > max_length:
+        file_txt = file_txt[:max_length]
 
-    return f"{file_line:<{max_length}} | <lvl>{record['level']: <7} | {coloured(bot_name, bot_colour)} | {record['message']}</lvl>\n"
+    # clickable link only works at start of line
+    return f"{file_txt:<{max_length}} | <lvl>{record['level']: <7} | {coloured(bot_name, bot_colour)} | {record['message']}</lvl>\n"
 
 
 def coloured(msg: str, colour: str) -> str:
