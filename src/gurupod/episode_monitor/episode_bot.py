@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Sequence
 
 from aiohttp import ClientSession
 from asyncpraw.models import Redditor, Subreddit, WikiPage
@@ -63,7 +63,7 @@ class EpisodeBot:
         self.wiki = wiki
 
     @classmethod
-    async def from_config(cls, session: Session, aio_session: ClientSession, reddit: Reddit):
+    async def from_config(cls, session: Session, aio_session: ClientSession, reddit: Reddit) -> EpisodeBot:
         main_soup = await MainSoup.from_url(MAIN_URL, aio_session)
         subreddit_to_post = await reddit.subreddit(SUB_TO_POST)
         sub_to_update_wiki = await reddit.subreddit(SUB_TO_WIKI)
@@ -71,7 +71,8 @@ class EpisodeBot:
         recipient = await reddit.redditor(DM_ADDRESS, fetch=False)
         return cls(session, aio_session, main_soup, reddit, subreddit_to_post, recipient, wiki)
 
-    async def run(self, sleep_interval: int = EPISODE_MONITOR_SLEEP):
+    async def run(self, sleep_interval: int = EPISODE_MONITOR_SLEEP) -> None:
+        """Schedule scraper and writer tasks."""
         logger.info(
             f"Initialised : {self.main_soup.main_url} - Posting to http://reddit.com/r/{self.subreddit.display_name}",
             bot_name="Scraper",
@@ -82,22 +83,23 @@ class EpisodeBot:
             logger.debug(f"Sleeping for {sleep_interval} seconds", bot_name="Scraper")
             await asyncio.sleep(sleep_interval)
 
-    async def update_episodes(self):
+    async def update_episodes(self) -> None:
+        """Scrape and process new episodes."""
         new_eps = await self._scrape_and_commit()
-        if not WRITE_EP_TO_SUBREDDIT:
-            logger.warning("WRITE_TO_SUBREDDIT is disabled - Not writing to web", bot_name="Scraper")
-            return
-        if len(new_eps) > MAX_EPISODE_IMPORT:
-            logger.warning(
-                f"Found {len(new_eps)} episodes - more than {MAX_EPISODE_IMPORT=} - Not writing to web ",
-                bot_name="Scraper",
-            )
-            return
-
         if new_eps:
-            [await self._process_new_episode(ep) for ep in new_eps]
+            if not WRITE_EP_TO_SUBREDDIT:
+                logger.warning("WRITE_TO_SUBREDDIT is disabled - Not writing to web", bot_name="Scraper")
+                return
+            if len(new_eps) > MAX_EPISODE_IMPORT:
+                logger.warning(
+                    f"Found {len(new_eps)} episodes - more than {MAX_EPISODE_IMPORT=} - Not writing to web ",
+                    bot_name="Scraper",
+                )
+                return
+        [await self._process_new_episode(ep) for ep in new_eps]
 
     async def _scrape_and_commit(self) -> list[EpisodeWith]:
+        """Scrape new episodes and add to db."""
         episode_stream = self.main_soup.episode_stream(aiosession=self.aio_session)
         new_stream = self._filter_existing_eps(episode_stream)
 
@@ -109,7 +111,8 @@ class EpisodeBot:
 
         return [EpisodeWith.model_validate(ep) for ep in added]
 
-    async def _add_assign(self, ep, existing_gurus):
+    async def _add_assign(self, ep, existing_gurus) -> Episode:
+        """Add episode to session and assign gurus."""
         try:
             val = Episode.model_validate(ep)
             self.session.add(val)
@@ -122,6 +125,7 @@ class EpisodeBot:
             self.session.rollback()
 
     async def _process_new_episode(self, ep: EpisodeWith) -> None:
+        """Submit episode to subreddit, update wiki and send confirmation dm."""
         submitted = await submit_episode_subreddit(ep, self.subreddit)
         logger.warning(
             f"Scraper | Write to web enabled - submitting thread {submitted.shortlink} to r/{self.subreddit.display_name}"
@@ -134,6 +138,7 @@ class EpisodeBot:
             await self._update_wiki(self.wiki)
 
     async def _update_wiki(self, wiki_page: WikiPage):
+        """Update wiki page with episodes."""
         episodes = self.session.exec(select(Episode).order_by(desc(Episode.date))).all()
         link = f"https://www.reddit.com/r/{self.subreddit.display_name}/wiki/{wiki_page.name}"
         writer = RWikiWriter(episodes)
@@ -142,8 +147,8 @@ class EpisodeBot:
         logger.warning(f"WRITE_TO_WIKI is enabled - Updated {link} with {len(episodes)} episodes", bot_name="Scraper")
 
     async def _filter_existing_eps(
-        self, episodes: AsyncGenerator[EP_OR_BASE_VAR, None]
-    ) -> AsyncGenerator[EP_OR_BASE_VAR, None]:
+        self, episodes: AsyncGenerator[EpisodeBase, None]
+    ) -> AsyncGenerator[EpisodeBase, None]:
         """Yields episodes that do not exist in db."""
         dupes = 0
         async for episode in episodes:
@@ -165,7 +170,7 @@ class EpisodeBot:
         return existing_episode is not None
 
 
-def reddit_episode_submitted_msg(submission, episode: EpisodeWith):
+def reddit_episode_submitted_msg(submission, episode: EpisodeWith) -> str:
     msg = f"""
     DecodeTheBot discovered a New episode "{episode.title}" on Captivate.fm
     It has been [posted to the test subreddit]({submission.shortlink})
@@ -178,7 +183,7 @@ def reddit_episode_submitted_msg(submission, episode: EpisodeWith):
     return msg
 
 
-async def message_home(recipient: Redditor | Subreddit, msg):
+async def message_home(recipient: Redditor | Subreddit, msg: str) -> None:
     recip_name = recipient.name if isinstance(recipient, Redditor) else recipient.display_name
     try:
         await recipient.message(subject="New Episode Posted", message=msg)
@@ -206,7 +211,7 @@ def get_matched_strs(episode: Episode, match_strs: set[str]) -> set[str]:
     return {_ for _ in match_strs if _.lower() in episode.title.lower()}
 
 
-def _assign_tags_one(episode: Episode, gurus) -> Episode:
+def _assign_tags_one(episode: Episode, gurus: Sequence[Guru]) -> Episode:
     tag_names = set([_.name for _ in gurus])
     matched = get_matched_strs(episode, tag_names)
     matched_gurus = [_ for _ in gurus if _.name in matched]
