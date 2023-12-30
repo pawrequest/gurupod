@@ -9,9 +9,9 @@ from sqlmodel import Field, JSON, Relationship
 
 from gurupod.core.database import SQLModel
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.core.gurulogging import get_logger
+from loguru import logger
 
-logger = get_logger()
+
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru, Episode
 
@@ -39,6 +39,17 @@ class RedditThreadBase(SQLModel):
 
     @classmethod
     def from_submission(cls, submission: Submission):
+        tdict = dict(
+            reddit_id=submission.id,
+            title=submission.title,
+            shortlink=submission.shortlink,
+            created_datetime=submission.created_utc,
+            submission=submission,
+        )
+        return cls.model_validate(tdict)
+
+    @classmethod
+    def from_submission_plus(cls, submission: Submission):
         tdict = dict(
             reddit_id=submission.id,
             title=submission.title,

@@ -1,118 +1,122 @@
+""" Monitors a subreddit.stream.submissions for new threads with guru_names in titles, adds to the db with Guru relationships
+"""
 from __future__ import annotations
 
-from typing import AsyncGenerator, Sequence
+from typing import AsyncGenerator
 
 from asyncpraw.models import Subreddit, WikiPage
-from asyncpraw.reddit import Submission
+from asyncpraw.reddit import Reddit, Submission
 from sqlmodel import Session, select
 
-from gurupod.core.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS
-from gurupod.core.gurulogging import get_logger
+from gurupod.core.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS, SUB_TO_MONITOR, SubmissionGurus
+from loguru import logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread
 
-logger = get_logger()
-
 
 class SubredditMonitor:
+    """Monitors a subreddit for new threads with guru tags and adds them to the database"""
+
     def __init__(self, session: Session, subreddit: Subreddit):
         self.subreddit = subreddit
         self.session = session
 
-    async def monitor(self):
-        logger.info(f"Monitor | watching http://reddit.com/r/{self.subreddit.display_name} for guru related threads")
+    @classmethod
+    async def from_config(cls, session: Session, reddit: Reddit):
+        subreddit = await reddit.subreddit(SUB_TO_MONITOR)
+        return cls(session, subreddit)
 
-        sub_stream = self.submission_stream()
-        new = filter_existing_submissions(sub_stream, self.session)
-        subs_and_gurus = subs_with_gurus(new, self.session)
-        reddit_threads = subs_and_gurus_to_thread(subs_and_gurus)
-        async for reddit_thread in reddit_threads:
+    async def monitor(self):
+        """Infinite async coordinating submission stream"""
+        logger.info(
+            f"Initialised - watching  http://reddit.com/r/{self.subreddit.display_name} for guru related threads",
+            bot_name="Monitor",
+        )
+
+        sub_stream = self.subreddit.stream.submissions(skip_existing=SKIP_OLD_THREADS)
+        new = self.filter_existing_submissions(sub_stream)
+        subs_plus = self.subs_with_gurus(new)
+        subs_threads = self.submissiongurus_to_threads(subs_plus)
+        async for submission, reddit_thread in subs_threads:
             self.session.add(reddit_thread)
             self.session.commit()
             if DO_FLAIR:
-                logger.warning("Monitor | DO FLAIR ENABLED - APPLYING FLAIR {gurus} to {submission.title}")
-                await flair_submission(reddit_thread.submission, reddit_thread.gurus)
+                flair_names = [_.name for _ in submission.gurus]
+                try:
+                    await flair_submission(submission, flair_names)
+                except Exception as e:
+                    logger.error(f"Error applying flair: {e}", bot_name="Monitor")
             else:
-                logger.warning("Monitor | DO FLAIR DISABLED - NOT APPLYING FLAIR")
+                logger.warning("DO FLAIR DISABLED - NOT APPLYING FLAIR", bot_name="Monitor")
 
-    async def submission_stream(self) -> AsyncGenerator[Submission, None]:
-        async for submission in self.subreddit.stream.submissions(skip_existing=SKIP_OLD_THREADS):
-            yield submission
+    async def submissiongurus_to_threads(
+        self,
+        sub_stream: AsyncGenerator[SubmissionGurus, None],
+    ) -> AsyncGenerator[tuple[SubmissionGurus, RedditThread], None]:
+        """Yields a tuple of extended SubmissionGurus and thread"""
+        async for submission in sub_stream:
+            thread = await submission_to_thread(submission)
+            thread.gurus.extend(submission.gurus)
+            logger.info(
+                f'New Guru Thread: {[_.name for _ in thread.gurus]} in "{thread.title}" @ {thread.shortlink}',
+                bot_name="Monitor",
+            )
+            yield submission, thread
+
+    def submission_exists(self, submission: Submission) -> bool:
+        """Checks if a Submission ID is already in the database of RedditThreads"""
+        existing_thread = self.session.exec(
+            select(RedditThread).where((RedditThread.reddit_id == submission.id))
+        ).first()
+        return existing_thread is not None
+
+    async def filter_existing_submissions(
+        self, sub_stream: AsyncGenerator[Submission, None]
+    ) -> AsyncGenerator[Submission, None]:
+        """Yields Submissions not already in db"""
+        async for submission in sub_stream:
+            if not self.submission_exists(submission):
+                yield submission
+
+    async def subs_with_gurus(
+        self, submission_stream: AsyncGenerator[Submission, None]
+    ) -> AsyncGenerator[SubmissionGurus, None]:
+        """Yields only Submissions that have a guru tag in the title, adds gurus to submission creating extended SubmissionGurus object (two jobs avoids enumerating gurus twice)"""
+        # todo find a way to update gurulist on schedule or signal without constantly asking db.. sends? queue?
+        async for submission in submission_stream:
+            tag_models = self.session.exec(select(Guru)).all()
+            if matched_tag_models := [_ for _ in tag_models if _.name.lower() in submission.title.lower()]:
+                submission.gurus = matched_tag_models
+                yield submission
 
 
 async def flair_submission(submission: Submission, flairs: list) -> bool:
+    """Applies GURU_FLAIR_ID to a Submission using flairs list as labels"""
     try:
-        # todo reenable
-        # DO NOT DELETE THESE COMMENTED LINES!
         for flair in flairs:
             try:
+                # whats this pycharm error Fixture 'submission.flair.select' is not requested by test functions or @pytest.mark.usefixtures marker
                 await submission.flair.select(GURU_FLAIR_ID, text=flair)
-                logger.info(f"\n\tMonitor | Flaired {submission.title} with {flair}")
+                logger.warning(f"Flaired {submission.title} with {flair}", bot_name="Monitor")
             except Exception as e:
-                logger.error(f"Monitor | Error applying flair: to {submission.title} {e}")
-        # [await submission.flair.select(GURU_FLAIR_ID, text=flair)for flair in flairs]
-        logger.warning(
-            "Monitor | FLAIRING DISABLED --- \n\tFlaired {submission.title} with {','.join(flairs)} --- FLAIRING DISABLED"
-        )
+                logger.error(f"Error applying flair: to {submission.title} {e}", bot_name="Monitor")
         return True
     except Exception as e:
-        logger.error(f"Monitor | Error applying flair: {e}")
+        logger.error(f"Error applying flair: {e}", bot_name="Monitor")
         return False
 
 
-def submission_exists(session, submission):
-    existing_thread = session.exec(select(RedditThread).where((RedditThread.reddit_id == submission.id))).first()
-
-    return existing_thread is not None
-
-
-async def filter_existing_submissions(
-    sub_stream: AsyncGenerator[Submission, None], session: Session
-) -> AsyncGenerator[Submission, None]:
-    async for submission in sub_stream:
-        if not submission_exists(session, submission):
-            yield submission
-
-
 async def submission_to_thread(submission: Submission) -> RedditThread:
+    """Turns a Submission into a RedditThread for db insertion"""
     try:
         thread_ = RedditThread.from_submission(submission)
-        return thread_
+        return RedditThread.model_validate(thread_)
     except Exception as e:
-        logger.error(f"Monitor | Error Turning Submission into RedditThread {e}")
-
-
-async def subs_and_gurus_to_thread(
-    sub_stream: AsyncGenerator[tuple[Submission, Sequence[Guru]], None],
-) -> AsyncGenerator[RedditThread, None]:
-    async for submission, gurus in sub_stream:
-        if thread_ := await submission_to_thread(submission):
-            thread_.gurus.extend(gurus)
-            logger.info(
-                f'Monitor | New Guru Thread: {[_.name for _ in thread_.gurus]} in "{thread_.title}" @ {thread_.shortlink}'
-            )
-            yield thread_
-
-
-async def subs_to_threads(
-    sub_stream: AsyncGenerator[Submission, None],
-) -> AsyncGenerator[RedditThread, None]:
-    async for submission in sub_stream:
-        if thread_ := await submission_to_thread(submission):
-            logger.info(f"Monitor | Yielding new submission: {thread_.title} with {[_.name for _ in thread_.gurus]}")
-            yield thread_
-
-
-async def subs_with_gurus(
-    submission_stream: AsyncGenerator[Submission, None], session: Session
-) -> AsyncGenerator[tuple[Submission, Sequence[Guru]], None]:
-    tag_models = session.exec(select(Guru)).all()
-    async for submission in submission_stream:
-        if matched_tag_models := [_ for _ in tag_models if _.name.lower() in submission.title.lower()]:
-            yield submission, matched_tag_models
+        logger.error(f"Error Turning Submission into RedditThread {e}", bot_name="Monitor")
 
 
 async def _edit_reddit_wiki(markup: str, wiki: WikiPage):
+    """Edits a reddit WikiPage"""
     await wiki.edit(content=markup)
     res = {
         "wiki": wiki.__str__,

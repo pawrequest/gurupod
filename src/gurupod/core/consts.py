@@ -1,35 +1,37 @@
 from __future__ import annotations
 
 import os
-import shutil
-import sys
-import tomllib
 from pathlib import Path
-from pprint import pprint
 
+from asyncpraw.models import Submission
 import dotenv
 
+from gurupod.core.config import get_config
+from gurupod.core.logger_config import get_logger
+
 dotenv.load_dotenv()
+
 HERE = Path(__file__).parent
 PROJECT_ROOT = HERE.parent.parent.parent
-DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR")
+DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR", "data")
+LOG_DIR = DATA_DIR / os.environ.get("LOG_DIR", "log")
+LOG_FILENAME = LOG_DIR / os.environ.get("LOG_FILE", "gurulog.log")
+LOG_PATH = LOG_DIR / LOG_FILENAME
+BACKUP_RESTORE_DIR = HERE.parent / "backup_restore"
+CONFIG_FILENAME = os.environ.get("CONFIG_FILE", "guruconfig.toml")
+CONFIG_PATH = DATA_DIR / CONFIG_FILENAME
+LOG_PROFILE = os.environ.get("LOG_PROFILE")
 
-conf_file = os.environ.get("CONFIG_FILE")
-conf_path = DATA_DIR / conf_file
-default_config_path = HERE / "default_config.toml"
+logger = get_logger(log_file=LOG_PATH, profile=LOG_PROFILE)
 
-if not conf_path.exists():
-    with open(default_config_path, "rb") as f:
-        def_conf = tomllib.load(f)
-    pprint(def_conf)
-    if input(f"Config file not found at {conf_path}. Create one from default values? (y/n):").lower() == "y":
-        shutil.copy(default_config_path, conf_path)
-        guru_conf = def_conf
-    else:
-        sys.exit(1)
-else:
-    with open(conf_path, "rb") as f:
-        guru_conf = tomllib.load(f)
+default_configs = [
+    BACKUP_RESTORE_DIR / "config_local.toml",
+    # BACKUP_RESTORE_DIR / "config_remote.toml",
+    BACKUP_RESTORE_DIR / "config_default.toml",
+]
+
+guru_conf = get_config(CONFIG_PATH, default_configs, DATA_DIR)
+
 # reddits
 SUB_TO_MONITOR = guru_conf.get("sub_to_monitor")
 SUB_TO_POST = guru_conf.get("sub_to_post")
@@ -40,7 +42,7 @@ SUB_TO_TEST = guru_conf.get("sub_to_test")
 GURU_FLAIR_ID = guru_conf.get("custom_flair")
 DM_ADDRESS = guru_conf.get("dm_address")
 HTML_TITLE = guru_conf.get("html_page_title")
-
+# LOGGER_MATCH_STR = 'logger\.(info|warning|error|debug)\(\s*"Scraper \| (.+?)"\s*\)'
 # Switches
 RUN_EP_BOT: bool = guru_conf.get("run_ep_bot")
 RUN_SUB_BOT: bool = guru_conf.get("run_sub_bot")
@@ -53,6 +55,7 @@ DO_FLAIR: bool = guru_conf.get("do_flair")
 SKIP_OLD_THREADS: bool = guru_conf.get("skip_old_threads")
 DEBUG: bool = guru_conf.get("debug")
 INITIALIZE: bool = guru_conf.get("initialize")
+MAX_EPISODE_IMPORT: int = int(guru_conf.get("max_import", 0))
 
 # consts
 BACKUP_SLEEP: int = guru_conf.get("backup_sleep")
@@ -67,9 +70,9 @@ REDIRECT: str = guru_conf.get("redirect")
 # paths
 GURU_DB = DATA_DIR / guru_conf.get("db_name")
 BACKUP_DIR = DATA_DIR / guru_conf.get("backup_dir")
-BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
-LOG_DIR = DATA_DIR / guru_conf.get("log_dir")
-LOG_FILE = LOG_DIR / guru_conf.get("log_file")
+# BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
+BACKUP_JSON = PROJECT_ROOT / guru_conf.get("back_js")
+PRUNE_SCRIPT = BACKUP_RESTORE_DIR / guru_conf.get("prune_script")
 
 # env vars
 if USE_PERSONAL_ACCOUNT:
@@ -82,3 +85,33 @@ else:
     REDDIT_TOKEN = os.environ["REDDIT_TOKEN"]
 
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
+
+GURU_NAME_LIST_FILE = BACKUP_RESTORE_DIR / guru_conf.get("gurus_file")
+
+params_to_log_names = [
+    "USE_PERSONAL_ACCOUNT",
+    "WRITE_EP_TO_SUBREDDIT",
+    "UPDATE_WIKI",
+    "DO_FLAIR",
+    "RUN_EP_BOT",
+    "RUN_SUB_BOT",
+    "RUN_BACKUP_BOT",
+    "SKIP_OLD_THREADS",
+    "DEBUG",
+    "INITIALIZE",
+]
+
+# Create a list of tuples, each containing a parameter name and its value
+params_to_log = [(param, globals()[param]) for param in params_to_log_names]
+
+
+# Pass the list to your logger
+def param_log_strs() -> list[str]:
+    res = [f"{param}: {value}" for param, value in params_to_log if value]
+    return res
+
+
+class SubmissionGurus(Submission):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.gurus = []

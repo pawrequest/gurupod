@@ -5,12 +5,10 @@ from typing import List, Optional, Sequence, TypeVar, Union
 from pydantic import BaseModel
 
 from gurupod.core.consts import DEBUG
-from gurupod.core.gurulogging import get_logger, log_episodes
+from gurupod.core.logger_funcs import log_episodes
 from gurupod.models.episode import Episode, EpisodeBase, EpisodeRead
 from gurupod.models.guru import GuruBase, GuruRead
 from gurupod.models.reddit_thread import RedditThreadBase, RedditThreadRead
-
-logger = get_logger()
 
 
 # keep 'with' views here for load order
@@ -53,7 +51,7 @@ class EpisodeResponse(BaseModel):
         )
         res = cls.model_validate(dict(episodes=eps, meta=meta_data))
         if DEBUG:
-            log_episodes(res.episodes, msg="Responding")
+            log_episodes(res.episodes, msg="Responding", bot_name="Response")
         return res
 
     def __str__(self):

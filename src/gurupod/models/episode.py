@@ -8,13 +8,13 @@ from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
 from gurupod.core.consts import DEBUG
-from gurupod.core.gurulogging import get_logger
+from loguru import logger
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru, RedditThread
 
-logger = get_logger()
+
 MAYBE_ATTRS = ["title", "notes", "links", "date"]
 
 
@@ -40,6 +40,12 @@ class EpisodeBase(SQLModel):
                 if DEBUG:
                     logger.debug(f"AutoParsed Date to {v}")
         return v
+
+    def log_str(self) -> str:
+        if self.title and self.date:
+            return f"\t\t<green>{self.date.date()}</green> - <bold><cyan>{self.title}</cyan></bold>"
+        else:
+            return f"\t\t{self.url}"
 
     def __str__(self):
         return f"{self.__class__.__name__}: {self.title or self.url}"

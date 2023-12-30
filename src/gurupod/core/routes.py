@@ -5,11 +5,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from gurupod.core.database import get_session
-from gurupod.core.gurulogging import get_logger
+from loguru import logger
 from gurupod.models.episode import Episode
 from gurupod.models.responses import EpisodeResponse
 
-logger = get_logger()
+
 ep_router = APIRouter()
 
 
