@@ -19,7 +19,7 @@ from gurupod.core.database import create_db_and_tables, engine_
 from loguru import logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.core.routes import ep_router
-from gurupod.backup_restore.backup_bot import backup_bot, db_from_json, db_to_json, gurus_from_file
+from gurupod.backup_restore.backup_bot import backup_bot, db_from_json, db_to_json, gurus_from_file, BackupBot
 
 
 @asynccontextmanager
@@ -60,7 +60,8 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
 
     try:
         if RUN_BACKUP_BOT:
-            tasks.append(asyncio.create_task(backup_bot(session)))
+            back_bot = BackupBot(session)
+            tasks.append(asyncio.create_task(back_bot.run()))
     except Exception as e:
         logger.error(f"Error initiating backup_bot: {e}")
 

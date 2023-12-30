@@ -26,7 +26,7 @@ logger = get_logger(log_file=LOG_PATH, profile=LOG_PROFILE)
 
 default_configs = [
     BACKUP_RESTORE_DIR / "config_local.toml",
-    BACKUP_RESTORE_DIR / "config_remote.toml",
+    # BACKUP_RESTORE_DIR / "config_remote.toml",
     BACKUP_RESTORE_DIR / "config_default.toml",
 ]
 
@@ -70,7 +70,9 @@ REDIRECT: str = guru_conf.get("redirect")
 # paths
 GURU_DB = DATA_DIR / guru_conf.get("db_name")
 BACKUP_DIR = DATA_DIR / guru_conf.get("backup_dir")
-BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
+# BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
+BACKUP_JSON = PROJECT_ROOT / guru_conf.get("back_js")
+PRUNE_SCRIPT = BACKUP_RESTORE_DIR / guru_conf.get("prune_script")
 
 # env vars
 if USE_PERSONAL_ACCOUNT:

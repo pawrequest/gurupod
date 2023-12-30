@@ -1,18 +1,51 @@
+"""Import and export the database to json on a schedule, import gurunames from csv to allow tagging in scraper and monitor"""
 from __future__ import annotations
 
 import asyncio
 import json
+import platform
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
 from sqlmodel import Session, select
-
-from gurupod.core.consts import BACKUP_JSON, BACKUP_SLEEP, DEBUG, GURU_NAME_LIST_FILE
 from loguru import logger
+
+from gurupod.backup_restore.prune import prune
+from gurupod.core.consts import BACKUP_JSON, BACKUP_SLEEP, DEBUG, GURU_NAME_LIST_FILE, PRUNE_SCRIPT
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
 from gurupod.models.reddit_thread import RedditThread
+
+
+class BackupBot:
+    """Backup the database to json on a schedule"""
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    async def run(self, interval: int = BACKUP_SLEEP):
+        """Continuously backup the database to json every interval seconds"""
+        logger.info(f"Initialised, backing up every {interval / 60} minutes", bot_name="BackupBot")
+        while True:
+            logger.debug("Waking", bot_name="BackupBot")
+            await db_to_json(self.session, BACKUP_JSON)
+            # logger.warning(subprocess.run([PRUNE_SCRIPT, str(BACKUP_JSON)], check=True))
+
+            prune(BACKUP_JSON)
+
+            logger.debug(f"Sleeping for {interval} seconds", bot_name="BackupBot")
+            await asyncio.sleep(interval)
+
+    async def restore(self):
+        """Restore the database from json"""
+        logger.info("Restoring database from json", bot_name="BackupBot")
+        db_from_json(self.session, BACKUP_JSON)
+
+    async def add_gurus_from_file(self):
+        """Add gurus from csv file"""
+        gurus_from_file(self.session)
 
 
 async def backup_bot(session, backup_filename=BACKUP_JSON):
@@ -23,6 +56,7 @@ async def backup_bot(session, backup_filename=BACKUP_JSON):
         logger.debug("Waking", bot_name="BackupBot")
         # dated_filename = get_dated_filename(backup_filename)
         await db_to_json(session, backup_filename)
+
         logger.debug(f"Sleeping for {interval} seconds", bot_name="BackupBot")
         await asyncio.sleep(interval)
 
