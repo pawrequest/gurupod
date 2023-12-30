@@ -87,8 +87,8 @@ REDIRECT: str = guru_conf.get("redirect")
 # paths
 GURU_DB = DATA_DIR / guru_conf.get("db_name")
 BACKUP_DIR = DATA_DIR / guru_conf.get("backup_dir")
-# BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
-BACKUP_JSON = PROJECT_ROOT / guru_conf.get("back_js")
+BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
+# BACKUP_JSON = PROJECT_ROOT / guru_conf.get("back_js")
 PRUNE_SCRIPT = BACKUP_RESTORE_DIR / guru_conf.get("prune_script")
 
 # env vars

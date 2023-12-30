@@ -39,5 +39,4 @@ episodes_md = "episodes.md"
 backup_dir = "backup"
 backup_json = "db_backup.json"
 gurus_file = "guru_names.txt"
-back_js = 'data / backup / db_backup.json'
 prune_script = 'prune_backup.sh'
