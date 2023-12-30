@@ -19,7 +19,7 @@ from gurupod.core.database import create_db_and_tables, engine_
 from loguru import logger
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.core.routes import ep_router
-from gurupod.backup_restore.backup_bot import backup_bot, db_from_json, db_to_json, gurus_from_file, BackupBot
+from gurupod.backup_restore.backup_bot import db_from_json, db_to_json, gurus_from_file, BackupBot
 
 
 @asynccontextmanager

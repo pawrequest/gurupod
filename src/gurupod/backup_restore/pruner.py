@@ -6,6 +6,19 @@ from pathlib import Path
 from loguru import logger
 
 
+def prune(input_file, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None):
+    logger.info(f"Pruning {input_file}", bot_name="BackupBot")
+    if not os.path.isfile(input_file):
+        raise FileNotFoundError(f"File {input_file} does not exist")
+
+    root_dir = os.path.dirname(input_file)
+    intervals = {"day": day_retain, "week": week_retain, "month": month_retain, "year": year_retain}
+
+    create_backup_dirs(root_dir, intervals)
+    make_backup(input_file, root_dir, intervals, debug_mode, backup_date)
+    prune_backups(root_dir, intervals)
+
+
 def create_backup_dirs(root_dir, intervals):
     for period in intervals:
         backup_dir = os.path.join(root_dir, period)
@@ -49,16 +62,3 @@ def prune_backups(root_dir, intervals):
         for file in all_files[retention:]:
             os.remove(os.path.join(backup_dir, file))
             print(f"Removed old backup: {file}")
-
-
-def prune(input_file, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None):
-    logger.info(f"Pruning {input_file}", bot_name="BackupBot")
-    if not os.path.isfile(input_file):
-        raise FileNotFoundError(f"File {input_file} does not exist")
-
-    root_dir = os.path.dirname(input_file)
-    intervals = {"day": day_retain, "week": week_retain, "month": month_retain, "year": year_retain}
-
-    create_backup_dirs(root_dir, intervals)
-    make_backup(input_file, root_dir, intervals, debug_mode, backup_date)
-    prune_backups(root_dir, intervals)
