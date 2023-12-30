@@ -6,7 +6,6 @@ services:
     build: .
     volumes:
       - ./src:/code/src
-      - ./data:/code/data
     env_file:
       - .env
     networks:
