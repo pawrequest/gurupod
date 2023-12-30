@@ -31,7 +31,6 @@ COPY README.md /code/README.md
 
 # Copy the src and data directories
 COPY src /code/src
-COPY data /code/data
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && pip install -e .
