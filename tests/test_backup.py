@@ -1,13 +1,15 @@
 import os
 import tempfile
 from datetime import datetime, timedelta
+from pathlib import Path
+
 from gurupod.backup_restore.pruner import prune
 
 
 def test_backup_pruning():
     # Create a temporary directory and a test file
     with tempfile.TemporaryDirectory() as tmp_dir:
-        test_file = os.path.join(tmp_dir, "testfile.txt")
+        test_file = Path(tmp_dir) / "testfile.txt"
         with open(test_file, "w") as f:
             f.write("Test content")
 

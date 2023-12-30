@@ -6,18 +6,23 @@ from pathlib import Path
 from loguru import logger
 
 
-def prune(input_file, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None):
+def prune(
+    input_file: Path, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None
+):
     logger.warning(f"Pruning {input_file}", bot_name="BackupBot")
     if not os.path.isfile(input_file):
         raise FileNotFoundError(f"File {input_file} does not exist")
 
-    root_dir = os.path.dirname(input_file)
+    root_dir = input_file.parent
     intervals = {"day": day_retain, "week": week_retain, "month": month_retain, "year": year_retain}
+    for interval in intervals:
+        logger.info(f"Backup directory for {interval}: {root_dir / interval}")
 
     create_backup_dirs(root_dir, intervals)
     make_backup(input_file, root_dir, intervals, debug_mode, backup_date)
     prune_backups(root_dir, intervals)
-    logger.warning("Pruning complete", bot_name="BackupBot")
+
+    logger.warning("Pruning complete", extra={"bot_name": "BackupBot"})
 
 
 def create_backup_dirs(root_dir, intervals):
