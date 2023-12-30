@@ -7,7 +7,7 @@ from loguru import logger
 
 
 def prune(input_file, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None):
-    logger.info(f"Pruning {input_file}", bot_name="BackupBot")
+    logger.warning(f"Pruning {input_file}", bot_name="BackupBot")
     if not os.path.isfile(input_file):
         raise FileNotFoundError(f"File {input_file} does not exist")
 
@@ -17,6 +17,7 @@ def prune(input_file, day_retain=7, week_retain=4, month_retain=12, year_retain=
     create_backup_dirs(root_dir, intervals)
     make_backup(input_file, root_dir, intervals, debug_mode, backup_date)
     prune_backups(root_dir, intervals)
+    logger.warning("Pruning complete", bot_name="BackupBot")
 
 
 def create_backup_dirs(root_dir, intervals):
