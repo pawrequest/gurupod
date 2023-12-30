@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import AsyncGenerator, Generator, Sequence
+from typing import AsyncGenerator
 
 from aiohttp import ClientSession
 from asyncpraw.models import Redditor, Subreddit, WikiPage
@@ -53,41 +53,34 @@ class EpisodeBot:
 
     async def _scrape(self) -> list[EpisodeWith]:
         existing_gurus = self.session.exec(select(Guru)).all()
-        existing_guru_names = set([_.name for _ in existing_gurus])
         episode_stream = self.main_soup.episode_stream(aiosession=self.aio_session)
         new_eps = self._filter_existing_eps(episode_stream)
-        # self._assign_tags(ep, Guru)
-        added = []
-        async for ep in new_eps:
-            logger.info(f"Scraper | New Episode: {ep.title} @ {ep.url}")
-            val = Episode.model_validate(ep)
-            try:
-                self.session.add(val)
-                val = self._assign_tags_one(val, existing_gurus)
-                self.session.add(val)
-                added.append(val)
-            except Exception as e:
-                logger.error(f"Scraper | Error adding {ep.title} to session: {e}")
-                continue
+        add_tasks = [asyncio.create_task(self.add_assign(ep, existing_gurus)) async for ep in new_eps]
 
-            if DEBUG:
-                if len(added) >= 3:
-                    logger.warning("DEBUG - LIMITING RESULTS")
-                    break
-
-        if added:
+        if added := await asyncio.gather(*add_tasks):
             self.session.commit()
             log_episodes(added, self._scrape, "Scraper | Committed")
 
         resp = [EpisodeWith.model_validate(ep) for ep in added]
         return resp
 
+    async def add_assign(self, ep, existing_gurus):
+        try:
+            val = Episode.model_validate(ep)
+            logger.info(f"Scraper | New Episode: {ep.title} @ {ep.url}")
+            self.session.add(val)
+            val = self._assign_tags_one(val, existing_gurus)
+            self.session.add(val)
+            return val
+        except Exception as e:
+            logger.error(f"Scraper | Error adding {ep.title} to session: {e}")
+
     async def _process_new_episode(self, ep: EpisodeWith) -> None:
         if WRITE_EP_TO_SUBREDDIT:
             submitted = await submit_episode_subreddit(ep, self.subreddit)
             logger.warning(
                 f"Scraper | Write to web enabled - submitting thread {submitted.shortlink} to r/{self.subreddit.display_name}"
-                f" - and sending dm to u/{self.recipient.name}"
+                f"+ Sending dm to u/{self.recipient.name}"
             )
             message_txt = reddit_episode_submitted_msg(submitted, ep)
             await message_home(self.recipient, message_txt)

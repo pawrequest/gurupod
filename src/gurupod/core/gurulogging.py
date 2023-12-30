@@ -54,18 +54,18 @@ def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = ""
     else:
         calling_f = f"{inspect.stack()[1].function} INSPECTED, YOU SHOULD PROVIDE THE FUNC"
 
-    new_msg = f"{calling_f} logging:\n\t\t{msg} {len(eps)} Episodes:\n"
+    new_msg = f"Calling Function {calling_f} logged:\n\t{msg} {len(eps)} Episodes:\n"
     new_msg += episode_log_msg(eps)
     _logger.info(new_msg)
 
 
 def episode_log_msg(eps: Sequence[EP_OR_BASE_VAR]) -> str:
-    msg = ""
+    msg = ""  # in case no eps
     msg += "\n".join([_.log_str() for _ in eps[:3]])
 
     if len(eps) == 4:
         fth = eps[3]
-        msg += fth.log_str()
+        msg += f"\n{fth.log_str()}"
     elif len(eps) > 4:
         to_log = min([2, abs(len(eps) - 4)])
         msg += " \n\t...\n"
