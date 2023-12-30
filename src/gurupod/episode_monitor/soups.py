@@ -9,10 +9,8 @@ from typing import AsyncGenerator
 from aiohttp import ClientError, ClientSession as ClientSession
 from bs4 import BeautifulSoup, Tag
 
-from gurupod.core.gurulogging import get_logger
+from loguru import logger
 from gurupod.models.episode import EpisodeBase
-
-logger = get_logger()
 
 
 class MainSoup(BeautifulSoup):
@@ -38,7 +36,7 @@ class MainSoup(BeautifulSoup):
 
     async def listing_soups(self, aiosession) -> AsyncGenerator[ListingSoup, None]:
         for listing_page in self.listing_pages:
-            logger.debug(f"Scraper | listing page {listing_page}")
+            logger.debug(f"listing page {listing_page}", bot_name="Scraper")
             listing_page_soup = await ListingSoup.from_url(listing_page, aiosession)
             yield listing_page_soup
 

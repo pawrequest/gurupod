@@ -8,13 +8,13 @@ from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
 from gurupod.core.consts import DEBUG
-from gurupod.core.gurulogging import get_logger
+from loguru import logger
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru, RedditThread
 
-logger = get_logger()
+
 MAYBE_ATTRS = ["title", "notes", "links", "date"]
 
 

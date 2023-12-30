@@ -1,36 +1,36 @@
 from __future__ import annotations
 
 import os
-import shutil
-import sys
-import tomllib
 from pathlib import Path
 
-from loguru import logger
+from asyncpraw.models import Submission
 import dotenv
+
+from gurupod.core.config import get_config
+from gurupod.core.logger_config import get_logger
 
 dotenv.load_dotenv()
 
 HERE = Path(__file__).parent
 PROJECT_ROOT = HERE.parent.parent.parent
-DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR")
+DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR", "data")
+LOG_DIR = DATA_DIR / os.environ.get("LOG_DIR", "log")
+LOG_FILENAME = LOG_DIR / os.environ.get("LOG_FILE", "gurulog.log")
+LOG_PATH = LOG_DIR / LOG_FILENAME
 BACKUP_RESTORE_DIR = HERE.parent / "backup_restore"
-conf_file = os.environ.get("CONFIG_FILE")
-conf_path = DATA_DIR / conf_file
-default_config_path = BACKUP_RESTORE_DIR / "default_config.toml"
+CONFIG_FILENAME = os.environ.get("CONFIG_FILE", "guruconfig.toml")
+CONFIG_PATH = DATA_DIR / CONFIG_FILENAME
+LOG_PROFILE = os.environ.get("LOG_PROFILE")
 
-if conf_path.exists():
-    with open(conf_path, "rb") as f:
-        guru_conf = tomllib.load(f)
-else:
-    if not default_config_path.exists():
-        sys.exit(f"Default config file not found at {default_config_path}")
-    with open(default_config_path, "rb") as f:
-        def_conf = tomllib.load(f)
-    logger.warning(f"Config file not found at {conf_path}. Creating from default values:\n{def_conf}")
-    Path.mkdir(DATA_DIR, exist_ok=True)
-    shutil.copy(default_config_path, conf_path)
-    guru_conf = def_conf
+logger = get_logger(log_file=LOG_PATH, profile=LOG_PROFILE)
+
+default_configs = [
+    BACKUP_RESTORE_DIR / "config_local.toml",
+    BACKUP_RESTORE_DIR / "config_remote.toml",
+    BACKUP_RESTORE_DIR / "config_default.toml",
+]
+
+guru_conf = get_config(CONFIG_PATH, default_configs, DATA_DIR)
 
 # reddits
 SUB_TO_MONITOR = guru_conf.get("sub_to_monitor")
@@ -42,7 +42,7 @@ SUB_TO_TEST = guru_conf.get("sub_to_test")
 GURU_FLAIR_ID = guru_conf.get("custom_flair")
 DM_ADDRESS = guru_conf.get("dm_address")
 HTML_TITLE = guru_conf.get("html_page_title")
-
+# LOGGER_MATCH_STR = 'logger\.(info|warning|error|debug)\(\s*"Scraper \| (.+?)"\s*\)'
 # Switches
 RUN_EP_BOT: bool = guru_conf.get("run_ep_bot")
 RUN_SUB_BOT: bool = guru_conf.get("run_sub_bot")
@@ -55,6 +55,7 @@ DO_FLAIR: bool = guru_conf.get("do_flair")
 SKIP_OLD_THREADS: bool = guru_conf.get("skip_old_threads")
 DEBUG: bool = guru_conf.get("debug")
 INITIALIZE: bool = guru_conf.get("initialize")
+MAX_EPISODE_IMPORT: int = int(guru_conf.get("max_import", 0))
 
 # consts
 BACKUP_SLEEP: int = guru_conf.get("backup_sleep")
@@ -70,8 +71,6 @@ REDIRECT: str = guru_conf.get("redirect")
 GURU_DB = DATA_DIR / guru_conf.get("db_name")
 BACKUP_DIR = DATA_DIR / guru_conf.get("backup_dir")
 BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
-LOG_DIR = DATA_DIR / guru_conf.get("log_dir")
-LOG_FILE = LOG_DIR / guru_conf.get("log_file")
 
 # env vars
 if USE_PERSONAL_ACCOUNT:
@@ -106,5 +105,11 @@ params_to_log = [(param, globals()[param]) for param in params_to_log_names]
 
 # Pass the list to your logger
 def param_log_strs() -> list[str]:
-    res = [f"{param}: {value}" for param, value in params_to_log]
+    res = [f"{param}: {value}" for param, value in params_to_log if value]
     return res
+
+
+class SubmissionGurus(Submission):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.gurus = []

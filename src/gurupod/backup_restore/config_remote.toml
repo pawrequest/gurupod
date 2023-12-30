@@ -1,12 +1,22 @@
 # reddit
-sub_to_monitor = "DecodingTheGurus"
-sub_to_post = "test"
-sub_to_wiki = "DecodingTheGurus"
 wiki_page = "episodes"
 test_wiki = "gurus"
 sub_to_test = "test"
 custom_flair = "f0c29d96-93e4-11ee-bdde-e666ed3aa602"
 dm_address = "decodethebot"
+sub_to_monitor = "DecodingTheGurus"
+sub_to_post = "test"
+sub_to_wiki = "DecodingTheGurus"
+
+#sub_to_monitor = "decodethebot"
+#sub_to_post = "decodethebot"
+#sub_to_wiki = "decodethebot"
+#wiki_page = "episodes"
+#test_wiki = "gurus"
+#sub_to_test = "decodethebot"
+#custom_flair = "f0c29d96-93e4-11ee-bdde-e666ed3aa602"
+#test_flair = "8f2be4ec-a6b9-11ee-9c51-0ad3bc3c8539"
+#dm_address = "decodethebot"
 
 
 # switches
@@ -20,6 +30,8 @@ skip_old_threads = false
 run_ep_bot = true
 run_sub_bot = true
 run_backup_bot = true
+max_import = 3
+
 
 # consts
 backup_sleep = 86400
