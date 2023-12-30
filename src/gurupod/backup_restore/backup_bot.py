@@ -11,7 +11,7 @@ from pathlib import Path
 from sqlmodel import Session, select
 from loguru import logger
 
-from gurupod.backup_restore.prune import prune
+from gurupod.backup_restore.pruner import prune
 from gurupod.core.consts import BACKUP_JSON, BACKUP_SLEEP, DEBUG, GURU_NAME_LIST_FILE, PRUNE_SCRIPT
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
@@ -31,10 +31,7 @@ class BackupBot:
         while True:
             logger.debug("Waking", bot_name="BackupBot")
             await db_to_json(self.session, BACKUP_JSON)
-            # logger.warning(subprocess.run([PRUNE_SCRIPT, str(BACKUP_JSON)], check=True))
-
             prune(BACKUP_JSON)
-
             logger.debug(f"Sleeping for {interval} seconds", bot_name="BackupBot")
             await asyncio.sleep(interval)
 
