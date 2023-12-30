@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import os
+import shutil
+import tomllib
 from pathlib import Path
 
 from asyncpraw.models import Submission
 import dotenv
 
-from gurupod.core.config import get_config
 from gurupod.core.logger_config import get_logger
 
 dotenv.load_dotenv()
@@ -22,15 +23,31 @@ CONFIG_FILENAME = os.environ.get("CONFIG_FILE", "guruconfig.toml")
 CONFIG_PATH = DATA_DIR / CONFIG_FILENAME
 LOG_PROFILE = os.environ.get("LOG_PROFILE")
 
+
+def get_config(config_toml, default_config_toml, data_dir):
+    if config_toml.exists():
+        with open(config_toml, "rb") as f:
+            guru_conf = tomllib.load(f)
+            logger.info(f"Loaded config from {config_toml}", bot_name="BOOT")
+
+    else:
+        with open(default_config_toml, "rb") as f:
+            guru_conf = tomllib.load(f)
+            logger.info(f"Loaded default config from {default_config_toml}", bot_name="BOOT")
+            logger.info(
+                f"Initialising with default values:\n{[f"{k} = {v}" for k, v in guru_conf.items()]}", bot_name="BOOT"
+            )
+            Path.mkdir(data_dir, exist_ok=True)
+            shutil.copy(default_config_toml, config_toml)
+
+    return guru_conf
+
+
 logger = get_logger(log_file=LOG_PATH, profile=LOG_PROFILE)
 
-default_configs = [
-    BACKUP_RESTORE_DIR / "config_local.toml",
-    # BACKUP_RESTORE_DIR / "config_remote.toml",
-    BACKUP_RESTORE_DIR / "config_default.toml",
-]
+default_config = BACKUP_RESTORE_DIR / "config_default.toml"
 
-guru_conf = get_config(CONFIG_PATH, default_configs, DATA_DIR)
+guru_conf = get_config(CONFIG_PATH, default_config, DATA_DIR)
 
 # reddits
 SUB_TO_MONITOR = guru_conf.get("sub_to_monitor")
