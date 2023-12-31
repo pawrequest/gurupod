@@ -30,7 +30,7 @@ def get_logger(log_file, profile: Literal["local", "remote", "default"] = None) 
 BOT_COLOR = {
     "Scraper": "cyan",
     "Monitor": "green",
-    "BackupBot": "magenta",
+    "Backup": "magenta",
 }
 
 

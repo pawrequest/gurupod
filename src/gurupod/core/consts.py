@@ -1,3 +1,4 @@
+# todo make this not be in docker so no rebuild to edit
 from __future__ import annotations
 
 import os

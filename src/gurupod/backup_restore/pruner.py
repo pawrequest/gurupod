@@ -8,27 +8,25 @@ from loguru import logger
 def prune(
     input_file: Path, day_retain=7, week_retain=4, month_retain=12, year_retain=5, debug_mode=0, backup_date=None
 ):
-    logger.warning(f"Pruning {input_file}", bot_name="BackupBot")
     if not input_file.exists():
         raise FileNotFoundError(f"File {input_file} does not exist")
+    logger.debug("Pruning backups", bot_name="Backup")
 
     root_dir = input_file.parent
     intervals = {"day": day_retain, "week": week_retain, "month": month_retain, "year": year_retain}
-    for interval in intervals:
-        logger.info(f"Backup directory for {interval}: {root_dir / interval}")
-
     create_backup_dirs(root_dir, intervals)
     make_backup(input_file, root_dir, intervals, debug_mode, backup_date)
     prune_backups(root_dir, intervals)
 
-    logger.warning("Pruning complete", extra={"bot_name": "BackupBot"})
+    logger.debug("Pruning complete", bot_name="Backup")
 
 
 def create_backup_dirs(root_dir: Path, intervals):
     for period in intervals:
         backup_dir = root_dir / period
-        Path.mkdir(backup_dir, exist_ok=True)
-        print(f"Created backup directory: {backup_dir}")
+        if not backup_dir.exists():
+            backup_dir.mkdir(parents=True, exist_ok=True)
+            logger.info(f"Created backup directory: {backup_dir}", bot_name="Backup")
 
 
 def make_backup(input_file, root_dir, intervals, debug_mode, backup_date=None):
@@ -40,13 +38,13 @@ def make_backup(input_file, root_dir, intervals, debug_mode, backup_date=None):
     daily_file = root_dir / "day" / dated_filename
 
     shutil.copy(input_file, daily_file)
-    print(f"Backup created at {daily_file}")
+    logger.info(f"Backup created at {daily_file}", bot_name="Backup")
 
     for period in intervals:
         period_dir = root_dir / period
         if debug_mode or should_copy_to_period(period, backup_date):
             shutil.copy(daily_file, period_dir)
-            print(f"Copied backup to {period_dir}")
+            logger.info(f"Copied backup to {period_dir}", bot_name="Backup")
 
 
 def should_copy_to_period(period, backup_date=None):
@@ -67,7 +65,7 @@ def prune_backups(root_dir: Path, intervals):
 
         for file in all_files[retention:]:
             file.unlink()
-            print(f"Removed old backup: {file}")
+            logger.info(f"Removed old backup: {file}", bot_name="Backup")
 
 
 # def prune_backups(root_dir: Path, intervals):
