@@ -1,7 +1,7 @@
 import json
 import re
 
-from gurupod.core.consts import EPISODES_JSON, EPISODES_MOD
+from gurupod.gurupod import EPISODES_JSON, EPISODES_MOD
 
 NEW_EPISODES_JSON = "new_episodes.json"
 

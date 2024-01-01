@@ -16,16 +16,16 @@ from gurupod.core.consts import (
     param_log_strs,
 )
 from gurupod import EpisodeBot, SubredditMonitor
-from gurupod.core.database import create_db_and_tables, engine_
+from gurupod.core.database import create_db, engine_
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.core.routes import ep_router
-from gurupod.backup_restore.backup_bot import Backup, db_from_json, db_to_json, gurus_from_file
+from gurupod.backup_restore.backup_bot import BackupBot, db_from_json, db_to_json, gurus_from_file
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info(f"Loading with params: {param_log_strs()}", bot_name="BOOT")
-    create_db_and_tables()
+    create_db()
     logger.info("tables created", bot_name="BOOT")
     with Session(engine_()) as session:
         if INITIALIZE:
@@ -60,7 +60,7 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
 
     try:
         if RUN_BACKUP_BOT:
-            back_bot = Backup(session)
+            back_bot = BackupBot(session)
             tasks.append(asyncio.create_task(back_bot.run(backup_path=BACKUP_JSON)))
     except Exception as e:
         logger.error(f"Error initiating backup_bot: {e}")

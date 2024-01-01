@@ -1,19 +1,21 @@
-# no dont do this it breaks stuff??!! from __future__ import annotations
+# from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
 from dateutil import parser
 from pydantic import field_validator
 from sqlalchemy import Column
-from sqlmodel import Field, JSON, Relationship, SQLModel
+from sqlmodel import Field, JSON, Relationship
+from gurupod.core.database import SQLModel
+from loguru import logger
 
 from gurupod.core.consts import DEBUG
-from loguru import logger
+
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:
-    from gurupod.models.guru import Guru, RedditThread
-
+    from gurupod.models.guru import Guru
+    from gurupod.models.reddit_thread import RedditThread
 
 MAYBE_ATTRS = ["title", "notes", "links", "date"]
 

@@ -36,8 +36,8 @@ BOT_COLOR = {
 
 def log_fmt_local_terminal(record):
     bot_name = record["extra"].get("bot_name", "General")
-    bot_name = f"{bot_name:<9}"
     bot_colour = BOT_COLOR.get(bot_name, "white")
+    bot_name = f"{bot_name:<9}"
     max_length = 80
     file_txt = f"{record['file'].path}:{record['line']}"
 

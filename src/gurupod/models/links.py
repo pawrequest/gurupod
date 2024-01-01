@@ -1,8 +1,9 @@
-from __future__ import annotations
+# from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field
+from gurupod.core.database import SQLModel
 
 if TYPE_CHECKING:
     pass

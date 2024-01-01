@@ -17,7 +17,7 @@ from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, Reddi
 from gurupod.models.reddit_thread import RedditThread
 
 
-class Backup:
+class BackupBot:
     """Backup the database to json on a schedule"""
 
     def __init__(self, session: Session):
@@ -139,6 +139,7 @@ def get_dated_filename(path: Path):
 
 def gurus_from_file(session: Session):
     try:
+        logger.info("Adding gurus from file", bot_name="Backup")
         guru_names_db = session.exec(select(Guru.name)).all()
         guru_names = set([_ for _ in guru_names_db])
         with open(GURU_NAME_LIST_FILE, "r") as file:

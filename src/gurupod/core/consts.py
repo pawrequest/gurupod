@@ -1,12 +1,11 @@
 # todo make this not be in docker so no rebuild to edit
-from __future__ import annotations
+# from __future__ import annotations
 
 import os
 import shutil
 import tomllib
 from pathlib import Path
 
-from asyncpraw.models import Submission
 import dotenv
 
 from gurupod.core.logger_config import get_logger
@@ -23,6 +22,8 @@ BACKUP_RESTORE_DIR = HERE.parent / "backup_restore"
 CONFIG_FILENAME = os.environ.get("CONFIG_FILE", "guruconfig.toml")
 CONFIG_PATH = DATA_DIR / CONFIG_FILENAME
 LOG_PROFILE = os.environ.get("LOG_PROFILE")
+
+logger = get_logger(log_file=LOG_PATH, profile=LOG_PROFILE)
 
 
 def get_config(config_toml, default_config_toml, data_dir):
@@ -43,8 +44,6 @@ def get_config(config_toml, default_config_toml, data_dir):
 
     return guru_conf
 
-
-logger = get_logger(log_file=LOG_PATH, profile=LOG_PROFILE)
 
 default_config = BACKUP_RESTORE_DIR / "config_default.toml"
 
@@ -127,9 +126,3 @@ params_to_log = [(param, globals()[param]) for param in params_to_log_names]
 def param_log_strs() -> list[str]:
     res = [f"{param}: {value}" for param, value in params_to_log if value]
     return res
-
-
-class SubmissionGurus(Submission):
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.gurus = []

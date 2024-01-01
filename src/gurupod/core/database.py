@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
 from sqlmodel import SQLModel, Session
 
+from gurupod.core.consts import GURU_DB
+
 
 def engine_(config=None):
     if config is None:
-        from gurupod.core.consts import GURU_DB
-
         db_url = f"sqlite:///{GURU_DB}"
         connect_args = {"check_same_thread": False}
     else:
@@ -22,7 +22,7 @@ def get_session(engine=None) -> Session:
     session.close()
 
 
-def create_db_and_tables(engine=None):
+def create_db(engine=None):
     if engine is None:
         engine = engine_()
     SQLModel.metadata.create_all(engine)

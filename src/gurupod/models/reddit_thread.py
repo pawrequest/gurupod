@@ -5,18 +5,15 @@ from typing import List, Optional, TYPE_CHECKING
 from asyncpraw.models import Submission
 from pydantic import field_validator
 from sqlalchemy import Column
-from sqlmodel import Field, JSON, Relationship
+from sqlmodel import Field, JSON, Relationship, SQLModel
 
-from gurupod.core.database import SQLModel
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
-from loguru import logger
-
 
 if TYPE_CHECKING:
-    from gurupod.models.guru import Guru, Episode
+    from gurupod.gurupod import Guru, Episode
 
 
-def db_ready_submission(submission: dict | Submission):
+def submission_to_dict(submission: dict | Submission):
     serializable_types = (int, float, str, bool, type(None))
     if isinstance(submission, Submission):
         submission = vars(submission)
@@ -35,7 +32,7 @@ class RedditThreadBase(SQLModel):
 
     @field_validator("submission", mode="before")
     def validate_submission(cls, v):
-        return db_ready_submission(v)
+        return submission_to_dict(v)
 
     @classmethod
     def from_submission(cls, submission: Submission):

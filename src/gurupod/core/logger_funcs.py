@@ -6,7 +6,7 @@ from typing import Sequence, TYPE_CHECKING
 from loguru import logger
 
 if TYPE_CHECKING:
-    from gurupod.models.responses import EP_OR_BASE_VAR
+    from gurupod.gurupod import EP_OR_BASE_VAR
 
 
 def log_episodes(eps: Sequence[EP_OR_BASE_VAR], calling_func=None, msg: str = "", bot_name="General"):

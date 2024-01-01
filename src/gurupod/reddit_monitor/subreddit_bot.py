@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import AsyncGenerator
 
-from asyncpraw.models import Subreddit, WikiPage
-from asyncpraw.reddit import Reddit, Submission
+from asyncpraw.models import Subreddit, WikiPage, Submission
+from asyncpraw.reddit import Reddit
 from sqlmodel import Session, select
 
-from gurupod.core.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS, SUB_TO_MONITOR, SubmissionGurus
+from gurupod.core.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS, SUB_TO_MONITOR
 from loguru import logger
 from gurupod.models.guru import Guru
 from gurupod.models.reddit_thread import RedditThread
@@ -139,3 +139,9 @@ async def submission_in_stream_by_title(title, subreddit: Subreddit) -> bool:
         submission: Submission = submission
         if title in submission.title:
             return True
+
+
+class SubmissionGurus(Submission):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.gurus = []
