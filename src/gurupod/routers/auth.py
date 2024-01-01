@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 import gurupod.models.user
 from gurupod.core.database import get_session
-from gurupod.shared import demo_page
+from gurupod.shared import decodethepage
 from gurupod.user_db import create_user
 
 router = APIRouter()
@@ -31,7 +31,7 @@ async def get_user_auth(
 @router.get("/login", response_model=FastUI, response_model_exclude_none=True)
 def auth_login(user: Annotated[str | None, Depends(get_user_auth)]) -> list[AnyComponent]:
     if user is None:
-        return demo_page(
+        return decodethepage(
             c.Paragraph(
                 text=(
                     "This is a very simple demo of authentication, "
@@ -67,7 +67,7 @@ async def profile(user: Annotated[gurupod.models.user.User | None, Depends(get_u
         return [c.FireEvent(event=GoToEvent(url="/auth/login"))]
     else:
         # active_count = await count_users()
-        return demo_page(
+        return decodethepage(
             c.Paragraph(text=f'You are logged in as "{user.email}", XXXXXX active users right now.'),
             c.Button(text="Logout", on_click=PageEvent(name="submit-form")),
             c.Form(

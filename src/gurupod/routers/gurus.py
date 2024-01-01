@@ -10,7 +10,7 @@ from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
 from gurupod.models.responses import GuruWith
 from gurupod.routers.forms import SelectGuru
-from gurupod.shared import demo_page
+from gurupod.shared import decodethepage
 from gurupod.routers.tables import tabs
 
 router = APIRouter()
@@ -20,7 +20,7 @@ router = APIRouter()
 async def guru_view(guru_id: int, session: Session = Depends(get_session)) -> list[AnyComponent]:
     guru = session.get(Guru, guru_id)
 
-    return demo_page(
+    return decodethepage(
         c.Link(components=[c.Text(text="Back")], on_click=BackEvent()),
         c.Details(data=guru),
         title=guru.name,
@@ -42,7 +42,7 @@ def guru_list_view(
             gurus = [guru]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
-    return demo_page(
+    return decodethepage(
         # *tabs(),
         c.ModelForm(
             model=EpisodeGuruFilter,

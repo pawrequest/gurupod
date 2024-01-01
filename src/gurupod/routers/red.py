@@ -8,7 +8,7 @@ from loguru import logger
 from gurupod.models.reddit_thread import RedditThread
 from gurupod.models.guru import Guru
 from gurupod.routers.gurus import EpisodeGuruFilter, ThreadGuruFilter
-from gurupod.shared import demo_page
+from gurupod.shared import decodethepage
 from gurupod.core.database import get_session
 from gurupod.models.episode import Episode
 
@@ -20,7 +20,7 @@ router = APIRouter()
 async def thread_view(thread_id: int, session: Session = Depends(get_session)) -> list[AnyComponent]:
     thread = session.get(RedditThread, thread_id)
 
-    return demo_page(
+    return decodethepage(
         c.Link(components=[c.Text(text="Back")], on_click=BackEvent()),
         c.Details(data=thread),
         title=thread.title,
@@ -42,7 +42,7 @@ def thread_list_view(
             threads = [thread for thread in threads if guru in thread.gurus]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
-    return demo_page(
+    return decodethepage(
         # *tabs(),
         c.ModelForm(
             model=ThreadGuruFilter,

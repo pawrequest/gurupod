@@ -9,7 +9,7 @@ from fastui.components.display import DisplayLookup, DisplayMode
 from fastui.events import BackEvent, GoToEvent
 from pydantic import BaseModel, Field, TypeAdapter
 
-from gurupod.shared import demo_page
+from gurupod.shared import decodethepage
 
 router = APIRouter()
 
@@ -60,7 +60,7 @@ def cities_view(page: int = 1, country: str | None = None) -> list[AnyComponent]
         cities = [city for city in cities if city.iso3 == country]
         country_name = cities[0].country if cities else country
         filter_form_initial["country"] = {"value": country, "label": country_name}
-    return demo_page(
+    return decodethepage(
         *tabs(),
         c.ModelForm(
             model=FilterForm,
@@ -87,7 +87,7 @@ def cities_view(page: int = 1, country: str | None = None) -> list[AnyComponent]
 @router.get("/cities/{city_id}", response_model=FastUI, response_model_exclude_none=True)
 def city_view(city_id: int) -> list[AnyComponent]:
     city = cities_lookup()[city_id]
-    return demo_page(
+    return decodethepage(
         *tabs(),
         c.Link(components=[c.Text(text="Back")], on_click=BackEvent()),
         c.Details(data=city),
@@ -111,7 +111,7 @@ users: list[User] = [
 
 @router.get("/users", response_model=FastUI, response_model_exclude_none=True)
 def users_view() -> list[AnyComponent]:
-    return demo_page(
+    return decodethepage(
         *tabs(),
         c.Table(
             data=users,
@@ -149,7 +149,7 @@ def tabs() -> list[AnyComponent]:
 @router.get("/users/{id}/", response_model=FastUI, response_model_exclude_none=True)
 def user_profile(id: int) -> list[AnyComponent]:
     user: User | None = users[id - 1] if id <= len(users) else None
-    return demo_page(
+    return decodethepage(
         *tabs(),
         c.Link(components=[c.Text(text="Back")], on_click=BackEvent()),
         c.Details(

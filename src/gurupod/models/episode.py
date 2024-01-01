@@ -65,7 +65,6 @@ class Episode(EpisodeBase, table=True):
 
 
 class EpisodeRead(EpisodeBase):
-    id: int
     title: str
     url: str
     date: datetime
@@ -73,3 +72,44 @@ class EpisodeRead(EpisodeBase):
     links: Optional[dict[str, str]]
     gurus: Optional[list[str]]
     reddit_threads: Optional[list[str]]
+
+    # @field_validator("gurus", mode="before")
+    # def gurus_to_list(cls, v) -> list[str]:
+    #     if isinstance(v, list) and v:
+    #         logger.debug("Converting Guru to str")
+    #         v = [g.name for g in v]
+    #     return v
+
+    # @field_validator("reddit_threads", mode="before")
+    # def reddit_threads_to_list(cls, v) -> list[str]:
+    #     if isinstance(v, list) and v:
+    #         logger.debug("Converting RedditThread to str")
+    #         v = [t.url for t in v]
+    #     return v
+
+
+class EpisodeFE(EpisodeBase):
+    title: str
+    url: str
+    date: datetime
+    notes: Optional[list[str]]
+    links: Optional[dict[str, str]]
+    gurus: Optional[list[str]]
+    reddit_threads: Optional[list[str]]
+
+    @field_validator("gurus", mode="before")
+    def gurus_to_list(cls, v) -> list[str]:
+        if isinstance(v, list) and v:
+            try:
+                v = [g.name for g in v]
+                logger.debug("Converting Guru to str")
+            except Exception as e:
+                logger.error(f"Could not convert Gurus to list: {v} - {e}")
+        return v
+
+    @field_validator("reddit_threads", mode="before")
+    def reddit_threads_to_list(cls, v) -> list[str]:
+        if isinstance(v, list) and v:
+            logger.debug("Converting RedditThread to str")
+            v = [t.url for t in v]
+        return v

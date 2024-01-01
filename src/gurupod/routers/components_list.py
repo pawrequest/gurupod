@@ -7,7 +7,7 @@ from fastui import AnyComponent, FastUI
 from fastui import components as c
 from fastui.events import GoToEvent, PageEvent
 
-from gurupod.shared import demo_page
+from gurupod.shared import decodethepage
 
 router = APIRouter()
 
@@ -18,7 +18,7 @@ def panel(*components: AnyComponent) -> AnyComponent:
 
 @router.get("", response_model=FastUI, response_model_exclude_none=True)
 def components_view() -> list[AnyComponent]:
-    return demo_page(
+    return decodethepage(
         c.Div(
             components=[
                 c.Heading(text="Text", level=2),

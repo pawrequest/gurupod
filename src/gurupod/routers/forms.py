@@ -2,36 +2,24 @@ from __future__ import annotations as _annotations
 
 import enum
 from collections import defaultdict
-from datetime import date
 from typing import Annotated, Literal, TypeAlias
 
 from loguru import logger
-from fastapi import APIRouter, Depends, UploadFile
-from fastui import AnyComponent, FastUI, components as c
-from fastui.events import GoToEvent, PageEvent
-from fastui.forms import FormFile, SelectSearchResponse, fastui_form
-from pydantic import BaseModel, EmailStr, Field, SecretStr, field_validator
-from pydantic_core import PydanticCustomError
-from sqlmodel import Session, desc, select
+from fastapi import APIRouter, Depends
+from fastui import FastUI, components as c
+from fastui.events import GoToEvent
+from fastui.forms import SelectSearchResponse, fastui_form
+from pydantic import BaseModel, EmailStr, Field, SecretStr
+from sqlmodel import Session
 
 from gurupod.core.database import get_session
-from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
-from gurupod.models.reddit_thread import RedditThread
-from gurupod.shared import demo_page
 
 router = APIRouter()
 
 
 @router.get("/search/{tgt_model}/", response_model=SelectSearchResponse)
 async def search_view(q: str, tgt_model, session: Session = Depends(get_session)) -> SelectSearchResponse:
-    logger.info(f"search_view: {q}")
-    # if tgt_model == "ep":
-    #     model_class = Episode
-    # elif tgt_model == "guru":
-    #     model_class = Guru
-    # elif tgt_model == "thread":
-    #     model_class = RedditThread
     gurus = session.query(Guru).all()
     gurus = [guru for guru in gurus if getattr(guru, tgt_model)]
     gurus = sorted(gurus, key=lambda x: len(getattr(x, tgt_model)), reverse=True)

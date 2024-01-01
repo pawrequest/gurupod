@@ -10,7 +10,8 @@ from sqlmodel import Field, JSON, Relationship, SQLModel
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
 
 if TYPE_CHECKING:
-    from gurupod.gurupod import Guru, Episode
+    from gurupod.models.guru import Guru
+    from gurupod.models.episode import Episode
 
 
 def submission_to_dict(submission: dict | Submission):

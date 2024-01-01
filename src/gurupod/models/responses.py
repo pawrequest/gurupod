@@ -22,6 +22,11 @@ class EpisodeWith(EpisodeBase):
     reddit_threads: Optional[List["RedditThreadRead"]]
 
 
+class EpisodeWith2(EpisodeBase):
+    gurus: Optional[List["GuruRead"]]
+    reddit_threads: Optional[List["RedditThreadRead"]]
+
+
 class RedditThreadWith(RedditThreadBase):
     episodes: Optional[List["EpisodeRead"]]
     gurus: Optional[List["GuruRead"]]
