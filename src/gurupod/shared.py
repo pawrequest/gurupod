@@ -1,7 +1,31 @@
 from __future__ import annotations as _annotations
 
+from functools import partial
+from typing import List
+
 from fastui import AnyComponent, components as c
 from fastui.events import GoToEvent
+
+
+def Flex(components: List[AnyComponent], classes: list = None) -> AnyComponent:
+    classes = classes or []
+    class_name = " ".join(classes)
+    class_name = f"d-flex border-bottom border-secondary {class_name}"
+    return c.Div(components=components, class_name=class_name)
+
+
+def Row(components: List[AnyComponent], classes: list = None) -> AnyComponent:
+    classes = classes or []
+    bs_classes = " ".join(classes)
+    bs_classes = f"row {bs_classes}"
+    return c.Div(components=components, class_name=bs_classes)
+
+
+def Col(components: List[AnyComponent], classes: list = None) -> AnyComponent:
+    classes = classes or []
+    bs_classes = " ".join(classes)
+    bs_classes = f"col {bs_classes}"
+    return c.Div(components=components, class_name=bs_classes)
 
 
 def decodethepage(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
