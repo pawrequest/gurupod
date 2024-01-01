@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
 from asyncpraw.models import Submission
+from loguru import logger
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
@@ -66,3 +67,29 @@ class RedditThread(RedditThreadBase, table=True):
 
 class RedditThreadRead(RedditThreadBase):
     id: int
+
+
+class RedditThreadFE(RedditThreadBase):
+    id: int
+    gurus: Optional[list[str]]
+    episodes: Optional[list[str]]
+
+    @field_validator("gurus", mode="before")
+    def gurus_to_list(cls, v) -> list[str]:
+        if isinstance(v, list) and v:
+            try:
+                v = [g.name for g in v]
+                logger.debug("Thread Converting Guru to str")
+            except Exception as e:
+                logger.error(f"Could not convert Gurus to list: {v} - {e}")
+        return v
+
+    @field_validator("episodes", mode="before")
+    def reddit_threads_to_list(cls, v) -> list[str]:
+        if isinstance(v, list) and v:
+            logger.debug("Thnread Converting episode to str")
+            try:
+                v = [t.url for t in v]
+            except Exception as e:
+                logger.error(f"Could not convert Episodes to list: {v} - {e}")
+        return v

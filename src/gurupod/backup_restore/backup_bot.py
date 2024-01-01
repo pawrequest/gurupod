@@ -157,3 +157,14 @@ def gurus_from_file(session: Session):
     except Exception as e:
         logger.error(f"Error adding gurus from file: {e}", bot_name="Backup")
         return
+
+
+"""@cache
+def cities_list() -> list[City]:
+    cities_adapter = TypeAdapter(list[City])
+    cities_file = Path(__file__).parent / 'cities.json'
+    cities = cities_adapter.validate_json(cities_file.read_bytes())
+    cities.sort(key=lambda city: city.population, reverse=True)
+    return cities
+
+"""

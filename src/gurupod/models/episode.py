@@ -3,14 +3,15 @@ from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING
 
 from dateutil import parser
+from fastui.events import GoToEvent
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship
-from gurupod.core.database import SQLModel
 from loguru import logger
+from fastui import components as c
 
+from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
-
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 
 if TYPE_CHECKING:
@@ -65,11 +66,11 @@ class Episode(EpisodeBase, table=True):
 
 
 class EpisodeRead(EpisodeBase):
-    title: str
-    url: str
-    date: datetime
-    notes: Optional[list[str]]
-    links: Optional[dict[str, str]]
+    # title: str
+    # url: str
+    # date: datetime
+    # notes: Optional[list[str]]
+    # links: Optional[dict[str, str]]
     gurus: Optional[list[str]]
     reddit_threads: Optional[list[str]]
 
@@ -89,20 +90,26 @@ class EpisodeRead(EpisodeBase):
 
 
 class EpisodeFE(EpisodeBase):
-    title: str
-    url: str
-    date: datetime
-    notes: Optional[list[str]]
+    id: int
+    # title: str
+    # url: str
+    # date: datetime
+    # notes: Optional[list[str]]
+    # links: Optional[ContentLinkCollection]
     links: Optional[dict[str, str]]
     gurus: Optional[list[str]]
     reddit_threads: Optional[list[str]]
+
+    @property
+    def slug(self):
+        return f"/eps/{self.id}"
 
     @field_validator("gurus", mode="before")
     def gurus_to_list(cls, v) -> list[str]:
         if isinstance(v, list) and v:
             try:
                 v = [g.name for g in v]
-                logger.debug("Converting Guru to str")
+                logger.debug(f"Converting Guru to str {v}")
             except Exception as e:
                 logger.error(f"Could not convert Gurus to list: {v} - {e}")
         return v

@@ -38,3 +38,24 @@ def decodethepage(*components: AnyComponent, title: str | None = None) -> list[A
             ],
         ),
     ]
+
+
+def tabs() -> list[AnyComponent]:
+    return [
+        c.LinkList(
+            links=[
+                c.Link(
+                    components=[c.Text(text="Cities")],
+                    on_click=GoToEvent(url="/table/cities"),
+                    active="startswith:/table/cities",
+                ),
+                c.Link(
+                    components=[c.Text(text="Users")],
+                    on_click=GoToEvent(url="/table/users"),
+                    active="startswith:/table/users",
+                ),
+            ],
+            mode="tabs",
+            class_name="+ mb-4",
+        ),
+    ]

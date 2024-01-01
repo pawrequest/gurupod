@@ -10,8 +10,7 @@ from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
 from gurupod.models.responses import GuruWith
 from gurupod.routers.forms import SelectGuru
-from gurupod.shared import decodethepage
-from gurupod.routers.tables import tabs
+from gurupod.shared import decodethepage, tabs
 
 router = APIRouter()
 

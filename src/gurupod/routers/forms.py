@@ -4,11 +4,11 @@ import enum
 from collections import defaultdict
 from typing import Annotated, Literal, TypeAlias
 
-from loguru import logger
 from fastapi import APIRouter, Depends
 from fastui import FastUI, components as c
 from fastui.events import GoToEvent
 from fastui.forms import SelectSearchResponse, fastui_form
+from loguru import logger
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 from sqlmodel import Session
 
@@ -22,6 +22,7 @@ router = APIRouter()
 async def search_view(q: str, tgt_model, session: Session = Depends(get_session)) -> SelectSearchResponse:
     gurus = session.query(Guru).all()
     gurus = [guru for guru in gurus if getattr(guru, tgt_model)]
+    # gurus = [guru for guru in gurus if getattr(guru, tgt_model)]
     gurus = sorted(gurus, key=lambda x: len(getattr(x, tgt_model)), reverse=True)
 
     if q:

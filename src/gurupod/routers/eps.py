@@ -34,7 +34,6 @@ def episode_list_view(
 ) -> list[AnyComponent]:
     logger.info("episode_filter")
     episodes = session.query(Episode).all()
-    episodes = [EpisodeFE.model_validate(_) for _ in episodes]
 
     page_size = 50
     filter_form_initial = {}
@@ -42,6 +41,13 @@ def episode_list_view(
         if guru := session.exec(select(Guru).where(Guru.name == guru_name)).first():
             episodes = [ep for ep in episodes if guru in ep.gurus]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
+
+    episodes = [EpisodeFE.model_validate(_) for _ in episodes]
+    output_components = [
+        _.to_div()
+        # c.Markdown(text=_.to_markdown)
+        for _ in episodes
+    ]
 
     return decodethepage(
         # *tabs(),
@@ -53,15 +59,20 @@ def episode_list_view(
             submit_on_change=True,
             display_mode="inline",
         ),
-        c.Table(
-            data=episodes[(page - 1) * page_size : page * page_size],
-            data_model=EpisodeFE,
-            # columns=[
-            #     DisplayLookup(field="title", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
-            #     # DisplayLookup(field="gurus", table_width_percent=13),
-            #     # DisplayLookup(field='id', table_width_percent=33),
-            # ],
+        c.Div(
+            components=output_components,
         ),
-        c.Pagination(page=page, page_size=page_size, total=len(episodes)),
+        # c.Table(
+        #     data=episodes[(page - 1) * page_size : page * page_size],
+        #     data_model=EpisodeFE,
+        #     columns=[
+        #         DisplayLookup(field="title", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
+        #         # DisplayLookup(field="short_link", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
+        #         # DisplayLookup(field='date', table_width_percent=13),
+        #         DisplayLookup(field="url", table_width_percent=25),
+        #         DisplayLookup(field="tags", table_width_percent=25),
+        #     ],
+        # ),
+        # c.Pagination(page=page, page_size=page_size, total=len(episodes)),
         title="Episodes",
     )

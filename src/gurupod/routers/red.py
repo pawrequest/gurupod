@@ -5,12 +5,11 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 from loguru import logger
 
-from gurupod.models.reddit_thread import RedditThread
+from gurupod.models.reddit_thread import RedditThread, RedditThreadFE
 from gurupod.models.guru import Guru
-from gurupod.routers.gurus import EpisodeGuruFilter, ThreadGuruFilter
+from gurupod.routers.gurus import ThreadGuruFilter
 from gurupod.shared import decodethepage
 from gurupod.core.database import get_session
-from gurupod.models.episode import Episode
 
 router = APIRouter()
 
@@ -33,7 +32,6 @@ def thread_list_view(
 ) -> list[AnyComponent]:
     logger.info("thread_filter")
     threads = session.query(RedditThread).all()
-    # episodes = [EpisodeWith.model_validate(_) for _ in episodes]
 
     page_size = 50
     filter_form_initial = {}
@@ -42,6 +40,7 @@ def thread_list_view(
             threads = [thread for thread in threads if guru in thread.gurus]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
+    threads = [RedditThreadFE.model_validate(_) for _ in threads]
     return decodethepage(
         # *tabs(),
         c.ModelForm(
@@ -54,7 +53,7 @@ def thread_list_view(
         ),
         c.Table(
             data=threads[(page - 1) * page_size : page * page_size],
-            data_model=RedditThread,
+            data_model=RedditThreadFE,
             columns=[
                 DisplayLookup(field="title", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
                 # DisplayLookup(field="short_link", on_click=GoToEvent(url="./{id}"), table_width_percent=25),

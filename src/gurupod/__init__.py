@@ -32,8 +32,6 @@ from gurupod.routers.auth import router as auth_router
 from gurupod.routers.components_list import router as components_router
 from gurupod.routers.forms import router as forms_router
 from gurupod.routers.main import router as main_router
-from gurupod.routers.sse import router as sse_router
-from gurupod.routers.tables import router as table_router
 from gurupod.routers.gurus import router as guru_router
 from gurupod.routers.eps import router as eps_router
 from gurupod.routers.red import router as red_router
@@ -70,8 +68,6 @@ else:
     app = FastAPI(lifespan=lifespan)
 
 app.include_router(components_router, prefix="/api/components")
-app.include_router(sse_router, prefix="/api/components")
-app.include_router(table_router, prefix="/api/table")
 app.include_router(forms_router, prefix="/api/forms")
 app.include_router(auth_router, prefix="/api/auth")
 app.include_router(guru_router, prefix="/api/guru")
