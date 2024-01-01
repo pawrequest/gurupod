@@ -8,7 +8,7 @@ from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship
 from loguru import logger
-from fastui import components as c
+from fastui import components as c, AnyComponent
 
 from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
@@ -131,12 +131,50 @@ class EpisodeFE(EpisodeBase):
             ]
         )
 
+    def joining_string(self) -> AnyComponent:
+        return c.Text(text=",   ")
+
+    def join_components_if_multiple(self, components: list[AnyComponent]) -> list[AnyComponent]:
+        if len(components) < 2:
+            return components
+        else:
+            res = []
+            for component in components[:-1]:
+                res.extend([component, self.joining_string()])
+            res.append(components[-1])
+            return res
+            # res = [[component, self.joining_string()] for component in components[:-1]]
+            # return res + [components[-1]]
+
     def gurus_col(self):
         return Col(
             classes=["col-3"],
-            # class_name="text-left col-3",
-            components=[c.Link(components=[c.Text(text=g)], on_click=GoToEvent(url=f"/gurus/{g}")) for g in self.gurus],
+            components=[
+                # c.Text(text=", ".join([f"[{g}](/gurus/{g})" for g in self.gurus])),
+                Col(
+                    components=self.join_components_if_multiple(
+                        [
+                            c.Link(
+                                components=[c.Text(text=g)],
+                                on_click=GoToEvent(url=f"/gurus/{g}"),
+                            )
+                            for g in self.gurus
+                        ]
+                    )
+                )
+            ],
         )
+        # class_name="text-left col-3",
+        # components=[c.Markdown(text=", ".join([f'[{g}]({f"/gurus/{g}"})' for g in self.gurus]))],
+        # c.Link(components=[c.Text(text=g)], on_click=GoToEvent(url=f"/gurus/{g}"))
+        # c.Markdown(text=f"[{g}]({f'/gurus/{g}'})")
+        # c.Markdown(text=f"{[
+        #     f'[{g}]({f'/gurus/{g}'})'
+        #     for g in self.gurus
+        # ]}")
+        # for g in self.gurus
+        #     ],
+        # )
 
     def title_col(self):
         return Col(
