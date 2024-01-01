@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 from loguru import logger
 
 from gurupod.models.guru import Guru
-from gurupod.routers.gurus import GuruFilter
+from gurupod.routers.gurus import EpisodeGuruFilter
 from gurupod.shared import demo_page
 from gurupod.core.database import get_session
 from gurupod.models.episode import Episode
@@ -45,7 +45,7 @@ def episode_list_view(
     return demo_page(
         # *tabs(),
         c.ModelForm(
-            model=GuruFilter,
+            model=EpisodeGuruFilter,
             submit_url=".",
             initial=filter_form_initial,
             method="GOTO",

@@ -17,28 +17,35 @@ from sqlmodel import Session, desc, select
 from gurupod.core.database import get_session
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru
+from gurupod.models.reddit_thread import RedditThread
 from gurupod.shared import demo_page
 
 router = APIRouter()
 
 
-@router.get("/search", response_model=SelectSearchResponse)
-async def search_view(q: str, session: Session = Depends(get_session)) -> SelectSearchResponse:
+@router.get("/search/{tgt_model}/", response_model=SelectSearchResponse)
+async def search_view(q: str, tgt_model, session: Session = Depends(get_session)) -> SelectSearchResponse:
+    logger.info(f"search_view: {q}")
+    # if tgt_model == "ep":
+    #     model_class = Episode
+    # elif tgt_model == "guru":
+    #     model_class = Guru
+    # elif tgt_model == "thread":
+    #     model_class = RedditThread
     gurus = session.query(Guru).all()
-    gurus = [guru for guru in gurus if guru.episodes]
-    gurus = sorted(gurus, key=lambda x: len(x.episodes), reverse=True)
+    gurus = [guru for guru in gurus if getattr(guru, tgt_model)]
+    gurus = sorted(gurus, key=lambda x: len(getattr(x, tgt_model)), reverse=True)
 
     if q:
         gurus = [guru for guru in gurus if q in guru.name]
-    # else:
-    #     gurus = gurus[0:20]
     guru_d = defaultdict(list)
     for guru in gurus:
-        guru_d["gurus"].append({"value": guru.name, "label": f"{guru.name} - {len(guru.episodes)} Episodes"})
+        guru_d["gurus"].append(
+            {"value": guru.name, "label": f"{guru.name} - {len(getattr(guru, tgt_model))} {tgt_model}"}
+        )
 
     options = [{"label": k, "options": v} for k, v in guru_d.items()]
     print(f"options: {options}")
-    # options = [{'label': 'episodes', 'options': [[{'value': ep.model_dump(), 'label': ep.title}] for ep in episodes]}]
     return SelectSearchResponse(options=options)
 
 

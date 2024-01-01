@@ -36,6 +36,7 @@ from gurupod.routers.sse import router as sse_router
 from gurupod.routers.tables import router as table_router
 from gurupod.routers.gurus import router as guru_router
 from gurupod.routers.eps import router as eps_router
+from gurupod.routers.red import router as red_router
 
 frontend_reload = "--reload" in sys.argv
 
@@ -75,6 +76,7 @@ app.include_router(forms_router, prefix="/api/forms")
 app.include_router(auth_router, prefix="/api/auth")
 app.include_router(guru_router, prefix="/api/guru")
 app.include_router(eps_router, prefix="/api/eps")
+app.include_router(red_router, prefix="/api/red")
 app.include_router(main_router, prefix="/api")
 
 

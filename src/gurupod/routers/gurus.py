@@ -45,7 +45,7 @@ def guru_list_view(
     return demo_page(
         # *tabs(),
         c.ModelForm(
-            model=GuruFilter,
+            model=EpisodeGuruFilter,
             submit_url=".",
             initial=filter_form_initial,
             method="GOTO",
@@ -68,5 +68,13 @@ def guru_list_view(
     )
 
 
-class GuruFilter(BaseModel):
-    guru_name: str = Field(json_schema_extra={"search_url": "/api/forms/search", "placeholder": "Filter by Guru..."})
+class EpisodeGuruFilter(BaseModel):
+    guru_name: str = Field(
+        json_schema_extra={"search_url": "/api/forms/search/episodes/", "placeholder": "Filter by Guru..."}
+    )
+
+
+class ThreadGuruFilter(BaseModel):
+    guru_name: str = Field(
+        json_schema_extra={"search_url": "/api/forms/search/reddit_threads/", "placeholder": "Filter by Guru..."}
+    )
