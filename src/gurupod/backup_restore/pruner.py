@@ -44,7 +44,7 @@ def make_backup(input_file, root_dir, intervals, debug_mode, backup_date=None):
         period_dir = root_dir / period
         if debug_mode or should_copy_to_period(period, backup_date):
             shutil.copy(daily_file, period_dir)
-            logger.info(f"Copied backup to {period_dir}", bot_name="Backup")
+            logger.info(f"{period}ly backup copied to {period_dir}", bot_name="Backup")
 
 
 def should_copy_to_period(period, backup_date=None):
