@@ -5,6 +5,8 @@ from typing import Sequence, TYPE_CHECKING
 from fastui import components as c
 from fastui.events import GoToEvent
 
+from gurupod.ui.css import ROW, SUB_ROW
+
 if TYPE_CHECKING:
     from gurupod.core.consts import HasTitleAndSlug
 from gurupod.models.reddit_thread import RedditThread
@@ -29,7 +31,7 @@ def reddit_list_row(rts: list["RedditThread"]) -> list[Row]:
 def thread_col(rts: Sequence[RedditThread]) -> Col:
     rows = []
     for rt in rts:
-        rows.append(Row(components=[link_from_title_slug(rt)]))
+        rows.append(Row(classes=SUB_ROW, components=[link_from_title_slug(rt)]))
     return Col(components=rows)
 
 
@@ -57,5 +59,5 @@ def thread_page_flex(rts: Sequence[RedditThread]) -> Flex:
     for rt in rts:
         red_col = reddit_link_column(rt)
         guru_col = gurus_column(rt.gurus)
-        rows.append(Row(classes=["container-fluid", "my-2", "py-2", "border"], components=[red_col, guru_col]))
+        rows.append(Row(classes=ROW, components=[red_col, guru_col]))
     return Flex(components=rows)

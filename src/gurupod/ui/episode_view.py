@@ -5,14 +5,16 @@ from typing import Sequence, TYPE_CHECKING
 from fastui import components as c
 from fastui.events import GoToEvent
 
+from gurupod.ui.css import ROW, SUB_ROW, PLAY_COL
+from gurupod.ui.shared import Col, gurus_column, title_column, Flex, Row
+
 if TYPE_CHECKING:
     from gurupod.models.episode import Episode, EpisodeBase
-from gurupod.ui.shared import Col, gurus_column, title_column, Flex, Row
 
 
 def play_column(episode: EpisodeBase) -> Col:
     res = Col(
-        classes=["col-1 text-right"],
+        classes=PLAY_COL,
         components=[
             c.Link(
                 components=[c.Text(text="Play")],
@@ -26,16 +28,11 @@ def play_column(episode: EpisodeBase) -> Col:
 def episodes_column(episodes: list[Episode]) -> Col:
     if not isinstance(episodes, list):
         episodes = [episodes]
-    ep_links = [
-        c.Link(class_name="well", components=[c.Text(text=ep.title)], on_click=GoToEvent(url=ep.slug))
-        for ep in episodes
-    ]
-
-    # ep_links = join_components_if_multiple(ep_links)
-    return Col(classes=["col-3"], components=[Row(components=[_]) for _ in ep_links])
+    links = [c.Link(components=[c.Text(text=ep.title)], on_click=GoToEvent(url=ep.slug)) for ep in episodes]
+    return Col(components=[Row(classes=SUB_ROW, components=[_]) for _ in links])
 
 
-def episode_list_flex(episodes: Sequence[Episode]) -> Flex:
+def episode_page_flex(episodes: Sequence[Episode]) -> Flex:
     if not episodes:
         return Flex(components=[c.Text(text="No episodes")])
     rows = []
@@ -43,20 +40,21 @@ def episode_list_flex(episodes: Sequence[Episode]) -> Flex:
         guru_col = gurus_column(episode.gurus)
         title_col = title_column(episode.title, episode.slug)
         play_col = play_column(episode)
-        rows.append(Row(components=[guru_col, title_col, play_col]))
+        rows.append(Row(classes=ROW, components=[guru_col, title_col, play_col]))
     return Flex(components=rows)
 
-    # return Flex(
-    #     components=[
-    #         [
-    #             Row(
-    #                 components=[
-    #                     Col(components=[gurus_column(episode.gurus)]),
-    #                     Col(components=[title_column(episode.title, episode.slug)]),
-    #                     Col(components=[play_column(episode)]),
-    #                 ]
-    #             )
-    #             for episode in episodes
-    #         ]
-    #     ],
-    # )
+
+def episode_detail_flex(episode: Episode) -> Flex:
+    return Flex(
+        components=[
+            Row(
+                components=[
+                    c.Link(
+                        components=[c.Text(text="Play")],
+                        on_click=GoToEvent(url=episode.url),
+                    ),
+                ]
+            ),
+            c.Paragraph(text=episode.description),
+        ]
+    )

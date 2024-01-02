@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
-from gurupod.ui.guru_view import g_list_col, guru_page_flex
+from gurupod.ui.guru_view import guru_page_flex
 from gurupod.ui.shared import decodethepage
 
 router = APIRouter()
@@ -31,6 +31,7 @@ def guru_list_view(
     logger.info("guru list view")
     gurus = session.query(Guru).all()
     gurus = [_ for _ in gurus if _.episodes or _.reddit_threads]
+    gurus.sort(key=lambda x: len(x.episodes) + len(x.reddit_threads), reverse=True)
 
     page_size = 50
     filter_form_initial = {}
@@ -39,14 +40,7 @@ def guru_list_view(
             gurus = [guru]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
-    if not gurus:
-        return decodethepage(
-            c.Text(text="No Gurus"),
-        )
     return decodethepage(
-        # c.ModelForm(model=SelectGuru, submit_url='/api/forms/select'),
-        # gurus_list_flex(gurus),
-        # g_list_col(gurus),
         guru_page_flex(gurus),
         c.Pagination(page=page, page_size=page_size, total=len(gurus)),
         title="Gurus",

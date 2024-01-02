@@ -7,7 +7,7 @@ from loguru import logger
 
 from gurupod.models.guru import Guru
 from gurupod.routers.guru import EpisodeGuruFilter
-from gurupod.ui.episode_view import play_column, episode_list_flex
+from gurupod.ui.episode_view import play_column, episode_page_flex
 from gurupod.ui.shared import decodethepage, gurus_column, Flex, title_column, Row, Col
 from gurupod.core.database import get_session
 from gurupod.models.episode import Episode
@@ -52,7 +52,7 @@ def episode_list_view(
             submit_on_change=True,
             display_mode="inline",
         ),
-        episode_list_flex(episodes),
+        episode_page_flex(episodes),
         c.Pagination(page=page, page_size=page_size, total=len(episodes)),
         title="Episodes",
     )

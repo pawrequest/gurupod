@@ -70,17 +70,6 @@ class RedditThread(RedditThreadBase, table=True):
     gurus: Optional[List["Guru"]] = Relationship(back_populates="reddit_threads", link_model=RedditThreadGuruLink)
     episodes: List["Episode"] = Relationship(back_populates="reddit_threads", link_model=RedditThreadEpisodeLink)
 
-    def to_div(self) -> Flex:
-        return Flex(
-            components=[
-                gurus_column(self.gurus),
-                Row(
-                    components=[title_column(self.title, self.slug)],
-                ),
-                episodes_column(self.episodes),
-            ]
-        )
-
 
 class RedditThreadRead(RedditThreadBase):
     id: int
