@@ -1,14 +1,12 @@
 # from __future__ import annotations
 from fastui import AnyComponent, FastUI, components as c
-from fastui.events import BackEvent
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 from loguru import logger
 
 from gurupod.models.guru import Guru
 from gurupod.routers.guru import EpisodeGuruFilter
-from gurupod.ui.episode_view import play_column, episode_page_flex
-from gurupod.ui.shared import decodethepage, gurus_column, Flex, title_column, Row, Col
+from gurupod.ui.shared import back_link, default_page_new, master_with_related
 from gurupod.core.database import get_session
 from gurupod.models.episode import Episode
 
@@ -19,11 +17,14 @@ router = APIRouter()
 @router.get("/{ep_id}", response_model=FastUI, response_model_exclude_none=True)
 async def episode_view(ep_id: int, session: Session = Depends(get_session)) -> list[AnyComponent]:
     episode_db = session.get(Episode, ep_id)
+    episode_db = Episode.model_validate(episode_db)
 
-    return decodethepage(
-        c.Link(components=[c.Text(text="Back")], on_click=BackEvent()),
-        c.Details(data=episode_db),
+    return default_page_new(
         title=episode_db.title,
+        components=[
+            back_link(),
+            episode_db.ui_detail(),
+        ],
     )
 
 
@@ -42,17 +43,37 @@ def episode_list_view(
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
     # episodes = [Episode.model_validate(_) for _ in episodes]
-    return decodethepage(
-        # *tabs(),
-        c.ModelForm(
-            model=EpisodeGuruFilter,
-            submit_url=".",
-            initial=filter_form_initial,
-            method="GOTO",
-            submit_on_change=True,
-            display_mode="inline",
-        ),
-        episode_page_flex(episodes),
-        c.Pagination(page=page, page_size=page_size, total=len(episodes)),
+    return default_page_new(
         title="Episodes",
+        components=[
+            guru_filter(filter_form_initial),
+            master_with_related(episodes, container=False, col=True),
+            # episodes_with_related(episodes, container=True, col=True),
+            c.Pagination(page=page, page_size=page_size, total=len(episodes)),
+        ],
+    )
+    # return default_page(
+    #     # *tabs(),
+    #     c.ModelForm(
+    #         model=EpisodeGuruFilter,
+    #         submit_url=".",
+    #         initial=filter_form_initial,
+    #         method="GOTO",
+    #         submit_on_change=True,
+    #         display_mode="inline",
+    #     ),
+    #     episodes_with_related(episodes, container=True, col=True),
+    #     c.Pagination(page=page, page_size=page_size, total=len(episodes)),
+    #     title="Episodes",
+    # )
+
+
+def guru_filter(filter_form_initial):
+    return c.ModelForm(
+        model=EpisodeGuruFilter,
+        submit_url=".",
+        initial=filter_form_initial,
+        method="GOTO",
+        submit_on_change=True,
+        display_mode="inline",
     )

@@ -1,16 +1,18 @@
 # no dont do this!! from __future__ import annotations
 from datetime import datetime
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING, Union
 
 from asyncpraw.models import Submission
+from fastui.events import GoToEvent
 from loguru import logger
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
+from fastui import components as c
 
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.ui.shared import Flex, Row, title_column, gurus_column
-from gurupod.ui.episode_view import episodes_column
+from gurupod.ui.css import ROW
+from gurupod.ui.shared import Col, Flex, Row, ui_link, master_self_only
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -69,6 +71,37 @@ class RedditThread(RedditThreadBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="reddit_threads", link_model=RedditThreadGuruLink)
     episodes: List["Episode"] = Relationship(back_populates="reddit_threads", link_model=RedditThreadEpisodeLink)
+
+    def ui_detail(self, container=False) -> Flex:
+        return c.Details(data=self)
+        # return Flex(
+        #     components=[
+        #         Row(
+        #             components=[
+        #                 c.Link(
+        #                     components=[c.Text(text="reddit")],
+        #                     on_click=GoToEvent(url=self.shortlink),
+        #                 )
+        #             ]
+        #         ),
+        #         c.Paragraph(text=self.submission.get("selftext")),
+        #     ]
+        # )
+
+    def ui_with_related(self) -> Row:
+        red_col = self.ui_self_only(col=True)
+        guru_col = master_self_only(self.gurus, col=True)
+        # guru_col = gurus_only(self.gurus, col=True)
+        ep_col = master_self_only(self.episodes, col=True)
+        # ep_col = episodes_only(self.episodes)
+        return Row(classes=ROW, components=[red_col, guru_col, ep_col])
+
+    def ui_self_only(self, col=False) -> Union[c.Div, c.Link]:
+        reddit_link = ui_link(self.title, self.slug)
+        if col:
+            reddit_link = Col(components=[reddit_link])
+
+        return reddit_link
 
 
 class RedditThreadRead(RedditThreadBase):

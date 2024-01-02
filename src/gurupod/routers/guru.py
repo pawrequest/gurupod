@@ -7,8 +7,7 @@ from pydantic import BaseModel, Field
 
 from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
-from gurupod.ui.guru_view import guru_page_flex
-from gurupod.ui.shared import decodethepage
+from gurupod.ui.shared import default_page_new, master_with_related, back_link, empty_page
 
 router = APIRouter()
 
@@ -16,35 +15,55 @@ router = APIRouter()
 @router.get("/{guru_id}", response_model=FastUI, response_model_exclude_none=True)
 async def guru_view(guru_id: int, session: Session = Depends(get_session)) -> list[AnyComponent]:
     guru = session.get(Guru, guru_id)
+    guru = Guru.model_validate(guru)
 
-    return decodethepage(
-        c.Link(components=[c.Text(text="Back")], on_click=BackEvent()),
-        c.Details(data=guru),
+    return default_page_new(
         title=guru.name,
+        components=[
+            back_link(),
+            guru.ui_detail(),
+        ],
     )
 
 
 @router.get("/", response_model=FastUI, response_model_exclude_none=True)
-def guru_list_view(
-    page: int = 1, guru_name: str | None = None, session: Session = Depends(get_session)
-) -> list[AnyComponent]:
+def guru_list_view(page: int = 1, session: Session = Depends(get_session)) -> list[AnyComponent]:
     logger.info("guru list view")
     gurus = session.query(Guru).all()
     gurus = [_ for _ in gurus if _.episodes or _.reddit_threads]
+    gurus = [Guru.model_validate(_) for _ in gurus]
     gurus.sort(key=lambda x: len(x.episodes) + len(x.reddit_threads), reverse=True)
+    if not gurus:
+        return empty_page()
 
-    page_size = 50
-    filter_form_initial = {}
-    if guru_name:
-        if guru := session.exec(select(Guru).where(Guru.name == guru_name)).first():
-            gurus = [guru]
-            filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
+    try:
+        mst = master_with_related(gurus, container=False, col=True)
 
-    return decodethepage(
-        guru_page_flex(gurus),
-        c.Pagination(page=page, page_size=page_size, total=len(gurus)),
-        title="Gurus",
-    )
+        page_size = 50
+        return default_page_new(
+            title="Gurus",
+            components=[
+                mst,
+                c.Pagination(page=page, page_size=page_size, total=len(gurus)),
+            ],
+        )
+    except Exception as e:
+        logger.error(e)
+        return empty_page()
+
+    # return default_page_new(
+    #     title="Gurus",
+    #     components=[
+    #         master_with_related(gurus, container=False, col=True),
+    #         c.Pagination(page=page, page_size=page_size, total=len(gurus)),
+    #     ],
+    # )
+    #
+    # return default_page(
+    #     gurus_with_related(gurus, container=True, col=True),
+    #     c.Pagination(page=page, page_size=page_size, total=len(gurus)),
+    #     title="Gurus",
+    # )
 
 
 class EpisodeGuruFilter(BaseModel):

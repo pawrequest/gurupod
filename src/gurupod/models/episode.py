@@ -1,18 +1,20 @@
 # from __future__ import annotations
 from datetime import datetime
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING, Union
 
 from dateutil import parser
+from fastui.events import GoToEvent
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship
 from loguru import logger
+from fastui import components as c
 
 from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
-from gurupod.ui.shared import Flex, title_column, gurus_column
-from gurupod.ui.episode_view import play_column
+from gurupod.ui.css import ROW
+from gurupod.ui.shared import Col, Flex, Row, title_column, ui_link, play_column, master_self_only
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -83,97 +85,38 @@ class Episode(EpisodeBase, table=True):
     reddit_threads: Optional[List["RedditThread"]] = Relationship(
         back_populates="episodes", link_model=RedditThreadEpisodeLink
     )
-    #
-    # def to_div(self) -> Flex:
-    #     return Flex(
-    #         classes=["row", "my-2"],
-    #         components=[
-    #             gurus_div(self.gurus),
-    #             title_div(self.title, self.slug),
-    #             play_div(self),
-    #         ],
-    #     )
-    #
+
+    def ui_detail(self) -> Flex:
+        return c.Details(data=self)
+        # return Flex(
+        #     components=[
+        #         Row(
+        #             components=[
+        #                 c.Link(
+        #                     components=[c.Text(text="Play")],
+        #                     on_click=GoToEvent(url=self.url),
+        #                 ),
+        #             ]
+        #         ),
+        #         c.Paragraph(text=self.description),
+        #     ]
+        # )
+
+    # ep page
+
+    def ui_self_only(self, col=True) -> Union[c.Div, c.Link]:
+        clink = ui_link(self.title, self.slug)
+        return Col(components=[clink]) if col else clink
+
+    def ui_with_related(self) -> c.Div:
+        # guru_col = gurus_only(self.gurus, col=True)
+        guru_col = master_self_only(self.gurus, col=True)
+        title_col = title_column(self.title, self.slug)
+        play_col = play_column(self.url)
+        row = Row(classes=ROW, components=[guru_col, title_col, play_col])
+        return row
 
 
 class EpisodeRead(EpisodeBase):
     gurus: Optional[list[str]]
     reddit_threads: Optional[list[str]]
-
-
-# class EpisodeFE(EpisodeBase):
-#     id: int
-#     links: Optional[dict[str, str]]
-#     gurus: Optional[list[str]]
-#     reddit_threads: Optional[list[str]]
-
-
-# @field_validator("gurus", mode="before")
-# def gurus_to_list(cls, v) -> list[str]:
-#     if isinstance(v, list) and v:
-#         try:
-#             v = [g.name for g in v]
-#             logger.debug(f"Converting Guru to str {v}")
-#         except Exception as e:
-#             logger.error(f"Could not convert Gurus to list: {v} - {e}")
-#     return v
-#
-# @field_validator("reddit_threads", mode="before")
-# def reddit_threads_to_list(cls, v) -> list[str]:
-#     if isinstance(v, list) and v:
-#         logger.debug("Converting RedditThread to str")
-#         v = [t.url for t in v]
-#     return v
-
-# class EpisodeFE(EpisodeBase):
-#     id: int
-#     links: Optional[dict[str, str]]
-#     gurus: Optional[list[str]]
-#     reddit_threads: Optional[list[str]]
-#
-#     @property
-#     def slug(self):
-#         return f"/eps/{self.id}"
-#
-#     @field_validator("gurus", mode="before")
-#     def gurus_to_list(cls, v) -> list[str]:
-#         if isinstance(v, list) and v:
-#             try:
-#                 v = [g.name for g in v]
-#                 logger.debug(f"Converting Guru to str {v}")
-#             except Exception as e:
-#                 logger.error(f"Could not convert Gurus to list: {v} - {e}")
-#         return v
-#
-#     @field_validator("reddit_threads", mode="before")
-#     def reddit_threads_to_list(cls, v) -> list[str]:
-#         if isinstance(v, list) and v:
-#             logger.debug("Converting RedditThread to str")
-#             v = [t.url for t in v]
-#         return v
-#
-#     @property
-#     def to_markdown(self) -> str:
-#         res = f""" * {self.slug_md} - - {self.gurus} - - {self.captivate_md}
-#
-#
-#         return res
-#
-#     @property
-#     def captivate_md(self):
-#         return f"[Play on Captivate.fm]({self.url})"
-#
-#     @property
-#     def slug_md(self):
-#         pad = 150 - len(self.title)
-#         return f"[{self.title:{pad}}]({self.slug})"
-#
-#     def to_div(self) -> Flex:
-#         return Flex(
-#             classes=["row", "my-2"],
-#             components=[
-#                 gurus_div(self.gurus),
-#                 title_div(self.title, self.slug),
-#                 play_div(self.url),
-#             ],
-#         )

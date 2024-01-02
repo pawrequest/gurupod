@@ -1,25 +1,101 @@
-from __future__ import annotations as _annotations
+from __future__ import annotations, annotations as _annotations
 
-from typing import List, TYPE_CHECKING
+from typing import List, Protocol, Sequence, TYPE_CHECKING, TypeVar, Union
 
 from fastui import AnyComponent, components as c
-from fastui.events import GoToEvent
+from fastui.events import BackEvent, GoToEvent
+from loguru import logger
 
-from gurupod.models.guru import Guru
-from gurupod.ui.css import GURUS_COL, TITLE_COL, NAME_COL
+from gurupod.ui.css import NAME_COL, PLAY_COL, TITLE_COL
 
 if TYPE_CHECKING:
-    pass
+    from gurupod.models.guru import Guru
+
+
+class UIElement(Protocol):
+    def ui_detail(self) -> Flex:
+        ...
+
+    def ui_self_only(self, col=True) -> Union[c.Div, c.Link]:
+        ...
+
+    def ui_with_related(self) -> c.Div:
+        ...
+
+
+def master_self_only(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
+    if not master:
+        return empty_div(col, container)
+    rows = [_.ui_self_only() for _ in master]
+    if col:
+        rows = Col(components=rows)
+    if container:
+        rows = Flex(components=rows)
+    return rows
+
+
+def master_with_related(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
+    try:
+        rows = [_.ui_with_related() for _ in master]
+        rows = [c.Div.model_validate(_) for _ in rows]
+        if col:
+            rows = Col(components=rows)
+            rows = c.Div.model_validate(rows)
+        if container:
+            rows = Flex(components=rows)
+            rows = c.Div.model_validate(rows)
+        return rows
+    except Exception as e:
+        logger.error(e)
+
+
+def default_page_new(components: list[AnyComponent], title: str | None = None) -> list[AnyComponent]:
+    try:
+        return [
+            c.PageTitle(text=title if title else "durfault title"),
+            nav_bar(),
+            c.Page(
+                components=[
+                    c.Heading(text=title) if title else (),
+                    *components,
+                ],
+            ),
+            footer(),
+        ]
+    except Exception as e:
+        logger.error(e)
+
+
+def empty_page() -> list[AnyComponent]:
+    return [
+        c.PageTitle(text="durfault title"),
+        nav_bar(),
+        c.Page(
+            components=[
+                c.Heading(text="durfault title"),
+                c.Text(text="---"),
+            ],
+        ),
+        footer(),
+    ]
 
 
 def Flex(components: List[AnyComponent], classes: list = None) -> c.Div:
-    if not components:
-        return c.Div(components=[c.Text(text="---")])
-    classes = classes or []
-    class_name = " ".join(classes)
-    class_name = f"container border-bottom border-secondary {class_name}"
-    # class_name = f"d-flex border-bottom border-secondary {class_name}"
-    return c.Div(components=components, class_name=class_name)
+    logger.info("Flex")
+    try:
+        if not components:
+            return c.Div(components=[c.Text(text="---")])
+    except Exception as e:
+        logger.error(e)
+    try:
+        components = [c.Div.model_validate(_) for _ in components]
+        classes = classes or []
+        class_name = " ".join(classes)
+        class_name = f"container border-bottom border-secondary {class_name}"
+        # class_name = f"d-flex border-bottom border-secondary {class_name}"
+        return c.Div(components=components, class_name=class_name)
+    except Exception as e:
+        logger.error(e)
 
 
 def Row(components: List[AnyComponent], classes: list = None) -> c.Div:
@@ -32,13 +108,72 @@ def Row(components: List[AnyComponent], classes: list = None) -> c.Div:
 
 
 def Col(components: List[AnyComponent], classes: list = None) -> c.Div:
-    classes = classes or []
-    bs_classes = " ".join(classes)
-    bs_classes = f"col {bs_classes}"
-    return c.Div(components=components, class_name=bs_classes)
+    try:
+        classes = classes or []
+        bs_classes = " ".join(classes)
+        bs_classes = f"col {bs_classes}"
+        return c.Div(components=components, class_name=bs_classes)
+    except Exception as e:
+        logger.error(e)
 
 
-def decodethepage(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
+def ui_link(title, url, on_click=None) -> c.Link:
+    on_click = on_click or GoToEvent(url=url)
+    link = c.Link(components=[c.Text(text=title)], on_click=on_click)
+    return link
+
+
+def name_column(guru: Guru) -> c.Div:
+    return Col(
+        classes=NAME_COL,
+        components=[
+            ui_link(guru.name, guru.slug),
+        ],
+    )
+
+
+def title_column(title, url) -> Col:
+    return Col(
+        classes=TITLE_COL,
+        components=[
+            ui_link(title, url),
+        ],
+    )
+
+
+def play_column(url) -> Col:
+    res = Col(
+        classes=PLAY_COL,
+        components=[
+            c.Link(
+                components=[c.Text(text="Play")],
+                on_click=GoToEvent(url=url),
+            ),
+        ],
+    )
+    return res
+
+
+def empty_div(col, container):
+    if col:
+        return empty_col()
+    elif container:
+        return empty_container()
+
+
+def empty_col():
+    return Col(components=[c.Text(text="---")])
+
+
+def empty_container():
+    return Flex(components=[c.Text(text="---")])
+
+
+def back_link():
+    return c.Link(components=[c.Text(text="Back")], on_click=BackEvent())
+
+
+def default_page(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
     return [
         c.PageTitle(text=f"{title}" if title else "durfault title"),
         nav_bar(),
@@ -106,52 +241,73 @@ def tabs() -> list[AnyComponent]:
     ]
 
 
-def join_components_if_multiple(components: list[AnyComponent]) -> list[AnyComponent]:
-    if len(components) < 2:
-        return components
-    else:
-        res = []
-        for component in components[:-1]:
-            res.extend([component, joining_string()])
-        res.append(components[-1])
-        return res
+# def join_components_if_multiple(components: list[AnyComponent]) -> list[AnyComponent]:
+#     if len(components) < 2:
+#         return components
+#     else:
+#         res = []
+#         for component in components[:-1]:
+#             res.extend([component, joining_string()])
+#         res.append(components[-1])
+#         return res
+#
+#
+# def joining_string() -> AnyComponent:
+#     return c.Text(text=",")
 
 
-def joining_string() -> AnyComponent:
-    return c.Text(text=",")
+# def episodes_with_related(episodes: Sequence[Episode], col=False, container=False) -> Union[c.Div, list[c.Div]]:
+#     rows = [episode.ui_with_related() for episode in episodes]
+#     if col:
+#         rows = Col(components=rows)
+#     if container:
+#         rows = Flex(components=rows)
+#
+#     return rows
 
 
-def name_column(guru: Guru) -> Col:
-    return Col(
-        classes=NAME_COL,
-        components=[
-            c.Link(
-                components=[c.Text(text=guru.name)],
-                on_click=GoToEvent(url=guru.slug),
-            ),
-        ],
-    )
-    pass
+# def episodes_only(episodes: Sequence[Episode], col=False, container=False) -> Flex:
+#     rows = [episode.ui_self_only() for episode in episodes]
+#     if col:
+#         rows = Col(components=rows)
+#     if container:
+#         rows = Flex(components=rows)
+#     return rows
 
 
-def title_column(title, url) -> Col:
-    return Col(
-        classes=TITLE_COL,
-        components=[
-            c.Link(
-                components=[c.Text(text=title)],
-                on_click=GoToEvent(url=url),
-                # class_name="text-primary bg-light",
-            ),
-        ],
-    )
+# def gurus_with_related(gurus: Sequence[Guru], col=False, container=False) -> Union[c.Div, list[c.Div]]:
+#     rows = [guru.ui_with_rel() for guru in gurus]
+#     if col:
+#         rows = Col(components=rows)
+#     if container:
+#         rows = Flex(components=rows)
+#     return rows
 
 
-def gurus_column(gurus: list[Guru]) -> Col:
-    if not gurus:
-        return Col(components=[c.Text(text="---")])
-    guru_links = [
-        c.Link(class_name="well", components=[c.Text(text=g.name)], on_click=GoToEvent(url=f"/guru/{g.id}"))
-        for g in gurus
-    ]
-    return Col(classes=GURUS_COL, components=[Row(components=[_]) for _ in guru_links])
+# def gurus_only(gurus: Sequence[Guru], col=False, container=False) -> Flex:
+#     if not gurus:
+#         return empty_div(col, container)
+#     rows = [guru.ui_self_only() for guru in gurus]
+#     if col:
+#         rows = Col(components=[rows])
+#     if container:
+#         rows = Flex(components=rows)
+#     return rows
+
+
+# def threads_with_related(rts: Sequence[RedditThread], col=False, container=False) -> Union[c.Div, list[c.Div]]:
+#     rows = [rt.ui_with_rel() for rt in rts]
+#     if col:
+#         rows = Col(components=[rows])
+#     if container:
+#         rows = Flex(components=[rows])
+#     return rows
+
+
+# def threads_only(rts: Sequence[RedditThread], col=False, container=False) -> Flex:
+#     rows = [rt.ui_self_only() for rt in rts]
+#     if col:
+#         rows = Col(components=[rows])
+#     if container:
+#         rows = Flex(components=[rows])
+#     return rows
