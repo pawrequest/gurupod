@@ -1,6 +1,5 @@
 from fastui import AnyComponent, FastUI, components as c
-from fastui.components.display import DisplayLookup
-from fastui.events import BackEvent, GoToEvent
+from fastui.events import BackEvent
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 from loguru import logger
@@ -8,9 +7,8 @@ from pydantic import BaseModel, Field
 
 from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
-from gurupod.models.responses import GuruWith
-from gurupod.routers.forms import SelectGuru
-from gurupod.shared import decodethepage, tabs
+from gurupod.ui.guru_view import g_list_col, guru_page_flex
+from gurupod.ui.shared import decodethepage
 
 router = APIRouter()
 
@@ -32,7 +30,7 @@ def guru_list_view(
 ) -> list[AnyComponent]:
     logger.info("guru list view")
     gurus = session.query(Guru).all()
-    # gurus = [GuruWith.model_validate(_) for _ in gurus]
+    gurus = [_ for _ in gurus if _.episodes or _.reddit_threads]
 
     page_size = 50
     filter_form_initial = {}
@@ -41,27 +39,15 @@ def guru_list_view(
             gurus = [guru]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
+    if not gurus:
+        return decodethepage(
+            c.Text(text="No Gurus"),
+        )
     return decodethepage(
-        # *tabs(),
-        c.ModelForm(
-            model=EpisodeGuruFilter,
-            submit_url=".",
-            initial=filter_form_initial,
-            method="GOTO",
-            submit_on_change=True,
-            display_mode="inline",
-        ),
-        # search_select_single: str = Field(json_schema_extra={'search_url': '/api/forms/search'})
         # c.ModelForm(model=SelectGuru, submit_url='/api/forms/select'),
-        c.Table(
-            data=gurus[(page - 1) * page_size : page * page_size],
-            data_model=Guru,
-            columns=[
-                DisplayLookup(field="name", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
-                # DisplayLookup(field='date', table_width_percent=13),
-                # DisplayLookup(field='id', table_width_percent=33),
-            ],
-        ),
+        # gurus_list_flex(gurus),
+        # g_list_col(gurus),
+        guru_page_flex(gurus),
         c.Pagination(page=page, page_size=page_size, total=len(gurus)),
         title="Gurus",
     )

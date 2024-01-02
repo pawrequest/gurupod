@@ -7,7 +7,7 @@ from fastui import AnyComponent, FastUI
 from fastui import components as c
 from fastui.events import GoToEvent, PageEvent
 
-from gurupod.shared import decodethepage
+from gurupod.ui.shared import decodethepage
 
 router = APIRouter()
 

@@ -1,14 +1,23 @@
 # todo make this not be in docker so no rebuild to edit
 # from __future__ import annotations
+from __future__ import annotations
 
 import os
 import shutil
 import tomllib
 from pathlib import Path
+from typing import TypeVar, Union, TYPE_CHECKING
 
 import dotenv
 
 from gurupod.core.logger_config import get_logger
+
+if TYPE_CHECKING:
+    from gurupod.models.episode import EpisodeBase
+    from gurupod.models.reddit_thread import RedditThreadBase
+
+    HasTitleAndSlug = TypeVar("HasTitleAndSlug", bound=Union[RedditThreadBase, EpisodeBase])
+
 
 dotenv.load_dotenv()
 

@@ -9,6 +9,8 @@ from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
+from gurupod.ui.shared import Flex, Row, title_column, gurus_column
+from gurupod.ui.episode_view import episodes_column
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -58,11 +60,26 @@ class RedditThreadBase(SQLModel):
         )
         return cls.model_validate(tdict)
 
+    @property
+    def slug(self):
+        return f"/red/{self.id}"
+
 
 class RedditThread(RedditThreadBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="reddit_threads", link_model=RedditThreadGuruLink)
     episodes: List["Episode"] = Relationship(back_populates="reddit_threads", link_model=RedditThreadEpisodeLink)
+
+    def to_div(self) -> Flex:
+        return Flex(
+            components=[
+                gurus_column(self.gurus),
+                Row(
+                    components=[title_column(self.title, self.slug)],
+                ),
+                episodes_column(self.episodes),
+            ]
+        )
 
 
 class RedditThreadRead(RedditThreadBase):

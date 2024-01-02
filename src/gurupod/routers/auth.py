@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 import gurupod.models.user
 from gurupod.core.database import get_session
-from gurupod.shared import decodethepage
+from gurupod.ui.shared import decodethepage
 from gurupod.user_db import create_user
 
 router = APIRouter()

@@ -12,7 +12,10 @@ certifi==2023.11.17
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
+dnspython==2.4.2
+email-validator==2.1.0.post1
 fastapi==0.104.1
+fastui==0.4.0
 frozenlist==1.4.0
 greenlet==3.0.1
 h11==0.14.0

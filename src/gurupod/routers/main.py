@@ -3,7 +3,7 @@ from __future__ import annotations as _annotations
 from fastapi import APIRouter
 from fastui import AnyComponent, FastUI, components as c
 
-from gurupod.shared import decodethepage
+from gurupod.ui.shared import decodethepage
 
 router = APIRouter()
 

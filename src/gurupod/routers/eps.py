@@ -1,17 +1,16 @@
 # from __future__ import annotations
 from fastui import AnyComponent, FastUI, components as c
-from fastui.components.display import DisplayLookup
-from fastui.events import BackEvent, GoToEvent
+from fastui.events import BackEvent
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 from loguru import logger
 
 from gurupod.models.guru import Guru
-from gurupod.models.responses import EpisodeWith
-from gurupod.routers.gurus import EpisodeGuruFilter
-from gurupod.shared import decodethepage
+from gurupod.routers.guru import EpisodeGuruFilter
+from gurupod.ui.episode_view import play_column, episode_list_flex
+from gurupod.ui.shared import decodethepage, gurus_column, Flex, title_column, Row, Col
 from gurupod.core.database import get_session
-from gurupod.models.episode import Episode, EpisodeRead, EpisodeFE
+from gurupod.models.episode import Episode
 
 router = APIRouter()
 
@@ -42,13 +41,7 @@ def episode_list_view(
             episodes = [ep for ep in episodes if guru in ep.gurus]
             filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
 
-    episodes = [EpisodeFE.model_validate(_) for _ in episodes]
-    output_components = [
-        _.to_div()
-        # c.Markdown(text=_.to_markdown)
-        for _ in episodes
-    ]
-
+    # episodes = [Episode.model_validate(_) for _ in episodes]
     return decodethepage(
         # *tabs(),
         c.ModelForm(
@@ -59,20 +52,7 @@ def episode_list_view(
             submit_on_change=True,
             display_mode="inline",
         ),
-        c.Div(
-            components=output_components,
-        ),
-        # c.Table(
-        #     data=episodes[(page - 1) * page_size : page * page_size],
-        #     data_model=EpisodeFE,
-        #     columns=[
-        #         DisplayLookup(field="title", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
-        #         # DisplayLookup(field="short_link", on_click=GoToEvent(url="./{id}"), table_width_percent=25),
-        #         # DisplayLookup(field='date', table_width_percent=13),
-        #         DisplayLookup(field="url", table_width_percent=25),
-        #         DisplayLookup(field="tags", table_width_percent=25),
-        #     ],
-        # ),
-        # c.Pagination(page=page, page_size=page_size, total=len(episodes)),
+        episode_list_flex(episodes),
+        c.Pagination(page=page, page_size=page_size, total=len(episodes)),
         title="Episodes",
     )
