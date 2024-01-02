@@ -23,7 +23,7 @@ class UIElement(Protocol):
         ...
 
 
-def master_self_only(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
+def object_ui_self_only(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
     if not master:
         return empty_div(col, container)
     rows = [_.ui_self_only() for _ in master]
@@ -34,7 +34,7 @@ def master_self_only(master: Sequence[UIElement], col=False, container=False) ->
     return rows
 
 
-def master_with_related(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
+def object_ui_with_related(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
     try:
         rows = [_.ui_with_related() for _ in master]
         rows = [c.Div.model_validate(_) for _ in rows]
@@ -49,7 +49,7 @@ def master_with_related(master: Sequence[UIElement], col=False, container=False)
         logger.error(e)
 
 
-def default_page_new(components: list[AnyComponent], title: str | None = None) -> list[AnyComponent]:
+def default_page(components: list[AnyComponent], title: str | None = None) -> list[AnyComponent]:
     try:
         return [
             c.PageTitle(text=title if title else "durfault title"),
@@ -173,7 +173,7 @@ def back_link():
     return c.Link(components=[c.Text(text="Back")], on_click=BackEvent())
 
 
-def default_page(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
+def fast_ui_default(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
     return [
         c.PageTitle(text=f"{title}" if title else "durfault title"),
         nav_bar(),
@@ -239,75 +239,3 @@ def tabs() -> list[AnyComponent]:
             class_name="+ mb-4",
         ),
     ]
-
-
-# def join_components_if_multiple(components: list[AnyComponent]) -> list[AnyComponent]:
-#     if len(components) < 2:
-#         return components
-#     else:
-#         res = []
-#         for component in components[:-1]:
-#             res.extend([component, joining_string()])
-#         res.append(components[-1])
-#         return res
-#
-#
-# def joining_string() -> AnyComponent:
-#     return c.Text(text=",")
-
-
-# def episodes_with_related(episodes: Sequence[Episode], col=False, container=False) -> Union[c.Div, list[c.Div]]:
-#     rows = [episode.ui_with_related() for episode in episodes]
-#     if col:
-#         rows = Col(components=rows)
-#     if container:
-#         rows = Flex(components=rows)
-#
-#     return rows
-
-
-# def episodes_only(episodes: Sequence[Episode], col=False, container=False) -> Flex:
-#     rows = [episode.ui_self_only() for episode in episodes]
-#     if col:
-#         rows = Col(components=rows)
-#     if container:
-#         rows = Flex(components=rows)
-#     return rows
-
-
-# def gurus_with_related(gurus: Sequence[Guru], col=False, container=False) -> Union[c.Div, list[c.Div]]:
-#     rows = [guru.ui_with_rel() for guru in gurus]
-#     if col:
-#         rows = Col(components=rows)
-#     if container:
-#         rows = Flex(components=rows)
-#     return rows
-
-
-# def gurus_only(gurus: Sequence[Guru], col=False, container=False) -> Flex:
-#     if not gurus:
-#         return empty_div(col, container)
-#     rows = [guru.ui_self_only() for guru in gurus]
-#     if col:
-#         rows = Col(components=[rows])
-#     if container:
-#         rows = Flex(components=rows)
-#     return rows
-
-
-# def threads_with_related(rts: Sequence[RedditThread], col=False, container=False) -> Union[c.Div, list[c.Div]]:
-#     rows = [rt.ui_with_rel() for rt in rts]
-#     if col:
-#         rows = Col(components=[rows])
-#     if container:
-#         rows = Flex(components=[rows])
-#     return rows
-
-
-# def threads_only(rts: Sequence[RedditThread], col=False, container=False) -> Flex:
-#     rows = [rt.ui_self_only() for rt in rts]
-#     if col:
-#         rows = Col(components=[rows])
-#     if container:
-#         rows = Flex(components=[rows])
-#     return rows

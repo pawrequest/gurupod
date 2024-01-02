@@ -8,7 +8,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from fastui import components as c
 
 from ..ui.css import ROW
-from ..ui.shared import Col, Flex, Row, master_self_only, name_column, ui_link
+from ..ui.shared import Col, Flex, Row, object_ui_self_only, name_column, ui_link
 
 if TYPE_CHECKING:
     from .episode import Episode
@@ -37,11 +37,9 @@ class Guru(GuruBase, table=True):
         return c.Details(data=self)
 
     def ui_with_related(self):
-        ep = master_self_only(self.episodes, col=True)
-        # ep = episodes_only(self.episodes)
+        ep = object_ui_self_only(self.episodes, col=True)
         nm = name_column(self)
-        threads = master_self_only(self.reddit_threads, col=True)
-        # threads = threads_only(self.reddit_threads, col=True)
+        threads = object_ui_self_only(self.reddit_threads, col=True)
         row = Row(classes=ROW, components=[ep, nm, threads])
         return row
 
@@ -49,7 +47,6 @@ class Guru(GuruBase, table=True):
         guru_link = ui_link(self.name, self.slug)
         if not col:
             return guru_link
-        # needs list?
         return Col(components=[guru_link])
 
 

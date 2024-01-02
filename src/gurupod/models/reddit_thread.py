@@ -12,7 +12,7 @@ from fastui import components as c
 
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
 from gurupod.ui.css import ROW
-from gurupod.ui.shared import Col, Flex, Row, ui_link, master_self_only
+from gurupod.ui.shared import Col, Flex, Row, ui_link, object_ui_self_only
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -90,9 +90,9 @@ class RedditThread(RedditThreadBase, table=True):
 
     def ui_with_related(self) -> Row:
         red_col = self.ui_self_only(col=True)
-        guru_col = master_self_only(self.gurus, col=True)
+        guru_col = object_ui_self_only(self.gurus, col=True)
         # guru_col = gurus_only(self.gurus, col=True)
-        ep_col = master_self_only(self.episodes, col=True)
+        ep_col = object_ui_self_only(self.episodes, col=True)
         # ep_col = episodes_only(self.episodes)
         return Row(classes=ROW, components=[red_col, guru_col, ep_col])
 

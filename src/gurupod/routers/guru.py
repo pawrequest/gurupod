@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
-from gurupod.ui.shared import default_page_new, master_with_related, back_link, empty_page
+from gurupod.ui.shared import default_page, object_ui_with_related, back_link, empty_page
 
 router = APIRouter()
 
@@ -17,7 +17,7 @@ async def guru_view(guru_id: int, session: Session = Depends(get_session)) -> li
     guru = session.get(Guru, guru_id)
     guru = Guru.model_validate(guru)
 
-    return default_page_new(
+    return default_page(
         title=guru.name,
         components=[
             back_link(),
@@ -37,10 +37,10 @@ def guru_list_view(page: int = 1, session: Session = Depends(get_session)) -> li
         return empty_page()
 
     try:
-        mst = master_with_related(gurus, container=False, col=True)
+        mst = object_ui_with_related(gurus, container=False, col=True)
 
         page_size = 50
-        return default_page_new(
+        return default_page(
             title="Gurus",
             components=[
                 mst,
@@ -50,20 +50,6 @@ def guru_list_view(page: int = 1, session: Session = Depends(get_session)) -> li
     except Exception as e:
         logger.error(e)
         return empty_page()
-
-    # return default_page_new(
-    #     title="Gurus",
-    #     components=[
-    #         master_with_related(gurus, container=False, col=True),
-    #         c.Pagination(page=page, page_size=page_size, total=len(gurus)),
-    #     ],
-    # )
-    #
-    # return default_page(
-    #     gurus_with_related(gurus, container=True, col=True),
-    #     c.Pagination(page=page, page_size=page_size, total=len(gurus)),
-    #     title="Gurus",
-    # )
 
 
 class EpisodeGuruFilter(BaseModel):

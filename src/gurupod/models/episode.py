@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import List, Optional, TYPE_CHECKING, Union
 
 from dateutil import parser
-from fastui.events import GoToEvent
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship
@@ -14,7 +13,7 @@ from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 from gurupod.ui.css import ROW
-from gurupod.ui.shared import Col, Flex, Row, title_column, ui_link, play_column, master_self_only
+from gurupod.ui.shared import Col, Flex, Row, object_ui_self_only, play_column, title_column, ui_link
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -62,22 +61,6 @@ class EpisodeBase(SQLModel):
     def slug(self):
         return f"/eps/{self.id}"
 
-    @property
-    def to_markdown(self) -> str:
-        res = f"""* {self.slug_md} -- {self.gurus} -- {self.captivate_md}
-    """
-
-        return res
-
-    @property
-    def captivate_md(self):
-        return f"[Play on Captivate.fm]({self.url})"
-
-    @property
-    def slug_md(self):
-        pad = 150 - len(self.title)
-        return f"[{self.title:{pad}}]({self.slug})"
-
 
 class Episode(EpisodeBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -87,20 +70,13 @@ class Episode(EpisodeBase, table=True):
     )
 
     def ui_detail(self) -> Flex:
-        return c.Details(data=self)
-        # return Flex(
-        #     components=[
-        #         Row(
-        #             components=[
-        #                 c.Link(
-        #                     components=[c.Text(text="Play")],
-        #                     on_click=GoToEvent(url=self.url),
-        #                 ),
-        #             ]
-        #         ),
-        #         c.Paragraph(text=self.description),
-        #     ]
-        # )
+        # return c.Details(data=self)
+        return Flex(
+            components=[
+                c.Heading(text=self.title),
+                c.Paragraph(text="\n".join(self.notes or [])),
+            ]
+        )
 
     # ep page
 
@@ -110,7 +86,7 @@ class Episode(EpisodeBase, table=True):
 
     def ui_with_related(self) -> c.Div:
         # guru_col = gurus_only(self.gurus, col=True)
-        guru_col = master_self_only(self.gurus, col=True)
+        guru_col = object_ui_self_only(self.gurus, col=True)
         title_col = title_column(self.title, self.slug)
         play_col = play_column(self.url)
         row = Row(classes=ROW, components=[guru_col, title_col, play_col])
