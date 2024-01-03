@@ -7,7 +7,8 @@ from pydantic import BaseModel, Field
 
 from gurupod.core.database import get_session
 from gurupod.models.guru import Guru
-from gurupod.ui.shared import default_page, object_ui_with_related, back_link, empty_page
+from gurupod.ui.shared import default_page, object_ui_with_related, back_link, empty_page, log_object_state
+from gurupod.models.episode import Episode
 
 router = APIRouter()
 
@@ -15,7 +16,10 @@ router = APIRouter()
 @router.get("/{guru_id}", response_model=FastUI, response_model_exclude_none=True)
 async def guru_view(guru_id: int, session: Session = Depends(get_session)) -> list[AnyComponent]:
     guru = session.get(Guru, guru_id)
-    guru = Guru.model_validate(guru)
+    # guru = Guru.model_validate(guru)
+    # guru = Guru.model_validate(guru)
+    if not isinstance(guru, Guru):
+        return empty_page()
 
     return default_page(
         title=guru.name,
@@ -31,13 +35,12 @@ def guru_list_view(page: int = 1, session: Session = Depends(get_session)) -> li
     logger.info("guru list view")
     gurus = session.query(Guru).all()
     gurus = [_ for _ in gurus if _.episodes or _.reddit_threads]
-    gurus = [Guru.model_validate(_) for _ in gurus]
     gurus.sort(key=lambda x: len(x.episodes) + len(x.reddit_threads), reverse=True)
     if not gurus:
         return empty_page()
 
     try:
-        mst = object_ui_with_related(gurus, container=False, col=True)
+        mst = object_ui_with_related(gurus)
 
         page_size = 50
         return default_page(

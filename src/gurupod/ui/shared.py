@@ -5,6 +5,7 @@ from typing import List, Protocol, Sequence, TYPE_CHECKING, TypeVar, Union
 from fastui import AnyComponent, components as c
 from fastui.events import BackEvent, GoToEvent
 from loguru import logger
+from sqlalchemy import inspect
 
 from gurupod.ui.css import NAME_COL, PLAY_COL, TITLE_COL
 
@@ -12,39 +13,52 @@ if TYPE_CHECKING:
     from gurupod.models.guru import Guru
 
 
+def log_object_state(obj):
+    obj_name = obj.__class__.__name__
+    insp = inspect(obj)
+    logger.info(f"State of {obj_name}:")
+    logger.info(f"Transient: {insp.transient}")
+    logger.info(f"Pending: {insp.pending}")
+    logger.info(f"Persistent: {insp.persistent}")
+    logger.info(f"Detached: {insp.detached}")
+    logger.debug("finished")
+
+
+# Assuming `gurus` and `reddit_threads` are lists of Guru and RedditThread objects respectively
+
+
 class UIElement(Protocol):
     def ui_detail(self) -> Flex:
         ...
 
-    def ui_self_only(self, col=True) -> Union[c.Div, c.Link]:
+    def ui_self_only(self) -> Union[c.Div, c.Link]:
         ...
 
     def ui_with_related(self) -> c.Div:
         ...
 
 
-def object_ui_self_only(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
-    if not master:
-        return empty_div(col, container)
-    rows = [_.ui_self_only() for _ in master]
-    if col:
-        rows = Col(components=rows)
-    if container:
-        rows = Flex(components=rows)
-    return rows
+def object_ui_self_only(master: Sequence[UIElement]) -> c.Div:
+    try:
+        if not master:
+            return empty_div(col=True)
+        rows = [_.ui_self_only() for _ in master]
+        col = Col(components=rows)
+        return col
+    except Exception as e:
+        logger.error(e)
+    # if col:
+    #     rows = Col(components=rows)
+    # if container:
+    #     rows = Flex(components=rows)
+    # return rows
 
 
-def object_ui_with_related(master: Sequence[UIElement], col=False, container=False) -> c.Div | list[c.Div]:
+def object_ui_with_related(master: Sequence[UIElement]) -> c.Div:
     try:
         rows = [_.ui_with_related() for _ in master]
-        rows = [c.Div.model_validate(_) for _ in rows]
-        if col:
-            rows = Col(components=rows)
-            rows = c.Div.model_validate(rows)
-        if container:
-            rows = Flex(components=rows)
-            rows = c.Div.model_validate(rows)
-        return rows
+        col = Col(components=rows)
+        return col
     except Exception as e:
         logger.error(e)
 
@@ -52,11 +66,11 @@ def object_ui_with_related(master: Sequence[UIElement], col=False, container=Fal
 def default_page(components: list[AnyComponent], title: str | None = None) -> list[AnyComponent]:
     try:
         return [
-            c.PageTitle(text=title if title else "durfault title"),
+            c.PageTitle(text=title if title else "DecodeTheBot"),
             nav_bar(),
             c.Page(
                 components=[
-                    c.Heading(text=title) if title else (),
+                    *((c.Heading(text=title),) if title else ()),
                     *components,
                 ],
             ),
@@ -68,7 +82,7 @@ def default_page(components: list[AnyComponent], title: str | None = None) -> li
 
 def empty_page() -> list[AnyComponent]:
     return [
-        c.PageTitle(text="durfault title"),
+        c.PageTitle(text="empty page"),
         nav_bar(),
         c.Page(
             components=[
@@ -80,7 +94,7 @@ def empty_page() -> list[AnyComponent]:
     ]
 
 
-def Flex(components: List[AnyComponent], classes: list = None) -> c.Div:
+def Flex(components: list[AnyComponent], classes: list = None) -> c.Div:
     logger.info("Flex")
     try:
         if not components:
@@ -88,31 +102,35 @@ def Flex(components: List[AnyComponent], classes: list = None) -> c.Div:
     except Exception as e:
         logger.error(e)
     try:
-        components = [c.Div.model_validate(_) for _ in components]
         classes = classes or []
         class_name = " ".join(classes)
         class_name = f"container border-bottom border-secondary {class_name}"
         # class_name = f"d-flex border-bottom border-secondary {class_name}"
         return c.Div(components=components, class_name=class_name)
+    except Exception as ee:
+        logger.error(ee)
+
+
+def Row(components: List[AnyComponent], classes: list = None) -> c.Div:
+    try:
+        return c.Div(components=components, class_name="row")
+        # if not components:
+        #     return c.Div(components=[c.Text(text="---")])
+        # classes = classes or []
+        # bs_classes = " ".join(classes)
+        # bs_classes = f"row {bs_classes}"
+        # return c.Div(components=components, class_name=bs_classes)
     except Exception as e:
         logger.error(e)
 
 
-def Row(components: List[AnyComponent], classes: list = None) -> c.Div:
-    if not components:
-        return c.Div(components=[c.Text(text="---")])
-    classes = classes or []
-    bs_classes = " ".join(classes)
-    bs_classes = f"row {bs_classes}"
-    return c.Div(components=components, class_name=bs_classes)
-
-
 def Col(components: List[AnyComponent], classes: list = None) -> c.Div:
     try:
-        classes = classes or []
-        bs_classes = " ".join(classes)
-        bs_classes = f"col {bs_classes}"
-        return c.Div(components=components, class_name=bs_classes)
+        return c.Div(components=components, class_name="col")
+        # classes = classes or []
+        # bs_classes = " ".join(classes)
+        # bs_classes = f"col {bs_classes}"
+        # return c.Div(components=components, class_name=bs_classes)
     except Exception as e:
         logger.error(e)
 
@@ -154,11 +172,13 @@ def play_column(url) -> Col:
     return res
 
 
-def empty_div(col, container):
+def empty_div(col=False, container=False) -> c.Div:
     if col:
         return empty_col()
     elif container:
         return empty_container()
+    else:
+        return c.Div(components=[c.Text(text="---")])
 
 
 def empty_col():

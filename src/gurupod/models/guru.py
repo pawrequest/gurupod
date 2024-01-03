@@ -34,19 +34,19 @@ class Guru(GuruBase, table=True):
     reddit_threads: List["RedditThread"] = Relationship(back_populates="gurus", link_model=RedditThreadGuruLink)
 
     def ui_detail(self) -> Flex:
-        return c.Details(data=self)
+        # return c.Details(data=self)
+        return self.ui_with_related()
 
     def ui_with_related(self):
-        ep = object_ui_self_only(self.episodes, col=True)
+        ep = object_ui_self_only(self.episodes)
         nm = name_column(self)
-        threads = object_ui_self_only(self.reddit_threads, col=True)
+        threads = object_ui_self_only(self.reddit_threads)
         row = Row(classes=ROW, components=[ep, nm, threads])
         return row
 
-    def ui_self_only(self, col=True) -> Union[c.Div, c.Link]:
+    def ui_self_only(self) -> Union[c.Div, c.Link]:
         guru_link = ui_link(self.name, self.slug)
-        if not col:
-            return guru_link
+        # return guru_link
         return Col(components=[guru_link])
 
 

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Sequence
+from typing import Sequence, TYPE_CHECKING
 
 from gurupod.core.consts import HTML_TITLE
-from gurupod.models.episode import EpisodeBase
+
+if TYPE_CHECKING:
+    from gurupod.models.episode import EpisodeBase
 
 
 class EpisodeWriter(ABC):
@@ -20,7 +22,10 @@ class EpisodeWriter(ABC):
         text += self._post_tail_text()
         return text
 
-    def write_one(self, episode: EpisodeBase) -> str:
+    def write_one(self, episode: EpisodeBase = None) -> str:
+        if len(self.episodes) != 1:
+            raise ValueError(f"No episode provided and {len(self.episodes)} episodes in writer.")
+        episode = episode or self.episodes[0]
         text = self._title_text(episode)
         text += self._date_text(episode.date.date().strftime("%A %B %d %Y"))
         text += self._notes_text(episode.notes) or ""
@@ -58,7 +63,7 @@ class EpisodeWriter(ABC):
 
 
 class HtmlWriter(EpisodeWriter):
-    def _contents(self, eps: list[EpisodeBase] = None) -> str:
+    def _contents(self, eps: Sequence[EpisodeBase] = None) -> str:
         eps = eps or self.episodes
         toc = "<h2>Table of Contents</h2>\n"
         for i, ep in enumerate(eps):

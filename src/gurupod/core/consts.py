@@ -135,3 +135,6 @@ params_to_log = [(param, globals()[param]) for param in params_to_log_names]
 def param_log_strs() -> list[str]:
     res = [f"{param}: {value}" for param, value in params_to_log if value]
     return res
+
+
+PAGE_SIZE = 50

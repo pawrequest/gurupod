@@ -11,6 +11,7 @@ from fastui import components as c
 
 from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
+from gurupod.episode_monitor.writer import RPostWriter
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
 from gurupod.ui.css import ROW
 from gurupod.ui.shared import Col, Flex, Row, object_ui_self_only, play_column, title_column, ui_link
@@ -70,23 +71,22 @@ class Episode(EpisodeBase, table=True):
     )
 
     def ui_detail(self) -> Flex:
-        # return c.Details(data=self)
+        writer = RPostWriter(self)
+        markup = writer.write_one()
         return Flex(
             components=[
-                c.Heading(text=self.title),
-                c.Paragraph(text="\n".join(self.notes or [])),
+                *(_.ui_self_only() for _ in self.gurus),
+                c.Markdown(text=markup),
             ]
         )
 
-    # ep page
-
-    def ui_self_only(self, col=True) -> Union[c.Div, c.Link]:
+    def ui_self_only(self) -> Union[c.Div, c.Link]:
         clink = ui_link(self.title, self.slug)
-        return Col(components=[clink]) if col else clink
+        # return clink
+        return Col(components=[clink])
 
     def ui_with_related(self) -> c.Div:
-        # guru_col = gurus_only(self.gurus, col=True)
-        guru_col = object_ui_self_only(self.gurus, col=True)
+        guru_col = object_ui_self_only(self.gurus)
         title_col = title_column(self.title, self.slug)
         play_col = play_column(self.url)
         row = Row(classes=ROW, components=[guru_col, title_col, play_col])
