@@ -3,7 +3,7 @@ from __future__ import annotations as _annotations
 from fastapi import APIRouter
 from fastui import AnyComponent, FastUI, components as c
 
-from gurupod.ui.shared import fast_ui_default
+from gurupod.ui.shared import fast_ui_default_page
 
 router = APIRouter()
 
@@ -37,7 +37,7 @@ The following components are demonstrated:
 * `Pagination` — See the bottom of the [cities table](/table/cities)
 * `ModelForm` — See [forms](/forms/login)
 """
-    return fast_ui_default(c.Markdown(text=markdown))
+    return fast_ui_default_page(c.Markdown(text=markdown))
 
 
 @router.get("/{path:path}", status_code=404)

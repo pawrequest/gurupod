@@ -13,8 +13,7 @@ from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
 from gurupod.episode_monitor.writer import RPostWriter
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
-from gurupod.ui.shared import Flex
-from gurupod.ui.mixin import UIMixin
+from gurupod.ui.mixin import Flex, _object_ui
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -63,7 +62,7 @@ class EpisodeBase(SQLModel):
         return f"/eps/{self.id}"
 
 
-class Episode(UIMixin, EpisodeBase, table=True):
+class Episode(EpisodeBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
     reddit_threads: Optional[List["RedditThread"]] = Relationship(
@@ -75,7 +74,7 @@ class Episode(UIMixin, EpisodeBase, table=True):
         markup = writer.write_one()
         return Flex(
             components=[
-                *(_.ui_self_only() for _ in self.gurus),
+                *(_object_ui(_) for _ in self.gurus),
                 c.Markdown(text=markup),
             ]
         )

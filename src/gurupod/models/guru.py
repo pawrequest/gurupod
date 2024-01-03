@@ -4,10 +4,9 @@
 from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import ConfigDict
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship, SQLModel, select
 
-from ..ui.mixin import UIMixin
-from ..ui.shared import Flex
+from ..ui.mixin import Flex, _object_ui_with, objects_ui_with
 
 if TYPE_CHECKING:
     from .episode import Episode
@@ -23,7 +22,7 @@ class GuruBase(SQLModel):
         return f"/guru/{self.id}"
 
 
-class Guru(UIMixin, GuruBase, table=True):
+class Guru(GuruBase, table=True):
     model_config = ConfigDict(
         populate_by_name=True,
     )
@@ -33,9 +32,24 @@ class Guru(UIMixin, GuruBase, table=True):
     reddit_threads: List["RedditThread"] = Relationship(back_populates="gurus", link_model=RedditThreadGuruLink)
 
     def ui_detail(self) -> Flex:
-        # return c.Details(data=self)
-        return self.ui_with_related()
+        return objects_ui_with([self])
+
+    @property
+    def interest(self):
+        return len(self.episodes) + len(self.reddit_threads)
 
 
 class GuruRead(GuruBase):
     id: int
+
+
+def guru_filter_init(guru_name, session, clazz):
+    filter_form_initial = {}
+    if guru_name:
+        guru = session.exec(select(Guru).where(Guru.name == guru_name)).one()
+        statement = select(clazz).where(clazz.gurus.any(Guru.id == guru.id))
+        data = session.exec(select(clazz).where(clazz.gurus.any(Guru.id == guru.id))).all()
+        filter_form_initial["guru"] = {"value": guru_name, "label": guru.name}
+    else:
+        data = session.query(clazz).all()
+    return data, filter_form_initial

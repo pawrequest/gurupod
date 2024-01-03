@@ -1,18 +1,15 @@
 # no dont do this!! from __future__ import annotations
 from datetime import datetime
-from typing import List, Optional, TYPE_CHECKING, Union
+from typing import List, Optional, TYPE_CHECKING
 
 from asyncpraw.models import Submission
-from loguru import logger
 from pydantic import field_validator
 from sqlalchemy import Column
 from sqlmodel import Field, JSON, Relationship, SQLModel
 from fastui import components as c
 
 from gurupod.models.links import RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.ui.css import ROW
-from gurupod.ui.mixin import UIMixin
-from gurupod.ui.shared import Col, Flex, Row, object_ui_self_only, ui_link
+from gurupod.ui.mixin import Flex
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -67,53 +64,14 @@ class RedditThreadBase(SQLModel):
         return f"/red/{self.id}"
 
 
-class RedditThread(UIMixin, RedditThreadBase, table=True):
+class RedditThread(RedditThreadBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="reddit_threads", link_model=RedditThreadGuruLink)
     episodes: List["Episode"] = Relationship(back_populates="reddit_threads", link_model=RedditThreadEpisodeLink)
 
-    def ui_detail(self, container=False) -> Flex:
+    def ui_detail(self) -> Flex:
         return c.Details(data=self)
-        # return Flex(
-        #     components=[
-        #         Row(
-        #             components=[
-        #                 c.Link(
-        #                     components=[c.Text(text="reddit")],
-        #                     on_click=GoToEvent(url=self.shortlink),
-        #                 )
-        #             ]
-        #         ),
-        #         c.Paragraph(text=self.submission.get("selftext")),
-        #     ]
-        # )
 
 
 class RedditThreadRead(RedditThreadBase):
     id: int
-
-
-class RedditThreadFE(RedditThreadBase):
-    id: int
-    gurus: Optional[list[str]]
-    episodes: Optional[list[str]]
-
-    @field_validator("gurus", mode="before")
-    def gurus_to_list(cls, v) -> list[str]:
-        if isinstance(v, list) and v:
-            try:
-                v = [g.name for g in v]
-                logger.debug("Thread Converting Guru to str")
-            except Exception as e:
-                logger.error(f"Could not convert Gurus to list: {v} - {e}")
-        return v
-
-    @field_validator("episodes", mode="before")
-    def reddit_threads_to_list(cls, v) -> list[str]:
-        if isinstance(v, list) and v:
-            logger.debug("Thnread Converting episode to str")
-            try:
-                v = [t.url for t in v]
-            except Exception as e:
-                logger.error(f"Could not convert Episodes to list: {v} - {e}")
-        return v

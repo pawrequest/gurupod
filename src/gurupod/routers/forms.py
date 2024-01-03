@@ -22,11 +22,10 @@ router = APIRouter()
 async def search_view(q: str, tgt_model, session: Session = Depends(get_session)) -> SelectSearchResponse:
     gurus = session.query(Guru).all()
     gurus = [guru for guru in gurus if getattr(guru, tgt_model)]
-    # gurus = [guru for guru in gurus if getattr(guru, tgt_model)]
-    gurus = sorted(gurus, key=lambda x: len(getattr(x, tgt_model)), reverse=True)
+    gurus.sort(key=lambda x: x.interest, reverse=True)
 
     if q:
-        gurus = [guru for guru in gurus if q in guru.name]
+        gurus = [guru for guru in gurus if q.lower() in guru.name.lower()]
     guru_d = defaultdict(list)
     for guru in gurus:
         guru_d["gurus"].append(

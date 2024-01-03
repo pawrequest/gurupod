@@ -137,4 +137,4 @@ def param_log_strs() -> list[str]:
     return res
 
 
-PAGE_SIZE = 50
+PAGE_SIZE = 20

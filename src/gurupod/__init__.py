@@ -32,7 +32,7 @@ from gurupod.routers.auth import router as auth_router
 from gurupod.routers.components_list import router as components_router
 from gurupod.routers.forms import router as forms_router
 from gurupod.routers.main import router as main_router
-from gurupod.routers.guru import router as guru_router
+from gurupod.routers.guroute import router as guru_router
 from gurupod.routers.eps import router as eps_router
 from gurupod.routers.red import router as red_router
 

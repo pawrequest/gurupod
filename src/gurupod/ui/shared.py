@@ -1,17 +1,16 @@
 from __future__ import annotations, annotations as _annotations
 
-from typing import List, Protocol, Sequence, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from fastui import AnyComponent, components as c
 from fastui.events import BackEvent, GoToEvent
 from loguru import logger
 from sqlalchemy import inspect
 
-from gurupod.ui.css import NAME_COL, PLAY_COL, TITLE_COL
+from gurupod.ui.css import PAGE
 
 if TYPE_CHECKING:
-    from gurupod.ui.mixin import UIElement
-    from gurupod.models.guru import Guru
+    pass
 
 
 def log_object_state(obj):
@@ -28,51 +27,6 @@ def log_object_state(obj):
 # Assuming `gurus` and `reddit_threads` are lists of Guru and RedditThread objects respectively
 
 
-class UI_EL(Protocol):
-    gurus: List[Guru]
-    slug: str
-
-
-class UI_EL_N(UI_EL):
-    name: str
-
-
-class UI_EL_T(UI_EL):
-    title: str
-
-
-UI_TYPE = Union[UI_EL_N, UI_EL_T]
-
-
-def label(obj: UI_TYPE) -> str:
-    return getattr(obj, "name", None) or getattr(obj, "title", None)
-
-
-def object_ui_self_only(master: Sequence[UIElement]) -> c.Div:
-    try:
-        if not master:
-            return empty_div(col=True)
-        rows = [_.ui_self_only() for _ in master]
-        col = Col(components=rows)
-        return col
-    except Exception as e:
-        logger.error(e)
-    # if col:
-    #     rows = Col(components=rows)
-    # if container:
-    #     rows = Flex(components=rows)
-    # return rows
-
-
-def object_ui_with_related(master: Sequence[UIElement]) -> c.Div:
-    try:
-        rows = [_.ui_with_related() for _ in master]
-        col = Col(components=rows)
-        return col
-    except Exception as e:
-        logger.error(e)
-
-
 def default_page(components: list[AnyComponent], title: str | None = None) -> list[AnyComponent]:
     try:
         return [
@@ -83,6 +37,7 @@ def default_page(components: list[AnyComponent], title: str | None = None) -> li
                     *((c.Heading(text=title),) if title else ()),
                     *components,
                 ],
+                # class_name=PAGE,
             ),
             footer(),
         ]
@@ -104,108 +59,13 @@ def empty_page() -> list[AnyComponent]:
     ]
 
 
-def Flex(components: list[AnyComponent], classes: list = None) -> c.Div:
-    logger.info("Flex")
-    try:
-        if not components:
-            return c.Div(components=[c.Text(text="---")])
-    except Exception as e:
-        logger.error(e)
-    try:
-        classes = classes or []
-        class_name = " ".join(classes)
-        class_name = f"container border-bottom border-secondary {class_name}"
-        # class_name = f"d-flex border-bottom border-secondary {class_name}"
-        return c.Div(components=components, class_name=class_name)
-    except Exception as ee:
-        logger.error(ee)
-
-
-def Row(components: List[AnyComponent], classes: list = None) -> c.Div:
-    try:
-        return c.Div(components=components, class_name="row")
-        # if not components:
-        #     return c.Div(components=[c.Text(text="---")])
-        # classes = classes or []
-        # bs_classes = " ".join(classes)
-        # bs_classes = f"row {bs_classes}"
-        # return c.Div(components=components, class_name=bs_classes)
-    except Exception as e:
-        logger.error(e)
-
-
-def Col(components: List[AnyComponent], classes: list = None) -> c.Div:
-    try:
-        return c.Div(components=components, class_name="col")
-        # classes = classes or []
-        # bs_classes = " ".join(classes)
-        # bs_classes = f"col {bs_classes}"
-        # return c.Div(components=components, class_name=bs_classes)
-    except Exception as e:
-        logger.error(e)
-
-
-def ui_link(title, url, on_click=None) -> c.Link:
-    on_click = on_click or GoToEvent(url=url)
-    link = c.Link(components=[c.Text(text=title)], on_click=on_click)
-    return link
-
-
-def name_column(guru: Guru) -> c.Div:
-    return Col(
-        classes=NAME_COL,
-        components=[
-            ui_link(guru.name, guru.slug),
-        ],
-    )
-
-
-def title_column(title, url) -> Col:
-    return Col(
-        classes=TITLE_COL,
-        components=[
-            ui_link(title, url),
-        ],
-    )
-
-
-def play_column(url) -> Col:
-    res = Col(
-        classes=PLAY_COL,
-        components=[
-            c.Link(
-                components=[c.Text(text="Play")],
-                on_click=GoToEvent(url=url),
-            ),
-        ],
-    )
-    return res
-
-
-def empty_div(col=False, container=False) -> c.Div:
-    if col:
-        return empty_col()
-    elif container:
-        return empty_container()
-    else:
-        return c.Div(components=[c.Text(text="---")])
-
-
-def empty_col():
-    return Col(components=[c.Text(text="---")])
-
-
-def empty_container():
-    return Flex(components=[c.Text(text="---")])
-
-
 def back_link():
     return c.Link(components=[c.Text(text="Back")], on_click=BackEvent())
 
 
-def fast_ui_default(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
+def fast_ui_default_page(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
     return [
-        c.PageTitle(text=f"{title}" if title else "durfault title"),
+        c.PageTitle(text=f"{title}" if title else "dwho called"),
         nav_bar(),
         c.Page(
             components=[
