@@ -1,6 +1,6 @@
 from __future__ import annotations, annotations as _annotations
 
-from typing import List, Protocol, Sequence, TYPE_CHECKING, TypeVar, Union
+from typing import List, Protocol, Sequence, TYPE_CHECKING, Union
 
 from fastui import AnyComponent, components as c
 from fastui.events import BackEvent, GoToEvent
@@ -10,6 +10,7 @@ from sqlalchemy import inspect
 from gurupod.ui.css import NAME_COL, PLAY_COL, TITLE_COL
 
 if TYPE_CHECKING:
+    from gurupod.ui.mixin import UIElement
     from gurupod.models.guru import Guru
 
 
@@ -27,15 +28,24 @@ def log_object_state(obj):
 # Assuming `gurus` and `reddit_threads` are lists of Guru and RedditThread objects respectively
 
 
-class UIElement(Protocol):
-    def ui_detail(self) -> Flex:
-        ...
+class UI_EL(Protocol):
+    gurus: List[Guru]
+    slug: str
 
-    def ui_self_only(self) -> Union[c.Div, c.Link]:
-        ...
 
-    def ui_with_related(self) -> c.Div:
-        ...
+class UI_EL_N(UI_EL):
+    name: str
+
+
+class UI_EL_T(UI_EL):
+    title: str
+
+
+UI_TYPE = Union[UI_EL_N, UI_EL_T]
+
+
+def label(obj: UI_TYPE) -> str:
+    return getattr(obj, "name", None) or getattr(obj, "title", None)
 
 
 def object_ui_self_only(master: Sequence[UIElement]) -> c.Div:

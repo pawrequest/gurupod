@@ -18,7 +18,6 @@ router = APIRouter()
 @router.get("/{ep_id}", response_model=FastUI, response_model_exclude_none=True)
 async def episode_view(ep_id: int, session: Session = Depends(get_session)) -> list[AnyComponent]:
     episode = session.get(Episode, ep_id)
-    episode = Episode.model_validate(episode)
 
     return default_page(
         components=[

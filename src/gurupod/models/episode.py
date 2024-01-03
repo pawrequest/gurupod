@@ -1,6 +1,6 @@
 # from __future__ import annotations
 from datetime import datetime
-from typing import List, Optional, TYPE_CHECKING, Union
+from typing import List, Optional, TYPE_CHECKING
 
 from dateutil import parser
 from pydantic import field_validator
@@ -13,8 +13,8 @@ from gurupod.core.database import SQLModel
 from gurupod.core.consts import DEBUG
 from gurupod.episode_monitor.writer import RPostWriter
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink
-from gurupod.ui.css import ROW
-from gurupod.ui.shared import Col, Flex, Row, object_ui_self_only, play_column, title_column, ui_link
+from gurupod.ui.shared import Flex
+from gurupod.ui.mixin import UIMixin
 
 if TYPE_CHECKING:
     from gurupod.models.guru import Guru
@@ -63,7 +63,7 @@ class EpisodeBase(SQLModel):
         return f"/eps/{self.id}"
 
 
-class Episode(EpisodeBase, table=True):
+class Episode(UIMixin, EpisodeBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     gurus: Optional[List["Guru"]] = Relationship(back_populates="episodes", link_model=GuruEpisodeLink)
     reddit_threads: Optional[List["RedditThread"]] = Relationship(
@@ -79,18 +79,6 @@ class Episode(EpisodeBase, table=True):
                 c.Markdown(text=markup),
             ]
         )
-
-    def ui_self_only(self) -> Union[c.Div, c.Link]:
-        clink = ui_link(self.title, self.slug)
-        # return clink
-        return Col(components=[clink])
-
-    def ui_with_related(self) -> c.Div:
-        guru_col = object_ui_self_only(self.gurus)
-        title_col = title_column(self.title, self.slug)
-        play_col = play_column(self.url)
-        row = Row(classes=ROW, components=[guru_col, title_col, play_col])
-        return row
 
 
 class EpisodeRead(EpisodeBase):

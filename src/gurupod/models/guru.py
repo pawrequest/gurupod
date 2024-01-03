@@ -1,14 +1,13 @@
 # no dont do this!! from __future__ import annotations
 """sqlalchemy.exc.InvalidRequestError: One or more mappers failed to initialize - can't proceed with initialization of other mappers. Triggering mapper: 'Mapper[Guru(guru)]'. Original exception was: When initializing mapper Mapper[Guru(guru)], expression "relationship("List['Episode']")" seems to be using a generic class as the argument to relationship(); please state the generic argument using an annotation, e.g. "episodes: Mapped[List['Episode']] = relationship()"
 """
-from typing import List, Optional, TYPE_CHECKING, Union
+from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import ConfigDict
 from sqlmodel import Field, Relationship, SQLModel
-from fastui import components as c
 
-from ..ui.css import ROW
-from ..ui.shared import Col, Flex, Row, object_ui_self_only, name_column, ui_link
+from ..ui.mixin import UIMixin
+from ..ui.shared import Flex
 
 if TYPE_CHECKING:
     from .episode import Episode
@@ -24,7 +23,7 @@ class GuruBase(SQLModel):
         return f"/guru/{self.id}"
 
 
-class Guru(GuruBase, table=True):
+class Guru(UIMixin, GuruBase, table=True):
     model_config = ConfigDict(
         populate_by_name=True,
     )
@@ -36,18 +35,6 @@ class Guru(GuruBase, table=True):
     def ui_detail(self) -> Flex:
         # return c.Details(data=self)
         return self.ui_with_related()
-
-    def ui_with_related(self):
-        ep = object_ui_self_only(self.episodes)
-        nm = name_column(self)
-        threads = object_ui_self_only(self.reddit_threads)
-        row = Row(classes=ROW, components=[ep, nm, threads])
-        return row
-
-    def ui_self_only(self) -> Union[c.Div, c.Link]:
-        guru_link = ui_link(self.name, self.slug)
-        # return guru_link
-        return Col(components=[guru_link])
 
 
 class GuruRead(GuruBase):
