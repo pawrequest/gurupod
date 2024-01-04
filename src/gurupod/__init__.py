@@ -19,8 +19,8 @@ from gurupod.core.consts import (
     RUN_BACKUP_BOT,
     RUN_EP_BOT,
     RUN_SUB_BOT,
-    param_log_strs,
     logger,
+    param_log_strs,
 )
 from gurupod.core.logger_config import get_logger
 from gurupod.episode_monitor.episode_bot import EpisodeBot
@@ -103,15 +103,42 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
     try:
         if RUN_BACKUP_BOT:
             back_bot = BackupBot(session)
-            tasks.append(asyncio.create_task(back_bot.run(backup_path=BACKUP_JSON)))
+            tasks.append(asyncio.create_task(back_bot.run()))
     except Exception as e:
         logger.error(f"Error initiating backup_bot: {e}")
 
     try:
         if RUN_SUB_BOT:
-            sub_bot = await SubredditMonitor.from_config(session, reddit)
+            sub_bot = await SubredditMonitor.run(session, reddit)
             tasks.append(asyncio.create_task(sub_bot.monitor()))
     except Exception as e:
         logger.error(f"Error initiating SubredditMonitor: {e}")
 
     return tasks
+
+
+## vaguely neater but dont get separate error handling for launching each bot....
+# async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit):
+#     bots = []
+#     try:
+#         if RUN_EP_BOT:
+#             bots.append(await EpisodeBot.from_config(session, aio_session, reddit))
+#     except Exception as e:
+#         logger.error(f"Error initiating EpisodeBot: {e}")
+#
+#     try:
+#         if RUN_BACKUP_BOT:
+#             bots.append(BackupBot(session, BACKUP_JSON))
+#     except Exception as e:
+#         logger.error(f"Error initiating backup_bot: {e}")
+#
+#     try:
+#         if RUN_SUB_BOT:
+#             bots.append(await SubredditMonitor.run(session, reddit))
+#     except Exception as e:
+#         logger.error(f"Error initiating SubredditMonitor: {e}")
+#
+#     try:
+#         return [asyncio.create_task(bot.run()) for bot in bots]
+#     except Exception as e:
+#         logger.error(f"Error running bot tasks {e}")

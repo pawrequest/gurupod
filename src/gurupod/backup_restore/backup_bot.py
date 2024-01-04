@@ -20,15 +20,16 @@ from gurupod.models.reddit_thread import RedditThread
 class BackupBot:
     """Backup the database to json on a schedule"""
 
-    def __init__(self, session: Session):
+    def __init__(self, session: Session, backup_path: Path = BACKUP_JSON):
         self.session = session
+        self.backup_path = backup_path
 
-    async def run(self, interval: int = BACKUP_SLEEP, backup_path: Path = BACKUP_JSON):
+    async def run(self, interval: int = BACKUP_SLEEP):
         """Continuously backup the database to json every interval seconds"""
         logger.info(f"Initialised, backing up every {interval / 60} minutes", bot_name="Backup")
         while True:
             logger.debug("Waking", bot_name="Backup")
-            await db_to_json(self.session, backup_path)
+            await db_to_json(self.session, self.backup_path)
             prune(BACKUP_JSON)
             logger.debug(f"Sleeping for {interval} seconds", bot_name="Backup")
             await asyncio.sleep(interval)

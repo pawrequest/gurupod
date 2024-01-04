@@ -22,7 +22,7 @@ class SubredditMonitor:
         self.session = session
 
     @classmethod
-    async def from_config(cls, session: Session, reddit: Reddit):
+    async def run(cls, session: Session, reddit: Reddit):
         subreddit = await reddit.subreddit(SUB_TO_MONITOR)
         return cls(session, subreddit)
 
