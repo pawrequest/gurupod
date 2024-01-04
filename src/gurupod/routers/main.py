@@ -1,15 +1,17 @@
 from __future__ import annotations as _annotations
 
-from fastapi import APIRouter
-from fastui import AnyComponent, FastUI, components as c
+from fastapi import APIRouter, Depends
+from fastui import FastUI
+from sqlmodel import Session
 
-from gurupod.ui.shared import fast_ui_default_page
+from gurupod.core.database import get_session
+from gurupod.routers.eps import episode_list_view
 
 router = APIRouter()
 
 
 @router.get("/", response_model=FastUI, response_model_exclude_none=True)
-def api_index() -> list[AnyComponent]:
+def api_index(page: int = 1, guru_name: str | None = None, session: Session = Depends(get_session)):
     # language=markdown
     markdown = """\
 This site provides a demo of [FastUI](https://github.com/pydantic/FastUI), the code for the demo
@@ -37,7 +39,9 @@ The following components are demonstrated:
 * `Pagination` — See the bottom of the [cities table](/table/cities)
 * `ModelForm` — See [forms](/forms/login)
 """
-    return fast_ui_default_page(c.Markdown(text=markdown))
+    # return fast_ui_default_page(c.Markdown(text=markdown))
+    # return GoToEvent(url="/eps/")
+    return episode_list_view(page, guru_name, session)
 
 
 @router.get("/{path:path}", status_code=404)
