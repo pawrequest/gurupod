@@ -65,7 +65,7 @@ def back_link():
 
 def fast_ui_default_page(*components: AnyComponent, title: str | None = None) -> list[AnyComponent]:
     return [
-        c.PageTitle(text=f"{title}" if title else "dwho called"),
+        c.PageTitle(text=f"{title}" if title else "DecodeTheBot"),
         nav_bar(),
         c.Page(
             components=[
