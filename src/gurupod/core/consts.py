@@ -27,7 +27,6 @@ DATA_DIR = PROJECT_ROOT / os.environ.get("DATA_DIR", "data")
 LOG_DIR = DATA_DIR / os.environ.get("LOG_DIR", "log")
 LOG_FILENAME = LOG_DIR / os.environ.get("LOG_FILE", "gurulog.log")
 LOG_PATH = LOG_DIR / LOG_FILENAME
-BACKUP_RESTORE_DIR = HERE.parent / "backup_restore"
 CONFIG_FILENAME = os.environ.get("CONFIG_FILE", "guruconfig.toml")
 CONFIG_PATH = DATA_DIR / CONFIG_FILENAME
 LOG_PROFILE = os.environ.get("LOG_PROFILE")
@@ -54,7 +53,7 @@ def get_config(config_toml, default_config_toml, data_dir):
     return guru_conf
 
 
-default_config = BACKUP_RESTORE_DIR / "config_default.toml"
+default_config = HERE / "config_default.toml"
 
 guru_conf = get_config(CONFIG_PATH, default_config, DATA_DIR)
 
@@ -97,8 +96,9 @@ REDIRECT: str = guru_conf.get("redirect")
 GURU_DB = DATA_DIR / guru_conf.get("db_name")
 BACKUP_DIR = DATA_DIR / guru_conf.get("backup_dir")
 BACKUP_JSON = BACKUP_DIR / guru_conf.get("backup_json")
+BACKUP_JSON.touch(exist_ok=True)
+
 # BACKUP_JSON = PROJECT_ROOT / guru_conf.get("back_js")
-PRUNE_SCRIPT = BACKUP_RESTORE_DIR / guru_conf.get("prune_script")
 
 # env vars
 if USE_PERSONAL_ACCOUNT:
@@ -112,7 +112,7 @@ else:
 
 REDDIT_SEND_KEY = os.environ["REDDIT_SEND_KEY"]
 
-GURU_NAME_LIST_FILE = BACKUP_RESTORE_DIR / guru_conf.get("gurus_file")
+GURU_NAME_LIST_FILE = HERE / guru_conf.get("gurus_file")
 
 params_to_log_names = [
     "USE_PERSONAL_ACCOUNT",

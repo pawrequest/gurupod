@@ -9,7 +9,7 @@ from pathlib import Path
 from sqlmodel import Session, select
 from loguru import logger
 
-from gurupod.backup_restore.pruner import prune
+from .pruner import prune
 from gurupod.core.consts import BACKUP_JSON, BACKUP_SLEEP, DEBUG, GURU_NAME_LIST_FILE
 from gurupod.models.episode import Episode
 from gurupod.models.guru import Guru

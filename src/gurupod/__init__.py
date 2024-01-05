@@ -6,14 +6,18 @@ from contextlib import asynccontextmanager
 
 from aiohttp import ClientSession
 from asyncpraw import Reddit
+from backupbot.pruner import Pruner
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastui import prebuilt_html
 from fastui.dev import dev_fastapi_app
 from sqlmodel import Session
 
+from backupbot import BackupBot
+
 from gurupod.core.consts import (
     BACKUP_JSON,
+    BACKUP_SLEEP,
     INITIALIZE,
     LOG_PATH,
     RUN_BACKUP_BOT,
@@ -24,10 +28,13 @@ from gurupod.core.consts import (
 )
 from gurupod.core.logger_config import get_logger
 from gurupod.episode_monitor.episode_bot import EpisodeBot
+from gurupod.models.episode import Episode
+from gurupod.models.guru import Guru
+from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
+from gurupod.models.reddit_thread import RedditThread
 from gurupod.reddit_monitor.subreddit_bot import SubredditMonitor
 from gurupod.core.database import create_db, engine_
 from gurupod.reddit_monitor.managers import reddit_cm
-from gurupod.backup_restore.backup_bot import BackupBot, db_from_json, db_to_json, gurus_from_file
 from gurupod.routers.auth import router as auth_router
 from gurupod.routers.components_list import router as components_router
 from gurupod.routers.forms import router as forms_router
@@ -38,6 +45,15 @@ from gurupod.routers.red import router as red_router
 
 frontend_reload = "--reload" in sys.argv
 
+JSON_NAMES_TO_MODEL_MAP = {
+    "episode": Episode,
+    "guru": Guru,
+    "reddit_thread": RedditThread,
+    "guru_ep_link": GuruEpisodeLink,
+    "reddit_thread_episode_link": RedditThreadEpisodeLink,
+    "reddit_thread_guru_link": RedditThreadGuruLink,
+}
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -45,9 +61,9 @@ async def lifespan(app: FastAPI):
     create_db()
     logger.info("tables created", bot_name="BOOT")
     with Session(engine_()) as session:
-        if INITIALIZE:
-            gurus_from_file(session)
-            db_from_json(session, BACKUP_JSON)
+        # if INITIALIZE:
+        #     gurus_from_file(session)
+        #     db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
                 tasks = await bot_tasks(session, aio_session, reddit)
@@ -59,7 +75,7 @@ async def lifespan(app: FastAPI):
 
                 await asyncio.gather(*tasks, return_exceptions=True)
                 if RUN_BACKUP_BOT:
-                    await db_to_json(session, BACKUP_JSON)
+                    await BackupBot(session, JSON_NAMES_TO_MODEL_MAP, BACKUP_JSON).backup()
 
 
 if frontend_reload:
@@ -101,9 +117,17 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
         logger.error(f"Error initiating EpisodeBot: {e}")
 
     try:
-        if RUN_BACKUP_BOT:
-            back_bot = BackupBot(session)
-            tasks.append(asyncio.create_task(back_bot.run()))
+        if RUN_BACKUP_BOT or INITIALIZE:
+            back_bot = BackupBot(
+                session=session,
+                json_name_to_model_map=JSON_NAMES_TO_MODEL_MAP,
+                backup_target=BACKUP_JSON,
+            )
+            pruner = Pruner(backup_target=BACKUP_JSON)
+            if INITIALIZE:
+                back_bot.restore()
+            if RUN_BACKUP_BOT:
+                tasks.append(asyncio.create_task(backup_tasks(back_bot, pruner)))
     except Exception as e:
         logger.error(f"Error initiating backup_bot: {e}")
 
@@ -115,6 +139,11 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
         logger.error(f"Error initiating SubredditMonitor: {e}")
 
     return tasks
+
+
+async def backup_tasks(backupbot: BackupBot, pruner: Pruner):
+    await backupbot.backup()
+    await pruner.copy_and_prune()
 
 
 ## vaguely neater but dont get separate error handling for launching each bot....

@@ -16,6 +16,7 @@ anyio==3.7.1
 asyncpraw==7.7.1
 asyncprawcore==2.4.0
 attrs==23.1.0
+backupbot @ file:///C:/Users/RYZEN/prdev/gurupod/../backupbot
 beautifulsoup4==4.12.2
 certifi==2023.11.17
 charset-normalizer==3.3.2
