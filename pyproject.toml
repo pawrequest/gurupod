@@ -17,7 +17,9 @@ dependencies = [
     "asyncpraw",
     "loguru",
     "fastui>=0.4.0",
-    "backupbot @ file:///C:/Users/RYZEN/prdev/gurupod/../backupbot",
+    "backupbot @ file:///C:/Users/RYZEN/prdev/backupbot",
+    "episode_scraper @ file:///C:/Users/RYZEN/prdev/episode_scraper",
+    "redditbot @ file:///C:/Users/RYZEN/prdev/redditbot",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

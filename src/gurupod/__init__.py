@@ -7,19 +7,19 @@ from contextlib import asynccontextmanager
 from aiohttp import ClientSession
 from asyncpraw import Reddit
 from backupbot.pruner import Pruner
+from episode_scraper.episode_bot import EpisodeBot
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastui import prebuilt_html
 from fastui.dev import dev_fastapi_app
 from sqlmodel import Session
-
 from backupbot import BackupBot
-
 from gurupod.core.consts import (
     BACKUP_JSON,
     BACKUP_SLEEP,
     INITIALIZE,
     LOG_PATH,
+    MAIN_URL,
     RUN_BACKUP_BOT,
     RUN_EP_BOT,
     RUN_SUB_BOT,
@@ -27,11 +27,13 @@ from gurupod.core.consts import (
     param_log_strs,
 )
 from gurupod.core.logger_config import get_logger
-from gurupod.episode_monitor.episode_bot import EpisodeBot
-from gurupod.models.episode import Episode
+
+from episode_scraper import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
-from gurupod.models.reddit_thread import RedditThread
+
+# from gurupod.models.reddit_thread import RedditThread
+from redditbot import RedditThread
 from gurupod.reddit_monitor.subreddit_bot import SubredditMonitor
 from gurupod.core.database import create_db, engine_
 from gurupod.reddit_monitor.managers import reddit_cm
@@ -111,7 +113,8 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
     tasks = []
     try:
         if RUN_EP_BOT:
-            ep_bot = await EpisodeBot.from_config(session, aio_session, reddit)
+            ep_bot = await EpisodeBot.from_url(session, aio_session, MAIN_URL)
+            # ep_bot = await EpisodeBot.from_config(session, aio_session, reddit)
             tasks.append(asyncio.create_task(ep_bot.run()))
     except Exception as e:
         logger.error(f"Error initiating EpisodeBot: {e}")
