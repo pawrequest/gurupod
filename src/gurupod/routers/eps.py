@@ -3,14 +3,13 @@ from fastui import AnyComponent, FastUI, components as c
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 from loguru import logger
-
+from episode_scraper import Episode
 from gurupod.core.consts import PAGE_SIZE
 from gurupod.models.guru import Guru
 from gurupod.routers.guroute import guru_filter
 from gurupod.ui.shared import back_link, default_page
 from gurupod.ui.mixin import objects_ui_with
 from gurupod.core.database import get_session
-from gurupod.models.episode import Episode
 
 router = APIRouter()
 

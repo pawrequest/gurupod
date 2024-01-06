@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from gurupod.core.consts import PAGE_SIZE
-from gurupod.models.reddit_thread import RedditThread
+from redditbot import RedditThread
 from gurupod.routers.eps import guru_filter_init
 from gurupod.routers.guroute import guru_filter
 from gurupod.ui.shared import back_link, default_page

@@ -32,9 +32,10 @@ from episode_scraper import Episode
 from gurupod.models.guru import Guru
 from gurupod.models.links import GuruEpisodeLink, RedditThreadEpisodeLink, RedditThreadGuruLink
 
-# from gurupod.models.reddit_thread import RedditThread
 from redditbot import RedditThread
-from gurupod.reddit_monitor.subreddit_bot import SubredditMonitor
+
+# from gurupod.reddit_monitor.subreddit_bot import SubredditMonitor
+from redditbot import SubredditMonitor
 from gurupod.core.database import create_db, engine_
 from gurupod.reddit_monitor.managers import reddit_cm
 from gurupod.routers.auth import router as auth_router
@@ -63,9 +64,6 @@ async def lifespan(app: FastAPI):
     create_db()
     logger.info("tables created", bot_name="BOOT")
     with Session(engine_()) as session:
-        # if INITIALIZE:
-        #     gurus_from_file(session)
-        #     db_from_json(session, BACKUP_JSON)
         async with ClientSession() as aio_session:
             async with reddit_cm() as reddit:
                 tasks = await bot_tasks(session, aio_session, reddit)
@@ -114,7 +112,6 @@ async def bot_tasks(session: Session, aio_session: ClientSession, reddit: Reddit
     try:
         if RUN_EP_BOT:
             ep_bot = await EpisodeBot.from_url(session, aio_session, MAIN_URL)
-            # ep_bot = await EpisodeBot.from_config(session, aio_session, reddit)
             tasks.append(asyncio.create_task(ep_bot.run()))
     except Exception as e:
         logger.error(f"Error initiating EpisodeBot: {e}")

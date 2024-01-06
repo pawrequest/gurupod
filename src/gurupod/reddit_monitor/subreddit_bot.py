@@ -11,7 +11,6 @@ from sqlmodel import Session, select
 from gurupod.core.consts import DO_FLAIR, GURU_FLAIR_ID, SKIP_OLD_THREADS, SUB_TO_MONITOR
 from loguru import logger
 from gurupod.models.guru import Guru
-from gurupod.models.reddit_thread import RedditThread
 
 
 class SubredditMonitor:
